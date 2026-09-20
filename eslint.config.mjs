@@ -12,6 +12,12 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Old static-site reference files kept for provenance only — not part
+    // of the Next.js app, never built or served, so they're excluded here.
+    "reference-*/**",
+    "reference-*.html",
+    "reference-*.css",
+    "reference-*.sql",
   ]),
 ]);
 
