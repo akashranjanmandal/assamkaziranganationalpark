@@ -42,6 +42,12 @@ function readServerEnv() {
     nextAuthSecret: required('NEXTAUTH_SECRET', process.env.NEXTAUTH_SECRET),
     razorpayKeyId: required('RAZORPAY_KEY_ID', process.env.RAZORPAY_KEY_ID),
     razorpayKeySecret: required('RAZORPAY_KEY_SECRET', process.env.RAZORPAY_KEY_SECRET),
+    // Optional at build time: this is a *different* secret from RAZORPAY_KEY_SECRET,
+    // generated when you add a webhook endpoint in the Razorpay dashboard
+    // (Settings -> Webhooks). Not required until you wire up the webhook
+    // there, so it's not eagerly `required()` — app/api/razorpay/webhook
+    // checks for it itself and fails closed (401) if it's missing.
+    razorpayWebhookSecret: process.env.RAZORPAY_WEBHOOK_SECRET ?? '',
     // Optional: only needed if using Vercel Blob instead of Supabase Storage for uploads.
     blobReadWriteToken: process.env.BLOB_READ_WRITE_TOKEN ?? '',
   };

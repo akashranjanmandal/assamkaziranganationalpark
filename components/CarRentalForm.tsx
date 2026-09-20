@@ -2,10 +2,12 @@
 
 import { useState } from "react";
 import { useToast } from "@/components/Toast";
+import { useTranslation } from "@/lib/i18n/I18nProvider";
 import type { Vehicle } from "@/lib/supabase/reads";
 
 export function CarRentalForm({ vehicles }: { vehicles: Vehicle[] }) {
   const showToast = useToast();
+  const t = useTranslation();
   const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({
     vehicle_name: "",
@@ -73,7 +75,7 @@ export function CarRentalForm({ vehicles }: { vehicles: Vehicle[] }) {
   return (
     <form onSubmit={handleSubmit} style={{ maxWidth: 700, margin: "0 auto" }}>
       <div className="form-group">
-        <label className="form-label">Preferred Vehicle</label>
+        <label className="form-label">{t("cr_lbl_vehicle")}</label>
         <select className="form-input" value={form.vehicle_name} onChange={(e) => update("vehicle_name", e.target.value)}>
           <option value="">Any / No preference</option>
           {vehicles.map((v) => (
@@ -84,7 +86,7 @@ export function CarRentalForm({ vehicles }: { vehicles: Vehicle[] }) {
         </select>
       </div>
       <div className="form-group">
-        <label className="form-label">Itinerary / Route</label>
+        <label className="form-label">{t("cr_lbl_itinerary")}</label>
         <textarea
           className="form-input"
           value={form.itinerary}
@@ -93,7 +95,7 @@ export function CarRentalForm({ vehicles }: { vehicles: Vehicle[] }) {
         />
       </div>
       <div className="form-group">
-        <label className="form-label">Number of Passengers</label>
+        <label className="form-label">{t("cr_lbl_pax2")}</label>
         <input
           type="number"
           min={1}
@@ -122,8 +124,9 @@ export function CarRentalForm({ vehicles }: { vehicles: Vehicle[] }) {
         <label className="form-label">Email (optional)</label>
         <input type="email" className="form-input" value={form.customer_email} onChange={(e) => update("customer_email", e.target.value)} />
       </div>
+      <p className="form-hint" style={{ marginBottom: "1rem" }}>{t("cr_note")}</p>
       <button className="btn-primary" style={{ width: "100%" }} type="submit" disabled={submitting}>
-        {submitting ? "Submitting…" : "Submit Enquiry"}
+        {submitting ? "Submitting…" : t("cr_submit")}
       </button>
     </form>
   );

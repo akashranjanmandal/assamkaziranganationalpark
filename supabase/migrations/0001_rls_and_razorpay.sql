@@ -26,11 +26,21 @@ ALTER TABLE bookings
   ADD COLUMN IF NOT EXISTS razorpay_signature TEXT;
 
 -- payment_status values used across the app:
---   'pending_confirmation' — legacy manual UPI/QR screenshot flow, awaiting admin review
---   'paid'                 — Razorpay payment verified server-side (HMAC signature check passed)
---   'confirmed'            — admin has confirmed the booking (safari slot guaranteed)
+--   'awaiting_payment' — booking row created, Razorpay checkout not yet completed/verified
+--   'paid'              — Razorpay payment verified server-side (HMAC signature check
+--                          in app/api/razorpay/verify, or the webhook) — the source of truth
+--   'confirmed'         — admin has confirmed the booking (safari slot guaranteed)
 -- No CHECK constraint added, to stay compatible with any existing rows using
 -- other ad-hoc values from the old site; application code is the source of truth.
+--
+-- The manual UPI-QR-screenshot payment flow (old `payment_method: 'qr'`,
+-- `bookings.screenshot_path` from reference-db-schema.sql, and the
+-- 'pending_confirmation' status) has been fully removed from the app —
+-- Razorpay is now the only payment path for safari bookings. The
+-- `screenshot_path` column itself is left in place (dropping a column is
+-- destructive and unnecessary — the app simply no longer writes to it).
+-- Car-rental enquiries are unaffected: they remain a WhatsApp lead-gen
+-- form with no online payment collected, same as the original site.
 
 -- ── 2. Vehicles (car rental fleet) ─────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS vehicles (

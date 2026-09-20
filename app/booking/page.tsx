@@ -5,6 +5,7 @@ import Link from "next/link";
 import Script from "next/script";
 import "./booking.css";
 import { useToast } from "@/components/Toast";
+import { DetailsModal } from "@/components/DetailsModal";
 import { uploadFile } from "@/lib/upload-client";
 import { publicEnv } from "@/lib/env";
 import {
@@ -49,6 +50,7 @@ export default function BookingPage() {
   const [submitting, setSubmitting] = useState(false);
   const [bookingId, setBookingId] = useState<number | null>(null);
   const [confirmed, setConfirmed] = useState(false);
+  const [detailsOpen, setDetailsOpen] = useState(false);
 
   const totalGuests = adultCount + childCount;
   const total = useMemo(() => (park ? calcTotal(park, adultCount) : 0), [park, adultCount]);
@@ -614,6 +616,9 @@ export default function BookingPage() {
           </div>
         </div>
         <div className="bbb-actions">
+          <button className="bbb-details-btn" type="button" onClick={() => setDetailsOpen(true)}>
+            📋 Details
+          </button>
           {step > 0 && (
             <button className="bbb-back-btn" onClick={handleBack} disabled={submitting}>
               Back
@@ -626,6 +631,8 @@ export default function BookingPage() {
           )}
         </div>
       </div>
+
+      <DetailsModal open={detailsOpen} onClose={() => setDetailsOpen(false)} park={park} />
     </div>
   );
 }

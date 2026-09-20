@@ -8,14 +8,19 @@ import { supabaseAdmin } from "@/lib/supabase-server";
  * but stores into a private Supabase Storage bucket ("assam-uploads")
  * using the service-role key — never exposed to the browser.
  *
- * Accepts multipart/form-data: fields `folder` ("screenshots" | "aadhaar")
- * and `file`. Returns { key } — an opaque storage path, not a public URL.
- * Files are served back only via the authenticated GET /api/files/[key]
- * route (see app/api/files/[...key]/route.ts).
+ * Accepts multipart/form-data: fields `folder` ("aadhaar") and `file`.
+ * Returns { key } — an opaque storage path, not a public URL. Files are
+ * served back only via the authenticated GET /api/files/[key] route (see
+ * app/api/files/[...key]/route.ts).
+ *
+ * "screenshots" (manual UPI payment proof) was removed from the allowlist:
+ * the booking flow now uses Razorpay exclusively, which verifies payment
+ * server-side via signature check — there's no user-submitted screenshot
+ * to store or review anymore.
  */
 
 const MAX_BYTES = 15 * 1024 * 1024; // 15MB
-const ALLOWED_FOLDERS = new Set(["screenshots", "aadhaar"]);
+const ALLOWED_FOLDERS = new Set(["aadhaar"]);
 
 export async function POST(req: NextRequest) {
   let form: FormData;

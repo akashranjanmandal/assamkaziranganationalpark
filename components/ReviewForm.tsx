@@ -2,9 +2,11 @@
 
 import { useState } from "react";
 import { useToast } from "@/components/Toast";
+import { useTranslation } from "@/lib/i18n/I18nProvider";
 
 export function ReviewForm() {
   const showToast = useToast();
+  const t = useTranslation();
   const [submitting, setSubmitting] = useState(false);
   const [name, setName] = useState("");
   const [rating, setRating] = useState(5);
@@ -43,11 +45,11 @@ export function ReviewForm() {
   return (
     <form onSubmit={handleSubmit} style={{ maxWidth: 600, margin: "0 auto" }}>
       <div className="form-group">
-        <label className="form-label">Your Name</label>
+        <label className="form-label">{t("rev_lbl_name")}</label>
         <input className="form-input" value={name} onChange={(e) => setName(e.target.value)} />
       </div>
       <div className="form-group">
-        <label className="form-label">Rating</label>
+        <label className="form-label">{t("rev_lbl_rating")}</label>
         <select className="form-input" value={rating} onChange={(e) => setRating(Number(e.target.value))}>
           {[5, 4, 3, 2, 1].map((n) => (
             <option key={n} value={n}>
@@ -57,7 +59,7 @@ export function ReviewForm() {
         </select>
       </div>
       <div className="form-group">
-        <label className="form-label">Park Visited (optional)</label>
+        <label className="form-label">{t("rev_lbl_sector")}</label>
         <select className="form-input" value={park} onChange={(e) => setPark(e.target.value)}>
           <option value="">—</option>
           <option value="Kaziranga">Kaziranga</option>
@@ -65,11 +67,11 @@ export function ReviewForm() {
         </select>
       </div>
       <div className="form-group">
-        <label className="form-label">Your Review</label>
+        <label className="form-label">{t("rev_lbl_summary")}</label>
         <textarea className="form-input" value={message} onChange={(e) => setMessage(e.target.value)} />
       </div>
       <button className="btn-primary" style={{ width: "100%" }} type="submit" disabled={submitting}>
-        {submitting ? "Submitting…" : "Submit Review"}
+        {submitting ? "Submitting…" : t("rev_btn")}
       </button>
     </form>
   );

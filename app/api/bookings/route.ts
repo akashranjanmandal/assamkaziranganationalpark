@@ -57,10 +57,8 @@ export async function POST(request: NextRequest) {
       total_price: data.total_price,
       primary_contact: data.primary_contact,
       guests: data.guests,
-      payment_status: data.payment_method === "razorpay" ? "pending_confirmation" : "pending_confirmation",
-      payment_id: data.payment_id ?? null,
-      payment_method: data.payment_method,
-      screenshot_path: data.screenshot_path ?? null,
+      payment_status: "awaiting_payment",
+      payment_method: "razorpay",
     })
     .select()
     .single();

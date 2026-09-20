@@ -26,9 +26,10 @@ export const bookingSchema = z.object({
   total_price: z.number().int().nonnegative(),
   primary_contact: z.string().trim().min(5).max(20),
   guests: z.array(guestSchema).min(1),
-  payment_method: z.enum(["qr", "razorpay"]).default("qr"),
-  payment_id: z.string().trim().max(200).optional(),
-  screenshot_path: z.string().trim().max(500).nullable().optional(),
+  // Razorpay is the only payment path — the old manual UPI-QR-screenshot
+  // flow has been removed. A booking is created with payment_status
+  // "awaiting_payment" and only flips to "paid" once
+  // app/api/razorpay/verify (or the webhook) confirms the signature.
 });
 
 export const reviewSchema = z.object({

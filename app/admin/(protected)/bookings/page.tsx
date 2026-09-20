@@ -21,7 +21,8 @@ interface Booking {
   guests: Guest[];
   payment_status: string;
   payment_id: string | null;
-  screenshot_path: string | null;
+  razorpay_order_id: string | null;
+  razorpay_payment_id: string | null;
   vehicle_number: string | null;
   driver_name: string | null;
   driver_contact: string | null;
@@ -201,7 +202,7 @@ export default function AdminBookingsPage() {
         </select>
         <select className="form-input" style={{ padding: "0.6rem 0.9rem", width: "auto" }} value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
           <option value="">All Status</option>
-          <option value="pending_confirmation">Pending</option>
+          <option value="awaiting_payment">Awaiting Payment</option>
           <option value="paid">Paid</option>
           <option value="confirmed">Confirmed</option>
         </select>
@@ -270,12 +271,12 @@ export default function AdminBookingsPage() {
                         )}
                       </td>
                       <td onClick={(e) => e.stopPropagation()}>
-                        <span className={`badge ${b.payment_status === "confirmed" ? "badge-confirmed" : "badge-pending"}`}>
-                          {b.payment_status === "confirmed" ? "Confirmed" : b.payment_status === "paid" ? "Paid" : "Pending"}
+                        <span className={`badge ${b.payment_status === "confirmed" ? "badge-confirmed" : b.payment_status === "paid" ? "badge-confirmed" : "badge-pending"}`}>
+                          {b.payment_status === "confirmed" ? "Confirmed" : b.payment_status === "paid" ? "Paid" : "Awaiting Payment"}
                         </span>
                         <br />
                         <div style={{ marginTop: "0.3rem", display: "flex", gap: "0.3rem", flexWrap: "wrap" }}>
-                          {b.payment_status !== "confirmed" && (
+                          {b.payment_status === "paid" && (
                             <button className="admin-btn admin-btn-primary" style={{ padding: "0.28rem 0.6rem", fontSize: "0.68rem" }} onClick={() => confirmBooking(b.id)}>
                               Confirm
                             </button>
@@ -302,20 +303,8 @@ export default function AdminBookingsPage() {
                               <DetailField label="Date" value={b.safari_date} />
                               <DetailField label="Time Slot" value={b.time_slot} />
                               <DetailField label="Total" value={`₹${(b.total_price || 0).toLocaleString("en-IN")}`} />
-                              <DetailField label="Payment Ref" value={b.payment_id || "—"} />
-                              {b.screenshot_path && (
-                                <div style={{ marginBottom: "0.55rem", fontSize: "0.84rem" }}>
-                                  <label style={{ fontSize: "0.62rem", color: "var(--forest-mid)", fontWeight: 600, textTransform: "uppercase", display: "block", marginBottom: "0.12rem" }}>
-                                    Payment Screenshot
-                                  </label>
-                                  <span
-                                    style={{ fontSize: "0.73rem", textDecoration: "underline", cursor: "pointer" }}
-                                    onClick={() => viewFile(b.screenshot_path)}
-                                  >
-                                    📎 View Screenshot
-                                  </span>
-                                </div>
-                              )}
+                              <DetailField label="Razorpay Payment ID" value={b.razorpay_payment_id || b.payment_id || "—"} />
+                              <DetailField label="Razorpay Order ID" value={b.razorpay_order_id || "—"} />
                               <DetailField label="Booked On" value={new Date(b.created_at).toLocaleString("en-IN")} />
                             </div>
                             <div style={{ background: "#fff", padding: "1.2rem", border: "1px solid #eee" }}>
