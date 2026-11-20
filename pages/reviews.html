@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guest Reviews | Manas Holidays</title>
+  <meta name="description" content="Read guest reviews of Manas Holidays / Assam Wild Safari and share your own experience of our Kaziranga and Manas safaris and North East tours.">
+  <link rel="canonical" href="https://assamkaziranganationalpark.com/pages/reviews.html">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Assam Wild Safari">
+  <meta property="og:title" content="Guest Reviews | Manas Holidays">
+  <meta property="og:description" content="Read guest reviews of Manas Holidays / Assam Wild Safari and share your own experience of our Kaziranga and Manas safaris and North East tours.">
+  <meta property="og:url" content="https://assamkaziranganationalpark.com/pages/reviews.html">
+  <meta property="og:image" content="https://assamkaziranganationalpark.com/images/kaziranga.jpg">
+  <meta property="og:locale" content="en_IN">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Guest Reviews | Manas Holidays">
+  <meta name="twitter:description" content="Read guest reviews of Manas Holidays / Assam Wild Safari and share your own experience of our Kaziranga and Manas safaris and North East tours.">
+  <meta name="twitter:image" content="https://assamkaziranganationalpark.com/images/kaziranga.jpg">
+  <meta name="theme-color" content="#050d06">
+  <link rel="icon" href="../images/logo.jpeg">
+  <link rel="stylesheet" href="../css/style.css">
+  <script src="../js/vendor/lucide-1.52.0.min.js"></script>
+  <style>
+    .reviews-hero {
+      padding: 12rem 2rem 8rem;
+      background: var(--forest-black);
+      color: var(--pure-white);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+
+
+
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 4rem;
+      margin-top: 4rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-stat {
+      text-align: center;
+    }
+
+    .hero-stat-num {
+      font-family: var(--font-display);
+      font-size: 3rem;
+      color: var(--gold);
+    }
+
+    .hero-stat-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      color: rgba(255, 255, 255, 0.35);
+      text-transform: uppercase;
+      margin-top: 0.4rem;
+    }
+
+    .reviews-section {
+      background: var(--off-white);
+    }
+
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 2.5rem;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    .review-card {
+      background: var(--pure-white);
+      padding: 3.5rem;
+      box-shadow: var(--shadow-premium);
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      transition: var(--transition);
+    }
+
+    .review-card:hover {
+      transform: translateY(-8px);
+    }
+
+    .review-stars {
+      display: flex;
+      gap: 0.3rem;
+    }
+
+    .review-text {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: var(--forest-dark);
+      font-style: italic;
+      flex: 1;
+    }
+
+    .review-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--off-white);
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .review-user {
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: var(--forest-black);
+      letter-spacing: 0.05em;
+    }
+
+    .review-park-tag {
+      font-size: 0.7rem;
+      color: var(--gold);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .review-intro { padding: 9rem 1.5rem 3rem; text-align: center; background: var(--pure-white, #fff); }
+    .review-intro h1 { font-size: clamp(1.8rem, 5vw, 3rem); margin: 0.6rem auto 1rem; max-width: 760px; line-height: 1.15; color: var(--forest-black, #0f2214); }
+    .review-intro p { max-width: 620px; margin: 0 auto 0.8rem; color: #555; font-size: 1.05rem; line-height: 1.7; }
+    .review-intro .review-intro-ask { font-weight: 600; color: var(--gold, #b5943b); font-size: 1.15rem; margin-top: 1.2rem; }
+
+    .add-review-section {
+      background: var(--forest-deep);
+      color: var(--pure-white);
+    }
+
+    .form-container {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    #rating-stars {
+      display: flex;
+      gap: 0.8rem;
+      margin-top: 1.2rem;
+    }
+
+    .star-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: rgba(255, 255, 255, 0.15);
+      transition: var(--transition);
+      padding: 0;
+    }
+
+    .star-btn i {
+      width: 40px;
+      height: 40px;
+      fill: currentColor;
+      stroke-width: 1;
+    }
+
+    .star-btn:hover,
+    .star-btn.active {
+      color: var(--gold);
+      transform: scale(1.1);
+    }
+
+    .form-footer {
+      margin-top: 4rem;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    @media (max-width: 900px) {
+      .reviews-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .reviews-hero {
+        padding: 9rem 1.5rem 5rem;
+      }
+
+      .hero-stats {
+        gap: 3rem;
+      }
+
+      .reviews-section,
+      .add-review-section {
+        padding: 5rem 1.5rem;
+      }
+
+      .reviews-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .review-card {
+        padding: 2.5rem 1.8rem;
+      }
+
+      .star-btn i {
+        width: 32px;
+        height: 32px;
+      }
+
+      .form-footer {
+        justify-content: center;
+      }
+
+      .two-col-form {
+        grid-template-columns: 1fr !important;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-stats {
+        flex-direction: column;
+        gap: 2.5rem;
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page-transition">
+    <div class="transition-shutter shutter-top"></div>
+    <div class="transition-shutter shutter-bottom"></div>
+    <div class="transition-logo">Assam <span>Wild</span> Safari</div>
+  </div>
+
+  <nav class="navbar solid">
+    <a href="../index.html" class="nav-logo-group">
+      <img src="../images/logo.jpeg" alt="Manas Holidays" class="nav-logo-img">
+      <div class="nav-logo-text">
+        <span class="nav-logo-name">Manas <span>Holidays</span></span>
+      </div>
+    </a>
+    <div class="hamburger"><span></span><span></span><span></span></div>
+  </nav>
+  <ul class="nav-links">
+    <button class="nav-close-btn" id="nav-close-btn" aria-label="Close menu">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <line x1="18" y1="6" x2="6" y2="18" />
+        <line x1="6" y1="6" x2="18" y2="18" />
+      </svg>
+    </button>
+    <li><a href="../index.html">Home</a></li>
+    <li><a href="itineraries.html">Itineraries</a></li>
+    <li><a href="booking.html">Booking</a></li>
+    <li><a href="car-rental.html">Car Rental</a></li>
+    <li><a href="reviews.html" class="active">Reviews</a></li>
+    <li class="nav-cta-item"><a href="booking.html" class="nav-cta">Book Now</a></li>
+    <li class="nav-recognised">
+      <span class="rec-label">Recognised by</span>
+      <div class="rec-logos">
+        <img src="../images/assam-logo.jpg" alt="Government of Assam" class="rec-logo">
+        <img src="../images/bodoland.jpg" alt="Bodoland Territorial Council" class="rec-logo">
+      </div>
+    </li>
+  </ul>
+  <div class="nav-overlay"></div>
+
+  <section class="review-intro">
+    <span class="section-label">We value your words</span>
+    <h1>Your reviews help us serve you better</h1>
+    <p>If you have travelled with us, we would love to hear how it went. A few kind words, or an honest suggestion, help us improve and help other travellers choose with confidence.</p>
+    <p class="review-intro-ask">Please rate us.</p>
+  </section>
+
+  <section class="add-review-section">
+    <div class="form-container">
+      <form id="review-form">
+        <div class="form-group">
+          <label class="form-label">Your name</label>
+          <input type="text" name="review-name" class="form-input" placeholder="Your full name" required
+            style="background:rgba(255,255,255,0.05);color:var(--pure-white);border-color:rgba(255,255,255,0.1);">
+        </div>
+
+        <div class="form-group" style="margin-top:1rem;">
+          <label class="form-label">Address <span style="opacity:.6;font-weight:400;">(optional)</span></label>
+          <input type="text" name="review-address" class="form-input" placeholder="Your city / address" autocomplete="street-address" maxlength="300"
+            style="background:rgba(255,255,255,0.05);color:var(--pure-white);border-color:rgba(255,255,255,0.1);">
+        </div>
+
+        <div class="form-group" style="margin-top:1rem;">
+          <label class="form-label">Contact number <span style="opacity:.6;font-weight:400;">(optional)</span></label>
+          <input type="tel" name="review-phone" class="form-input" placeholder="+91 XXXXX XXXXX" autocomplete="tel" maxlength="30"
+            style="background:rgba(255,255,255,0.05);color:var(--pure-white);border-color:rgba(255,255,255,0.1);">
+        </div>
+
+        <div class="form-group" style="margin-top:1rem;">
+          <label class="form-label">Email <span style="opacity:.6;font-weight:400;">(optional)</span></label>
+          <input type="email" name="review-email" class="form-input" placeholder="you@example.com" autocomplete="email" maxlength="120"
+            style="background:rgba(255,255,255,0.05);color:var(--pure-white);border-color:rgba(255,255,255,0.1);">
+          <div style="font-size:0.78rem;opacity:.55;margin-top:.4rem;">Your address, number and email are kept private and are not shown on the website.</div>
+        </div>
+
+        <div class="form-group" style="margin-top:1rem;">
+          <label class="form-label">Your rating</label>
+          <div id="rating-stars">
+            <button type="button" class="star-btn" data-val="1"><i data-lucide="star"></i></button>
+            <button type="button" class="star-btn" data-val="2"><i data-lucide="star"></i></button>
+            <button type="button" class="star-btn" data-val="3"><i data-lucide="star"></i></button>
+            <button type="button" class="star-btn" data-val="4"><i data-lucide="star"></i></button>
+            <button type="button" class="star-btn active" data-val="5"><i data-lucide="star"></i></button>
+          </div>
+          <input type="hidden" name="review-rating" id="review-rating-val" value="5">
+        </div>
+
+        <div class="form-group" style="margin-top:2.5rem;">
+          <label class="form-label">Your experience</label>
+          <textarea name="review-message" class="form-input" rows="6"
+            placeholder="Tell us about your trip — what you enjoyed and what we can do better" required
+            style="background:rgba(255,255,255,0.05);color:var(--pure-white);border-color:rgba(255,255,255,0.1);"></textarea>
+        </div>
+
+        <div class="form-footer">
+          <button type="button" class="btn-primary" onclick="submitReview(document.getElementById('review-form'))"
+            style="padding:1.2rem 3.5rem;">Submit review</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <section class="reviews-section">
+    <div style="text-align:center;margin-bottom:6rem;">
+      <span class="section-label">Guest reviews</span>
+      <h2 class="section-title">WHAT OUR GUESTS SAY</h2>
+      <p class="section-body" style="max-width:550px;margin:0 auto;">Honest words from travellers who explored Kaziranga and Manas with us.</p>
+    </div>
+    <div class="carousel-wrap">
+      <button class="carousel-arrow prev" id="reviews-prev" aria-label="Previous"><i data-lucide="chevron-left"></i></button>
+      <div class="carousel-track reviews-container">
+        <!-- populated by JS -->
+      </div>
+      <button class="carousel-arrow next" id="reviews-next" aria-label="Next"><i data-lucide="chevron-right"></i></button>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-logo-group">
+          <img src="../images/logo.jpeg" alt="Assam Wild Safari" class="footer-logo-img">
+          <div class="powered-by">Powered by Manas Holidays</div>
+        </div>
+        <p class="footer-desc">Jeep safari booking for Kaziranga and Manas National Parks, North East India tour packages and airport pickup &amp; drop in Assam.</p>
+        <p class="footer-contact-info" style="font-size:0.85rem;color:rgba(255,255,255,0.5);margin-top:1rem;">
+          Abhayapuri, Assam
+        </p>
+      </div>
+      <div>
+        <div class="footer-col-title">Safaris &amp; Tours</div>
+        <ul class="footer-links">
+          <li><a href="../kaziranga-jungle-safari/">Kaziranga Jeep Safari</a></li>
+          <li><a href="../manas-jungle-safari/">Manas Jeep Safari</a></li>
+          <li><a href="../north-east-india-tour-packages/">North East Tour Packages</a></li>
+          <li><a href="../guwahati-to-kaziranga-manas-taxi/">Airport Pickup &amp; Drop</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Quick Links</div>
+        <ul class="footer-links">
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="booking.html">Book Safari</a></li>
+          <li><a href="itineraries.html">Itineraries</a></li>
+          <li><a href="car-rental.html">Car Rental</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Contact</div>
+        <ul class="footer-links">
+          <li><a href="tel:+919365609948">+91 93656 09948</a></li>
+          <li><a href="tel:+919709884206">+91 97098 84206</a></li>
+          <li><a href="https://wa.me/919365609948" target="_blank" rel="noopener">WhatsApp Us</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2026 Assam Wild Safari. Kaziranga &amp; Manas jungle safari, North East India tours.</div>
+  </footer>
+
+  <script src="../js/lang.js"></script>
+  <script src="../js/main.js"></script>
+  <script>
+
+    // Star rating interaction
+    const stars = document.querySelectorAll('.star-btn');
+    const ratingInput = document.getElementById('review-rating-val');
+    stars.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const val = parseInt(btn.dataset.val);
+        ratingInput.value = val;
+        stars.forEach((s, i) => s.classList.toggle('active', i < val));
+      });
+    });
+    // Responsive form
+    function fixFormCols() {
+      document.querySelectorAll('.two-col-form').forEach(el => {
+        el.style.gridTemplateColumns = window.innerWidth <= 640 ? '1fr' : '1fr 1fr';
+      });
+    }
+    window.addEventListener('resize', fixFormCols);
+    fixFormCols();
+
+    /* ── Real review submission + approved-reviews display (overrides main.js's demo behavior) ── */
+    async function loadApprovedReviews() {
+      const container = document.querySelector('.reviews-container');
+      if (!container) return;
+      const data = await fetch('/.netlify/functions/public-data?type=reviews').then(r => r.ok ? r.json() : {}).then(j => j.data).catch(() => null);
+      if (!data || !data.length) {
+        container.innerHTML = '<p style="text-align:center;color:var(--forest-mid);">No reviews yet — be the first to share your experience!</p>';
+        return;
+      }
+      renderReviews(data.map(r => ({
+        name: r.name, rating: r.rating, park: r.park, message: r.message,
+        date: new Date(r.created_at).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' })
+      })));
+      wireCarouselArrows(container, document.getElementById('reviews-prev'), document.getElementById('reviews-next'));
+    }
+    loadApprovedReviews();
+
+    window.submitReview = async function (form) {
+      const name = form.querySelector('[name="review-name"]')?.value?.trim();
+      const message = form.querySelector('[name="review-message"]')?.value?.trim();
+      const address = form.querySelector('[name="review-address"]')?.value?.trim() || '';
+      const phone = form.querySelector('[name="review-phone"]')?.value?.trim() || '';
+      const email = form.querySelector('[name="review-email"]')?.value?.trim() || '';
+      const rating = parseInt(document.getElementById('review-rating-val')?.value || 5);
+      if (!name || !message) { showToast('Please fill all fields.', 'error'); return; }
+      const btn = form.querySelector('button[type="button"]');
+      if (btn) { btn.textContent = 'SENDING...'; btn.disabled = true; }
+      const res = await fetch('/.netlify/functions/submit-review', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, rating, message, address, phone, email })
+      }).catch(() => null);
+      const error = !res ? { message: 'Network error' } : res.ok ? null : { message: (await res.json().catch(() => ({}))).error || 'Request failed' };
+      if (btn) { btn.textContent = 'SUBMIT REVIEW'; btn.disabled = false; }
+      if (error) { showToast('Error: ' + error.message, 'error'); return; }
+      showToast('Thank you! Your review will appear once approved by our team.', 'success');
+      form.reset();
+      document.querySelectorAll('.star-btn').forEach((s, i) => s.classList.toggle('active', i === 4));
+      if (document.getElementById('review-rating-val')) document.getElementById('review-rating-val').value = 5;
+    };
+  </script>
+</body>
+
+</html>

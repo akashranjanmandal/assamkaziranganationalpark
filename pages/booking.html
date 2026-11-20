@@ -1,0 +1,2171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Kaziranga & Manas Jeep Safari Online | Assam Wild Safari</title>
+  <meta name="description" content="Book a private or shared jeep safari in Kaziranga or Manas National Park. Choose zone, date and time, upload IDs and send your request — we confirm on WhatsApp.">
+  <link rel="canonical" href="https://assamkaziranganationalpark.com/pages/booking.html">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Assam Wild Safari">
+  <meta property="og:title" content="Book Kaziranga & Manas Jeep Safari Online | Assam Wild Safari">
+  <meta property="og:description" content="Book a private or shared jeep safari in Kaziranga or Manas National Park. Choose zone, date and time, upload IDs and send your request — we confirm on WhatsApp.">
+  <meta property="og:url" content="https://assamkaziranganationalpark.com/pages/booking.html">
+  <meta property="og:image" content="https://assamkaziranganationalpark.com/images/kaziranga.jpg">
+  <meta property="og:locale" content="en_IN">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Book Kaziranga & Manas Jeep Safari Online | Assam Wild Safari">
+  <meta name="twitter:description" content="Book a private or shared jeep safari in Kaziranga or Manas National Park. Choose zone, date and time, upload IDs and send your request — we confirm on WhatsApp.">
+  <meta name="twitter:image" content="https://assamkaziranganationalpark.com/images/kaziranga.jpg">
+  <meta name="theme-color" content="#050d06">
+  <link rel="icon" href="../images/logo.jpeg">
+  <link rel="stylesheet" href="../css/style.css">
+  <script src="../js/vendor/lucide-1.52.0.min.js"></script>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+  <style>
+    /* ── Reset ── */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { overflow-x: hidden; max-width: 100vw; margin: 0; padding: 0; }
+
+    body {
+      background: #f7f5f0;
+      padding-bottom: 82px;
+      font-family: var(--font-body, 'Inter', sans-serif);
+    }
+
+    /* ── Minimal Booking Header ── */
+    .bk-header {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      background: var(--forest-black, #050d06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1.5rem;
+      border-bottom: 2px solid var(--gold, #b5943b);
+    }
+
+    .bk-logo-group {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+    }
+
+    .bk-logo-img {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1.5px solid var(--gold, #b5943b);
+    }
+
+    .bk-logo-name {
+      font-family: var(--font-display, Georgia, serif);
+      font-size: 1.05rem;
+      color: #fff;
+      line-height: 1;
+    }
+
+    .bk-logo-name em {
+      color: var(--gold, #b5943b);
+      font-style: normal;
+    }
+
+    .bk-logo-sub {
+      font-size: 0.6rem;
+      color: rgba(255,255,255,0.38);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      display: block;
+      margin-top: 0.15rem;
+    }
+
+    .bk-home-link {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.45);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: color 0.2s;
+      letter-spacing: 0.04em;
+    }
+
+    .bk-home-link:hover { color: var(--gold, #b5943b); }
+
+    /* ── Step Bar ── */
+    .step-bar {
+      max-width: 720px;
+      margin: 2rem auto 0;
+      padding: 1.4rem 1.5rem;
+      background: #fff;
+      box-shadow: 0 4px 30px rgba(0,0,0,0.07);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      scroll-margin-top: 70px;
+    }
+
+    .step-indicator {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.45rem;
+      flex: 1;
+      position: relative;
+    }
+
+    .step-indicator:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 19px;
+      left: calc(50% + 20px);
+      width: calc(100% - 40px);
+      height: 2px;
+      background: #e8e4dc;
+      transition: background 0.4s;
+    }
+
+    .step-indicator.completed:not(:last-child)::after {
+      background: var(--forest-dark, #1a3a1e);
+    }
+
+    .step-num {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 2px solid #ddd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #888;
+      transition: all 0.35s;
+      background: #fff;
+      flex-shrink: 0;
+    }
+
+    .step-indicator.active .step-num {
+      border-color: var(--gold, #b5943b);
+      color: #fff;
+      background: var(--gold, #b5943b);
+      box-shadow: 0 0 0 4px rgba(181,148,59,0.15);
+    }
+
+    .step-indicator.completed .step-num {
+      background: var(--forest-dark, #1a3a1e);
+      border-color: var(--forest-dark, #1a3a1e);
+      color: #fff;
+    }
+
+    .step-label-text {
+      font-size: 0.58rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: #aaa;
+      white-space: nowrap;
+    }
+
+    .step-indicator.active .step-label-text { color: var(--gold, #b5943b); }
+    .step-indicator.completed .step-label-text { color: var(--forest-dark, #1a3a1e); }
+
+    @media (max-width: 480px) {
+      .step-label-text { display: none; }
+      .step-bar { margin: 1.5rem 1rem 0; padding: 1.1rem 0.8rem; }
+    }
+
+    /* ── Form Wrap ── */
+    .booking-form-wrap {
+      max-width: 780px;
+      margin: 2rem auto 2rem;
+      padding: 0 1.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .booking-form-wrap { padding: 0 1rem; margin-top: 1.5rem; }
+    }
+
+    /* ── Details Modal (bottom sheet on mobile, centered on desktop) ── */
+    .details-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 9000;
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    .details-modal.open { display: flex; }
+
+    .details-modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(5,13,6,0.72);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      animation: fadeInBD 0.25s ease;
+    }
+
+    @keyframes fadeInBD { from { opacity: 0; } to { opacity: 1; } }
+
+    .details-modal-sheet {
+      position: relative;
+      z-index: 1;
+      background: #fff;
+      width: 100%;
+      max-width: 660px;
+      max-height: 90vh;
+      overflow-y: auto;
+      border-radius: 18px 18px 0 0;
+      padding-bottom: 2.5rem;
+      animation: sheetUp 0.38s cubic-bezier(0.34,1.3,0.64,1);
+    }
+
+    @media (min-width: 700px) {
+      .details-modal { align-items: center; }
+      .details-modal-sheet {
+        border-radius: 14px;
+        max-height: 86vh;
+        margin: 1rem;
+        animation: scaleIn 0.3s cubic-bezier(0.34,1.3,0.64,1);
+      }
+    }
+
+    @keyframes sheetUp {
+      from { transform: translateY(40px); opacity: 0; }
+      to   { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes scaleIn {
+      from { transform: scale(0.94); opacity: 0; }
+      to   { transform: scale(1); opacity: 1; }
+    }
+
+    .modal-handle-bar {
+      width: 38px; height: 4px;
+      background: #ddd; border-radius: 2px;
+      margin: 0.9rem auto 0;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.9rem 1.5rem 0.9rem;
+      border-bottom: 1px solid #eee;
+      position: sticky;
+      top: 0;
+      background: #fff;
+      z-index: 2;
+    }
+
+    .modal-title {
+      font-family: var(--font-display, Georgia, serif);
+      font-size: 1.35rem;
+      color: var(--forest-black, #050d06);
+    }
+
+    .modal-close-btn {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      border: none;
+      background: #f2f2f2;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+
+    .modal-close-btn:hover { background: #e0e0e0; }
+
+    .modal-body { padding: 1.5rem; }
+
+    .modal-section {
+      margin-bottom: 2rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid #eee;
+    }
+
+    .modal-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+    .modal-section-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--gold, #b5943b);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Jeep options in modal */
+    .modal-jeep-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    @media (max-width: 480px) { .modal-jeep-grid { grid-template-columns: 1fr; } }
+
+    .modal-jeep-card {
+      padding: 1.2rem;
+      border: 2px solid rgba(201,163,79,0.25);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.25s;
+      background: #fafaf7;
+    }
+
+    .modal-jeep-card:hover { border-color: var(--gold, #b5943b); }
+
+    .modal-jeep-card.active {
+      border-color: var(--gold, #b5943b);
+      background: rgba(201,163,79,0.06);
+      box-shadow: 0 0 0 1px var(--gold, #b5943b);
+    }
+
+    .modal-jeep-title {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--gold, #b5943b);
+      letter-spacing: 0.1em;
+      margin-bottom: 0.4rem;
+    }
+
+    .modal-jeep-name {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--forest-black, #050d06);
+      margin-bottom: 0.3rem;
+    }
+
+    .modal-jeep-desc {
+      font-size: 0.75rem;
+      color: #666;
+      line-height: 1.6;
+    }
+
+    /* Pricing table in modal */
+    .modal-pricing-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+    }
+
+    @media (max-width: 480px) { .modal-pricing-grid { grid-template-columns: 1fr; } }
+
+    .modal-pricing-col-title {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--forest-black, #050d06);
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .modal-price-row {
+      background: rgba(255,255,255,0.8);
+      border: 1px solid #e8e4dc;
+      border-radius: 6px;
+      padding: 0.75rem 0.9rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .modal-price-row:last-child { margin-bottom: 0; }
+
+    .modal-price-type { font-size: 0.7rem; color: #777; margin-bottom: 0.2rem; }
+
+    .modal-price-amount {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #c0392b;
+    }
+
+    .modal-price-amount.gold { color: #b7861a; }
+
+    .modal-price-unit { font-size: 0.65rem; font-weight: 400; color: #999; }
+
+    .modal-price-note {
+      font-size: 0.72rem;
+      color: #666;
+      margin-top: 0.8rem;
+      line-height: 1.7;
+      padding-top: 0.8rem;
+      border-top: 1px solid #eee;
+    }
+
+    /* Cancellation */
+    .cancel-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.7rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .cancel-cell {
+      padding: 0.8rem 0.5rem;
+      border: 1px solid #e8e4dc;
+      border-radius: 6px;
+      text-align: center;
+    }
+
+    .cancel-pct { font-size: 1.1rem; font-weight: 700; }
+    .cancel-when { font-size: 0.65rem; color: #777; margin-top: 0.25rem; line-height: 1.4; }
+
+    /* Park rules */
+    .park-rules-modal-list {
+      list-style: none;
+      padding: 0; margin: 0;
+      display: grid;
+      gap: 0.55rem;
+    }
+
+    .park-rules-modal-list li {
+      display: flex;
+      gap: 0.55rem;
+      align-items: flex-start;
+      font-size: 0.84rem;
+      color: var(--forest-dark, #1a3a1e);
+      line-height: 1.55;
+    }
+
+    .park-rules-modal-list li::before {
+      content: '◆';
+      color: var(--gold, #b5943b);
+      font-size: 0.42rem;
+      margin-top: 0.42rem;
+      flex-shrink: 0;
+    }
+
+    /* ── FIXED BOTTOM BAR ── */
+    .booking-bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 500;
+      background: var(--forest-black, #050d06);
+      border-top: 2px solid var(--gold, #b5943b);
+      padding: 0.7rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      min-height: 68px;
+    }
+
+    .bbb-brief {
+      flex: 1;
+      display: flex;
+      gap: 1.2rem;
+      align-items: center;
+      overflow: hidden;
+      min-width: 0;
+    }
+
+    .bbb-item {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      flex-shrink: 0;
+    }
+
+    .bbb-label {
+      font-size: 0.52rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .bbb-val {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 120px;
+      margin-top: 0.18rem;
+    }
+
+    .bbb-total-val {
+      font-family: var(--font-display, Georgia, serif);
+      font-size: 1.25rem;
+      color: var(--gold, #b5943b);
+      white-space: nowrap;
+      margin-top: 0.1rem;
+    }
+
+    .bbb-actions {
+      display: flex;
+      gap: 0.5rem;
+      flex-shrink: 0;
+      align-items: center;
+    }
+
+    .bbb-details-btn {
+      padding: 0.5rem 0.8rem;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: transparent;
+      color: rgba(255,255,255,0.65);
+      font-size: 0.72rem;
+      font-family: var(--font-body, sans-serif);
+      cursor: pointer;
+      border-radius: 5px;
+      transition: all 0.2s;
+      white-space: nowrap;
+      letter-spacing: 0.04em;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .bbb-details-btn:hover { border-color: var(--gold, #b5943b); color: var(--gold, #b5943b); }
+
+    .bbb-back-btn {
+      padding: 0.5rem 0.9rem;
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.55);
+      font-size: 0.78rem;
+      font-family: var(--font-body, sans-serif);
+      cursor: pointer;
+      border-radius: 5px;
+      transition: all 0.2s;
+      display: none;
+    }
+
+    .bbb-back-btn.show { display: block; }
+    .bbb-back-btn:hover { border-color: rgba(255,255,255,0.4); color: #fff; }
+
+    .bbb-next-btn {
+      padding: 0.55rem 1.3rem;
+      background: var(--gold, #b5943b);
+      border: none;
+      color: var(--forest-black, #050d06);
+      font-size: 0.8rem;
+      font-weight: 700;
+      font-family: var(--font-body, sans-serif);
+      cursor: pointer;
+      border-radius: 5px;
+      transition: all 0.2s;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .bbb-next-btn:hover { background: #c9a34f; transform: translateY(-1px); box-shadow: 0 4px 14px rgba(181,148,59,0.35); }
+    .bbb-next-btn:active { transform: none; }
+
+    // Optional business details: a GST number needs a valid 15-character GSTIN and a business name.
+    function gstProblem(biz, gst) {
+      const g = (gst || '').replace(/\s+/g, '').toUpperCase();
+      if (!g) return '';
+      if (!/^\d{2}[A-Z]{5}\d{4}[A-Z][1-9A-Z]Z[0-9A-Z]$/.test(g)) return 'Please enter a valid 15-character GST number, or leave it empty.';
+      if (!(biz || '').trim()) return 'Please enter the business name for the GST number.';
+      return '';
+    }
+    /* Phone: two rows — everything stays visible (park, date, guests, amount), buttons below. */
+    @media (max-width: 640px) {
+      .booking-bottom-bar { flex-direction: column; align-items: stretch; gap: 0.55rem; padding: 0.6rem 1rem calc(0.6rem + env(safe-area-inset-bottom, 0px)); }
+      .bbb-brief { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.4rem 1rem; overflow: visible; }
+      .bbb-item { flex-shrink: 1; }
+      .bbb-item.hide-xs { display: flex; }
+      .bbb-val { max-width: none; white-space: normal; overflow: visible; text-overflow: clip; font-size: 0.78rem; line-height: 1.25; }
+      .bbb-brief .bbb-item:nth-child(1) { order: 1; }
+      .bbb-brief .bbb-item:nth-child(4) { order: 2; align-items: flex-end; text-align: right; }
+      .bbb-brief .bbb-item:nth-child(2) { order: 3; }
+      .bbb-brief .bbb-item:nth-child(3) { order: 4; align-items: flex-end; text-align: right; }
+      .bbb-total-val { font-size: 1.3rem; }
+      .bbb-actions { width: 100%; }
+      .bbb-details-btn { padding: 0.55rem 0.7rem; font-size: 0.7rem; }
+      .bbb-back-btn.show { flex: 1; padding: 0.55rem 0.5rem; }
+      .bbb-next-btn { flex: 2; padding: 0.6rem 0.9rem; font-size: 0.78rem; }
+    }
+
+    /* ── Park selector ── */
+    .park-selector {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+      margin: 2rem 0 1.8rem;
+    }
+
+    @media (max-width: 540px) { .park-selector { grid-template-columns: 1fr; } }
+
+    .park-option {
+      position: relative;
+      cursor: pointer;
+      border: 3px solid transparent;
+      transition: transform 0.3s, border-color 0.3s;
+      border-radius: 4px;
+    }
+
+    .park-rate-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 0.5rem;
+      padding: 0.22rem 0;
+      font-size: 0.8rem;
+      color: #fff;
+    }
+
+    .park-rate-label {
+      font-weight: 700;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      flex-shrink: 0;
+      color: #fff;
+    }
+
+    .park-rate-val {
+      font-weight: 700;
+      font-size: 0.82rem;
+      text-align: right;
+      color: #fff;
+    }
+
+    .park-rate-val small {
+      font-weight: 400;
+      font-size: 0.65rem;
+      color: rgba(255,255,255,0.6);
+    }
+
+    .park-rate-private .park-rate-label,
+    .park-rate-private .park-rate-val {
+      color: var(--gold, #b5943b);
+    }
+
+    .park-rate-private .park-rate-val small {
+      color: rgba(181,148,59,0.75);
+    }
+
+    .park-option:hover { transform: translateY(-3px); }
+    .park-option.selected { border-color: var(--gold, #b5943b); }
+
+    .park-option-img {
+      height: 300px;
+      background-size: cover;
+      background-position: center;
+      filter: brightness(0.45);
+      transition: transform 0.6s ease, filter 0.4s;
+    }
+
+    @media (max-width: 540px) { .park-option-img { height: 260px; } }
+
+    .park-option:hover .park-option-img { transform: scale(1.04); filter: brightness(0.58); }
+
+    .park-option-info {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 1.2rem;
+      background: linear-gradient(transparent, rgba(0,0,0,0.88) 35%);
+      color: #fff;
+    }
+
+    .park-option-tag { font-size: 0.58rem; color: var(--gold, #b5943b); letter-spacing: 0.18em; font-weight: 700; display: block; margin-bottom: 0.18rem; text-transform: uppercase; }
+    .park-option-name { font-family: var(--font-display, Georgia, serif); font-size: 1.7rem; line-height: 1; }
+    .park-option-price { font-size: 0.72rem; color: rgba(255,255,255,0.65); margin-top: 0.2rem; }
+
+    .selected-check {
+      position: absolute;
+      top: 0.7rem; right: 0.7rem;
+      background: var(--gold, #b5943b);
+      border-radius: 50%;
+      width: 28px; height: 28px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .park-option.selected .selected-check { display: flex; }
+
+    /* Jeep Toggle (compact, in step 1) */
+    .jeep-toggle-bar {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border: 2px solid rgba(201,163,79,0.35);
+      border-radius: 7px;
+      overflow: hidden;
+      margin: 0 0 1.5rem;
+    }
+
+    .jtb-opt {
+      padding: 0.9rem 1rem;
+      text-align: center;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      font-family: var(--font-body, sans-serif);
+      transition: all 0.25s;
+      border-right: 1px solid rgba(201,163,79,0.25);
+    }
+
+    .jtb-opt:last-child { border-right: none; }
+
+    .jtb-opt.active { background: rgba(201,163,79,0.12); }
+
+    .jtb-opt.selected {
+      background: var(--gold, #b5943b);
+    }
+
+    .jtb-opt .jtb-name {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--forest-dark, #1a3a1e);
+    }
+
+    .jtb-opt.selected .jtb-name { color: #fff; }
+
+    .jtb-opt .jtb-desc {
+      font-size: 0.7rem;
+      color: #777;
+      margin-top: 0.18rem;
+    }
+
+    .jtb-opt.selected .jtb-desc { color: rgba(255,255,255,0.75); }
+
+    /* Time slots */
+    .time-slots {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1.2rem;
+    }
+
+    @media (max-width: 420px) { .time-slots { grid-template-columns: 1fr; } }
+
+    .time-slot {
+      padding: 1.3rem;
+      background: #f5f3ee;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.25s;
+      border-radius: 6px;
+    }
+
+    .time-slot:hover { background: #ede9df; }
+
+    .time-slot.selected {
+      border-color: var(--gold, #b5943b);
+      background: #fff;
+      box-shadow: 0 0 20px rgba(181,148,59,0.18);
+      transform: translateY(-2px);
+    }
+
+    .time-slot-name { font-weight: 700; font-size: 0.9rem; margin-bottom: 0.2rem; color: var(--forest-dark, #1a3a1e); }
+    .time-slot-time { font-size: 0.8rem; color: #777; }
+
+    /* Tuesday warning */
+    .tuesday-warning {
+      background: #5c1a1a;
+      color: #ffb3b3;
+      padding: 0.85rem 1.1rem;
+      font-size: 0.82rem;
+      margin-top: 0.5rem;
+      display: none;
+      border-left: 4px solid #ff6b6b;
+      line-height: 1.5;
+      border-radius: 4px;
+    }
+
+    .tuesday-warning.visible { display: flex; align-items: center; gap: 0.5rem; }
+
+    /* Booking preview card */
+    .booking-preview-card {
+      background: var(--forest-black, #050d06);
+      color: #fff;
+      padding: 1.5rem 1.8rem;
+      margin: 1.5rem 0;
+      display: none;
+      border-left: 4px solid var(--gold, #b5943b);
+      border-radius: 4px;
+    }
+
+    .booking-preview-card.visible { display: block; }
+
+    .booking-preview-label { font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold, #b5943b); font-weight: 700; margin-bottom: 0.75rem; }
+
+    .booking-preview-row { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.35rem; font-size: 0.95rem; font-weight: 600; }
+    .booking-preview-row:last-child { margin-bottom: 0; }
+    .bp-icon { color: var(--gold, #b5943b); flex-shrink: 0; }
+
+    /* Guest cards */
+    .guest-card {
+      border: 1px solid #e8e4dc;
+      padding: 1.6rem;
+      margin-bottom: 1rem;
+      background: #f9f8f4;
+      border-radius: 6px;
+    }
+
+    .guest-card-title {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold, #b5943b);
+      margin-bottom: 1.2rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 2px solid var(--gold, #b5943b);
+    }
+
+    .guest-fields-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.1rem;
+    }
+
+    @media (max-width: 540px) { .guest-fields-grid { grid-template-columns: 1fr; } }
+
+    .guest-fields-full { grid-column: 1 / -1; }
+
+    .form-group-tight { margin-bottom: 0; }
+
+    /* Aadhaar upload area */
+    .aadhaar-upload-area {
+      border: 2px dashed #bbb;
+      padding: 1.3rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.25s;
+      background: #fff;
+      width: 100%;
+      border-radius: 6px;
+    }
+
+    .aadhaar-upload-area:hover { border-color: var(--gold, #b5943b); background: #fdfaf3; }
+
+    .aadhaar-upload-area.has-file { border-color: #27ae60; border-style: solid; background: #f0faf0; }
+
+    .aadhaar-upload-label { font-size: 0.74rem; color: #777; margin-top: 0.35rem; display: block; }
+    .aadhaar-upload-name { font-size: 0.74rem; color: var(--forest-dark, #1a3a1e); font-weight: 600; margin-top: 0.2rem; word-break: break-all; display: block; }
+
+    /* Payment */
+    .payment-amount-card {
+      background: var(--forest-black, #050d06);
+      color: #fff;
+      padding: 2rem;
+      margin: 2rem 0;
+      text-align: center;
+      border-radius: 6px;
+    }
+
+    .pay-amount-label { font-size: 0.65rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold, #b5943b); margin-bottom: 0.35rem; }
+    .pay-amount-value { font-family: var(--font-display, Georgia, serif); font-size: 3rem; }
+    .pay-amount-sub { font-size: 0.72rem; color: rgba(255,255,255,0.38); margin-top: 0.2rem; }
+
+    /* UPI QR */
+    .upi-qr-wrap { text-align: center; padding: 1.5rem; background: #f5f3ee; border-radius: 8px; }
+    .upi-qr-img { width: 175px; height: 175px; object-fit: contain; margin: 0 auto; border: 1px solid #ddd; background: white; display: block; }
+    .upi-id-badge { display: inline-block; background: var(--forest-dark, #1a3a1e); color: #fff; padding: 0.55rem 1.3rem; font-size: 0.88rem; font-weight: 700; letter-spacing: 0.05em; margin-top: 0.9rem; border-radius: 4px; }
+
+    /* NEFT */
+    .neft-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+    .neft-table td { padding: 0.85rem 1rem; border-bottom: 1px solid #eee; font-size: 0.88rem; }
+    .neft-table td:first-child { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold, #b5943b); width: 40%; }
+
+    /* T&C */
+    .tnc-box { background: #fdf8ec; border: 1px solid #e8d89a; padding: 1.4rem; margin: 1.5rem 0; border-radius: 6px; }
+    .tnc-title { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold, #b5943b); margin-bottom: 0.75rem; }
+    .tnc-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.45rem; }
+    .tnc-list li { font-size: 0.8rem; color: #5a4a1a; display: flex; gap: 0.55rem; line-height: 1.5; }
+    .tnc-list li::before { content: '•'; color: var(--gold, #b5943b); flex-shrink: 0; }
+    .tnc-check-row { display: flex; align-items: flex-start; gap: 0.75rem; margin-top: 1rem; font-size: 0.83rem; color: var(--forest-dark, #1a3a1e); cursor: pointer; }
+    .tnc-check-row input { margin-top: 2px; accent-color: var(--gold, #b5943b); flex-shrink: 0; }
+
+    /* Success */
+    .booking-success { padding: 1.5rem 0; }
+    .success-details { margin: 2rem 0; border: 1px solid #eee; border-radius: 6px; overflow: hidden; }
+    .success-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 1rem 1.3rem; border-bottom: 1px solid #eee; gap: 1rem; }
+    .success-row:last-child { border-bottom: none; }
+    .success-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #888; flex-shrink: 0; }
+    .success-value { font-weight: 600; color: var(--forest-black, #050d06); text-align: right; word-break: break-word; }
+
+    /* Post-booking */
+    .post-booking-info {
+      background: linear-gradient(135deg, var(--forest-dark, #1a3a1e), var(--forest-black, #050d06));
+      color: #fff;
+      padding: 1.8rem;
+      margin-top: 1.5rem;
+      border-left: 4px solid var(--gold, #b5943b);
+      border-radius: 4px;
+    }
+
+    .pbi-title { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.24em; text-transform: uppercase; color: var(--gold, #b5943b); margin-bottom: 1.1rem; }
+    .pbi-item { display: flex; gap: 0.9rem; align-items: flex-start; margin-bottom: 1rem; }
+    .pbi-item:last-child { margin-bottom: 0; }
+    .pbi-icon { color: var(--gold, #b5943b); flex-shrink: 0; margin-top: 2px; }
+    .pbi-text { font-size: 0.88rem; line-height: 1.6; color: rgba(255,255,255,0.82); }
+    .pbi-text strong { color: #fff; }
+
+    /* Loading overlay */
+    .upload-loading {
+      position: fixed; inset: 0;
+      background: rgba(5,13,6,0.88);
+      z-index: 9990;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 1.4rem;
+      padding: 2rem;
+    }
+
+    .upload-loading.active { display: flex; }
+
+    .upload-loading p {
+      color: #fff;
+      font-size: 0.86rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    .spinner {
+      width: 44px; height: 44px;
+      border: 3px solid rgba(181,148,59,0.25);
+      border-top-color: var(--gold, #b5943b);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Form helpers */
+    .section-label { font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold, #b5943b); font-weight: 700; display: block; margin-bottom: 0.5rem; }
+
+    .section-title { font-family: var(--font-display, Georgia, serif); font-size: clamp(2rem, 6vw, 3.2rem); line-height: 0.95; margin: 0.3rem 0 1.8rem; color: var(--forest-black, #050d06); }
+
+    .form-hint { font-size: 0.7rem; color: #777; margin-top: 0.3rem; }
+
+    .section-divider { border: none; border-top: 1px solid #eee; margin: 2rem 0; }
+
+    input[type="date"].form-input:focus { border-color: var(--gold, #b5943b); box-shadow: 0 0 15px rgba(181,148,59,0.12); background: #fdfaf3; }
+
+    /* Age note */
+    .age-note { font-size: 0.68rem; color: #888; margin-top: 0.3rem; }
+
+    /* Park rules in step 2 */
+    .park-rules-box {
+      margin-top: 1.5rem;
+      background: #f5f3ee;
+      border-left: 3px solid var(--gold, #b5943b);
+      padding: 1.5rem;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .park-rules-title { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold, #b5943b); margin-bottom: 0.8rem; }
+
+    .park-rules-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.5rem; }
+    .park-rules-list li { font-size: 0.84rem; color: var(--forest-dark, #1a3a1e); display: flex; gap: 0.55rem; align-items: flex-start; line-height: 1.5; }
+    .park-rules-list li::before { content: '◆'; color: var(--gold, #b5943b); font-size: 0.42rem; margin-top: 0.42rem; flex-shrink: 0; }
+
+    /* Guest count row */
+    .guest-count-row { display: flex; align-items: center; gap: 1.1rem; flex-wrap: wrap; }
+    .count-btn {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      border: 2px solid var(--gold, #b5943b);
+      background: transparent;
+      color: var(--gold, #b5943b);
+      font-size: 1.25rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .count-btn:hover { background: var(--gold, #b5943b); color: #fff; }
+    .count-display { font-family: var(--font-display, Georgia, serif); font-size: 2.1rem; color: var(--forest-black, #050d06); min-width: 2rem; text-align: center; }
+    .count-label { font-size: 0.76rem; color: #777; font-weight: 600; }
+
+    /* Two col */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    @media (max-width: 540px) { .two-col { grid-template-columns: 1fr; } }
+
+    /* Action required box */
+    .action-required-box { background: var(--gold, #b5943b); color: var(--forest-black, #050d06); padding: 1.6rem 1.8rem; margin-top: 1.8rem; border-radius: 4px; }
+    .arb-title { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 0.7rem; }
+    .arb-body { font-size: 0.88rem; line-height: 1.7; font-weight: 500; }
+
+    /* Form-area card */
+    #booking-form-area {
+      background: #fff;
+      padding: 2.5rem;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+      border-radius: 8px;
+    }
+
+    @media (max-width: 600px) {
+      #booking-form-area { padding: 1.6rem 1.2rem; }
+    }
+
+    /* Local file notice */
+    .local-file-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: #e8f5e9;
+      color: #2e7d32;
+      font-size: 0.66rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      padding: 0.2rem 0.55rem;
+      border-radius: 20px;
+      margin-left: 0.5rem;
+      text-transform: uppercase;
+      vertical-align: middle;
+    }
+
+    /* ═══ Additions for the zone-based booking flow ═══ */
+    /* Keep toasts clear of the fixed bottom bar so they never block the Next button */
+    .toast { bottom: calc(var(--bar-h, 68px) + 1rem); pointer-events: none; }
+    .park-logo {
+      position: absolute; top: 0.8rem; left: 0.8rem; z-index: 2;
+      width: 74px; height: 74px; border-radius: 50%; background: #fff;
+      object-fit: contain; padding: 3px; box-shadow: 0 2px 10px rgba(0,0,0,0.35);
+    }
+    .choice-label { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #888; margin: 1.6rem 0 0.7rem; }
+    .choice-label:first-of-type { margin-top: 0.5rem; }
+    .choice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+    @media (max-width: 540px) { .choice-grid { grid-template-columns: 1fr; } }
+    .choice-card {
+      border: 2px solid #e5e0d2; background: #fff; padding: 1rem 1.1rem; border-radius: 6px;
+      cursor: pointer; transition: border-color 0.2s, box-shadow 0.2s; position: relative;
+    }
+    .choice-card:hover { border-color: var(--gold, #b5943b); }
+    .choice-card.selected { border-color: var(--gold, #b5943b); box-shadow: 0 0 0 1px var(--gold, #b5943b); background: #fdfaf3; }
+    .choice-card.disabled { opacity: 0.55; cursor: not-allowed; background: #f3f1ec; }
+    .choice-card.disabled:hover { border-color: #e5e0d2; }
+    .choice-title { font-weight: 700; font-size: 0.95rem; color: var(--forest-black, #050d06); }
+    .choice-sub { font-size: 0.76rem; color: #777; margin-top: 0.25rem; line-height: 1.5; }
+    .choice-badge { position: absolute; top: 0.6rem; right: 0.6rem; font-size: 0.58rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; background: #e8e4dc; color: #666; padding: 0.2rem 0.5rem; border-radius: 20px; }
+    .zone-list { display: grid; gap: 0.8rem; }
+    .zone-card {
+      display: flex; align-items: center; gap: 1rem; border: 2px solid #e5e0d2; background: #fff;
+      padding: 0.9rem 1.1rem; border-radius: 6px; cursor: pointer; transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .zone-card:hover { border-color: var(--gold, #b5943b); }
+    .zone-card.selected { border-color: var(--gold, #b5943b); box-shadow: 0 0 0 1px var(--gold, #b5943b); background: #fdfaf3; }
+    .zone-logo { width: 54px; height: 54px; border-radius: 50%; object-fit: contain; background: #fff; border: 1px solid #eee; flex-shrink: 0; }
+    .zone-info { flex: 1; min-width: 0; }
+    .zone-name { font-weight: 700; font-size: 0.98rem; color: var(--forest-black, #050d06); }
+    .zone-meta { font-size: 0.74rem; color: #777; margin-top: 0.2rem; line-height: 1.5; }
+    .zone-price { text-align: right; flex-shrink: 0; font-family: var(--font-display, Georgia, serif); font-size: 1.35rem; color: var(--forest-dark, #1a3a1e); line-height: 1.1; }
+    .zone-price small { display: block; font-family: var(--font-body, sans-serif); font-size: 0.64rem; color: #888; margin-top: 0.15rem; }
+    .info-note { background: #fdf8ec; border: 1px solid #e8d89a; border-radius: 6px; padding: 0.8rem 1rem; font-size: 0.8rem; color: #5a4a1a; line-height: 1.6; margin-top: 1rem; }
+    .info-note.warn { background: #fdecec; border-color: #f0b8b8; color: #7a2323; }
+    .fee-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; margin-top: 0.4rem; }
+    .fee-table th, .fee-table td { padding: 0.45rem 0.6rem; border-bottom: 1px solid #eee3c4; text-align: left; }
+    .fee-table th { font-size: 0.64rem; letter-spacing: 0.12em; text-transform: uppercase; color: #8a7430; }
+    .guest-fields-grid select.form-input, .addon-grid select.form-input { background: #fff; }
+    .addon-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    @media (max-width: 600px) { .addon-grid { grid-template-columns: 1fr; } }
+    .addon-grid .full { grid-column: 1 / -1; }
+    .seg { display: inline-flex; border: 2px solid #e5e0d2; border-radius: 6px; overflow: hidden; background: #fff; flex-wrap: wrap; }
+    .seg button { border: none; background: none; padding: 0.65rem 1.1rem; font-size: 0.82rem; font-weight: 600; cursor: pointer; color: #666; font-family: inherit; }
+    .seg button.on { background: var(--forest-dark, #1a3a1e); color: #fff; }
+    .quote-line { display: flex; justify-content: space-between; gap: 1rem; font-size: 0.85rem; padding: 0.35rem 0; color: rgba(255,255,255,0.75); }
+    .quote-line.total { border-top: 1px solid rgba(255,255,255,0.2); margin-top: 0.4rem; padding-top: 0.7rem; color: #fff; font-weight: 700; }
+    .pay-amount-card .quote-lines { text-align: left; max-width: 420px; margin: 1rem auto 0; }
+    .req { color: #c0392b; }
+    .contact-card { background: #fff; border: 1px solid #e8e4dc; border-radius: 6px; padding: 1.2rem 1.3rem; margin-bottom: 1.5rem; }
+    .catalog-error { text-align: center; padding: 3rem 1rem; color: #777; }
+  </style>
+</head>
+
+<body>
+  <!-- Loading overlay -->
+  <div class="upload-loading" id="upload-loading">
+    <div class="spinner"></div>
+    <p id="upload-loading-text">Processing your booking…</p>
+  </div>
+
+  <!-- ═══ DETAILS MODAL ═══ -->
+  <div class="details-modal" id="details-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="details-modal-backdrop" onclick="closeModal()"></div>
+    <div class="details-modal-sheet" id="details-modal-sheet">
+      <div class="modal-handle-bar"></div>
+      <div class="modal-header">
+        <div class="modal-title" id="modal-title">Safari Details</div>
+        <button class="modal-close-btn" onclick="closeModal()" aria-label="Close details">
+          <i data-lucide="x" style="width:15px;height:15px;"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <div class="modal-section">
+          <div class="modal-section-label"><i data-lucide="indian-rupee" style="width:13px;height:13px;"></i> Jeep Safari Rates</div>
+          <div id="modal-pricing"></div>
+          <div class="modal-price-note" style="display:flex;align-items:center;justify-content:center;gap:0.35rem;flex-wrap:wrap;">
+            <i data-lucide="check" style="width:13px;height:13px;color:#27ae60;"></i> Park entry &amp; jeep included &nbsp;·&nbsp;
+            <span style="color:#c0392b;">Manas camera charges are added in the last step · Kaziranga camera charges are paid at the gate</span> &nbsp;·&nbsp;
+            Call <a href="tel:+919365609948" style="color:var(--gold,#b5943b);">+91 93656 09948</a> for help
+          </div>
+        </div>
+
+        <div class="modal-section">
+          <div class="modal-section-label"><i data-lucide="shield-check" style="width:13px;height:13px;"></i> Cancellation Policy</div>
+          <div class="cancel-grid">
+            <div class="cancel-cell"><div class="cancel-pct" style="color:#27ae60;">100%</div><div class="cancel-when">Cancel <strong>1 week</strong> or more before</div></div>
+            <div class="cancel-cell"><div class="cancel-pct" style="color:#f39c12;">50%</div><div class="cancel-when">Cancel <strong>3 days</strong> before</div></div>
+            <div class="cancel-cell"><div class="cancel-pct" style="color:#e74c3c;">0%</div><div class="cancel-when">After <strong>3 days</strong> — no refund</div></div>
+          </div>
+          <p style="font-size:0.78rem;color:#555;line-height:1.7;margin-top:0.5rem;">
+            If the National Park authority does not permit entry on your safari day, a <strong>full refund</strong> is processed within 24 hours.
+          </p>
+        </div>
+
+        <div class="modal-section" id="modal-rules-section" style="display:none;">
+          <div class="modal-section-label" id="modal-rules-label"><i data-lucide="info" style="width:13px;height:13px;"></i> Park Rules</div>
+          <ul class="park-rules-modal-list" id="modal-rules-list"></ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ MINIMAL HEADER ═══ -->
+  <header class="bk-header">
+    <a href="../index.html" class="bk-logo-group">
+      <img src="../images/logo.jpeg" alt="Assam Wild Safari" class="bk-logo-img" onerror="this.style.display='none'">
+      <div>
+        <div class="bk-logo-name">Assam <em>Wild</em> Safari</div>
+        <span class="bk-logo-sub">Northeast India's Premium Safari</span>
+      </div>
+    </a>
+    <a href="../index.html" class="bk-home-link"><i data-lucide="arrow-left" style="width:14px;height:14px;"></i> Back to Home</a>
+  </header>
+
+  <!-- ═══ STEP BAR ═══ -->
+  <div class="step-bar" id="step-bar">
+    <div class="step-indicator active" id="step-ind-0"><div class="step-num">1</div><div class="step-label-text">Park</div></div>
+    <div class="step-indicator" id="step-ind-1"><div class="step-num">2</div><div class="step-label-text">Safari</div></div>
+    <div class="step-indicator" id="step-ind-2"><div class="step-num">3</div><div class="step-label-text">Guests</div></div>
+    <div class="step-indicator" id="step-ind-4"><div class="step-num">5</div><div class="step-label-text">Payment</div></div>
+  </div>
+
+  <div class="booking-form-wrap">
+    <div id="booking-form-area">
+
+      <!-- ══ STEP 1: PARK ══ -->
+      <div class="step-content" id="step-0">
+        <span class="section-label">Step 1 of 5 — Choose Your Destination</span>
+        <h2 class="section-title">PICK YOUR<br>NATIONAL PARK</h2>
+        <div class="park-selector" id="park-selector"><div class="catalog-error">Loading parks…</div></div>
+        <p style="font-size:0.75rem;color:#888;text-align:center;margin-top:0.4rem;">
+          Tap <strong style="color:var(--gold,#b5943b);">Details</strong> at the bottom for rates, cancellation &amp; park rules.
+        </p>
+      </div>
+
+      <!-- ══ STEP 2: SAFARI ══ -->
+      <div class="step-content" id="step-1" style="display:none;">
+        <span class="section-label">Step 2 of 5 — Your Safari</span>
+        <h2 class="section-title" id="safari-title">PICK YOUR<br>SAFARI</h2>
+
+        <div id="service-block">
+          <div class="choice-label">Safari type</div>
+          <div class="choice-grid">
+            <div class="choice-card disabled" onclick="showToast('Elephant rides are not open yet. Please book a jeep safari.', 'error')">
+              <span class="choice-badge">Not open yet</span>
+              <div class="choice-title">Elephant Ride</div>
+              <div class="choice-sub">Will be available soon.</div>
+            </div>
+            <div class="choice-card selected">
+              <div class="choice-title">Jeep Safari</div>
+              <div class="choice-sub">Choose your zone below.</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="jeeptype-block">
+          <div class="choice-label">Jeep</div>
+          <div class="choice-grid" id="jeeptype-grid"></div>
+        </div>
+
+        <div id="nationality-block">
+          <div class="choice-label">Guest nationality</div>
+          <div class="seg" id="nationality-seg">
+            <button type="button" id="nat-indian" class="on" onclick="setNationality('indian')">Indian</button>
+            <button type="button" id="nat-foreigner" onclick="setNationality('foreigner')">Foreigner</button>
+          </div>
+          <div class="hint" id="nat-hint" style="display:none;margin-top:0.5rem;">Foreign guests can upload their passport or any other ID card they have.</div>
+        </div>
+
+        <div id="shared-zone-card" style="display:none;"></div>
+
+        <div class="choice-label" id="zone-label">Select zone</div>
+        <div class="zone-list" id="zone-list"></div>
+        <div id="zone-note"></div>
+
+        <div class="two-col" style="margin-top:1.8rem;">
+          <div class="form-group">
+            <label class="form-label">Safari Date</label>
+            <input type="date" id="booking-date" class="form-input" oninput="onDateChange()">
+            <div class="tuesday-warning" id="tuesday-warning"><i data-lucide="alert-triangle" style="width:16px;height:16px;flex-shrink:0;"></i> <span id="tuesday-warning-text"></span></div>
+          </div>
+          <div class="form-group" id="slot-group">
+            <label class="form-label">Time Slot</label>
+            <div class="time-slots" id="time-slots-container"></div>
+          </div>
+        </div>
+
+        <div class="booking-preview-card" id="booking-preview">
+          <div class="booking-preview-label">Your Selected Safari</div>
+          <div class="booking-preview-row"><i data-lucide="map-pin" class="bp-icon" style="width:17px;height:17px;"></i><span id="preview-park">—</span></div>
+          <div class="booking-preview-row"><i data-lucide="calendar" class="bp-icon" style="width:17px;height:17px;"></i><span id="preview-date">—</span></div>
+          <div class="booking-preview-row"><i data-lucide="clock" class="bp-icon" style="width:17px;height:17px;"></i><span id="preview-time">—</span></div>
+        </div>
+      </div>
+
+      <!-- ══ STEP 3: GUESTS ══ -->
+      <div class="step-content" id="step-2" style="display:none;">
+        <span class="section-label">Step 3 of 5 — Guest Details</span>
+        <h2 class="section-title">GUEST<br>DETAILS</h2>
+
+        <div class="contact-card">
+          <div class="choice-label" style="margin-top:0;">Who should we contact?</div>
+          <div class="addon-grid">
+            <div class="form-group form-group-tight">
+              <label class="form-label">Your Name <span class="req">*</span></label>
+              <input type="text" class="form-input" id="c-name" placeholder="Full name" autocomplete="name" oninput="S.contact.name=this.value">
+            </div>
+            <div class="form-group form-group-tight">
+              <label class="form-label">Mobile / WhatsApp <span class="req">*</span></label>
+              <input type="tel" class="form-input" id="c-phone" placeholder="+91 XXXXX XXXXX" autocomplete="tel" oninput="S.contact.phone=this.value">
+              <div class="form-hint">We contact you on this WhatsApp number.</div>
+            </div>
+            <div class="form-group form-group-tight">
+              <label class="form-label">Business name <span style="opacity:.6;font-weight:400;">(optional)</span></label>
+              <input type="text" class="form-input" id="c-biz" placeholder="For business bookings" autocomplete="organization" oninput="S.contact.business=this.value">
+            </div>
+            <div class="form-group form-group-tight">
+              <label class="form-label">GST number <span style="opacity:.6;font-weight:400;">(optional)</span></label>
+              <input type="text" class="form-input" id="c-gst" placeholder="15-character GSTIN" maxlength="20" autocapitalize="characters" oninput="S.contact.gst=this.value">
+            </div>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div>
+            <div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#888;margin-bottom:0.5rem;" id="adult-label">Adults</div>
+            <div class="guest-count-row">
+              <button class="count-btn" onclick="changeAdults(-1)" type="button">−</button>
+              <span class="count-display" id="adult-count-display">1</span>
+              <button class="count-btn" onclick="changeAdults(1)" type="button">+</button>
+              <span class="count-label">adult(s)</span>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#888;margin-bottom:0.5rem;">Children <span style="font-weight:400;">(5 yrs &amp; under · <span id="child-fee-note">free</span>)</span></div>
+            <div class="guest-count-row">
+              <button class="count-btn" onclick="changeChildren(-1)" type="button">−</button>
+              <span class="count-display" id="child-count-display">0</span>
+              <button class="count-btn" onclick="changeChildren(1)" type="button">+</button>
+              <span class="count-label">child(ren)</span>
+            </div>
+          </div>
+        </div>
+        <div class="info-note" id="jeep-count-note" style="display:none;"></div>
+
+        <div id="id-note" class="info-note" style="margin-bottom:1.2rem;"></div>
+        <div id="guest-forms-container"></div>
+      </div>
+
+      <!-- ══ STEP 5: PAYMENT ══ -->
+      <div class="step-content" id="step-4" style="display:none;">
+        <span class="section-label">Step 5 of 5 — Payment</span>
+        <h2 class="section-title" id="pay-title">COMPLETE<br>PAYMENT</h2>
+
+        <div class="park-rules-box" id="camera-box" style="margin-bottom:1.5rem;"></div>
+
+        <div class="payment-amount-card">
+          <div class="pay-amount-label" id="pay-label">Total Amount Payable (No GST)</div>
+          <div class="pay-amount-value" id="pay-total-display">₹0</div>
+          <div class="quote-lines" id="pay-breakdown"></div>
+        </div>
+
+        <div class="park-rules-box" style="margin-bottom:1.5rem;">
+          <div class="park-rules-title">Important — Park Rules</div>
+          <ul class="park-rules-list" id="payment-rules-list"></ul>
+        </div>
+
+        <hr class="section-divider">
+        <p id="pay-intro" style="font-size:0.85rem;color:#777;margin:0 0 1.2rem;line-height:1.7;">
+          Pay securely with UPI, card, net banking or wallet via Razorpay. Your booking is confirmed instantly once payment succeeds.
+        </p>
+
+        <div class="tnc-box">
+          <div class="tnc-title">Refund Policy &amp; Safari Rules</div>
+          <ul class="tnc-list">
+            <li style="display:flex;align-items:flex-start;gap:0.5rem;"><i data-lucide="check-circle" style="width:15px;height:15px;color:#27ae60;flex-shrink:0;margin-top:2px;"></i> <span><strong>Cancellation 1 week or more before safari — 100% refund.</strong></span></li>
+            <li style="display:flex;align-items:flex-start;gap:0.5rem;"><i data-lucide="alert-circle" style="width:15px;height:15px;color:#f39c12;flex-shrink:0;margin-top:2px;"></i> <span><strong>Cancellation 3 days before safari — 50% refund.</strong></span></li>
+            <li style="display:flex;align-items:flex-start;gap:0.5rem;"><i data-lucide="x-circle" style="width:15px;height:15px;color:#e74c3c;flex-shrink:0;margin-top:2px;"></i> <span><strong>Cancellation after 3 days — no refund.</strong></span></li>
+            <li>If the National Park authority does not allow entry, <strong>full payment will be refunded within 24 hours</strong>.</li>
+            <li style="display:flex;align-items:flex-start;gap:0.5rem;"><i data-lucide="clock" style="width:15px;height:15px;color:var(--gold,#b5943b);flex-shrink:0;margin-top:2px;"></i> <span><strong>Guests must be ready at the pickup point at least 30 minutes before the safari timing.</strong></span></li>
+            <li style="display:flex;align-items:flex-start;gap:0.5rem;"><i data-lucide="x-circle" style="width:15px;height:15px;color:#e74c3c;flex-shrink:0;margin-top:2px;"></i> <span><strong>Delay in reporting will result in no refund.</strong> The jeep will not wait beyond the scheduled departure time.</span></li>
+          </ul>
+          <label class="tnc-check-row">
+            <input type="checkbox" id="tnc-agree">
+            I have read and agree to the Refund Policy above.
+          </label>
+        </div>
+
+        <button class="btn-primary" style="width:100%;padding:1.2rem;margin-top:0.5rem;font-size:0.95rem;" id="pay-btn" onclick="payNow()">Pay &amp; Confirm Booking</button>
+
+        <div style="text-align:center;margin-top:1rem;">
+          <button onclick="goBack(4)" style="background:none;border:none;cursor:pointer;color:#888;font-family:var(--font-body,sans-serif);font-size:0.84rem;text-decoration:underline;">← Back</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══ FIXED BOTTOM BAR ═══ -->
+  <div class="booking-bottom-bar" id="booking-bottom-bar">
+    <div class="bbb-brief" id="bbb-brief">
+      <div class="bbb-item"><span class="bbb-label">Park</span><span class="bbb-val" id="bbb-park">—</span></div>
+      <div class="bbb-item hide-xs"><span class="bbb-label">Date</span><span class="bbb-val" id="bbb-date">—</span></div>
+      <div class="bbb-item hide-xs"><span class="bbb-label">Guests</span><span class="bbb-val" id="bbb-guests">1 Adult</span></div>
+      <div class="bbb-item"><span class="bbb-label" id="bbb-total-label">Total</span><span class="bbb-total-val" id="bbb-total">₹0</span></div>
+    </div>
+    <div class="bbb-actions">
+      <button class="bbb-details-btn" onclick="openModal()" id="bbb-details-btn"><i data-lucide="file-text" style="width:13px;height:13px;"></i> Details</button>
+      <button class="bbb-back-btn" id="bbb-back-btn" onclick="bbbBack()">← Back</button>
+      <button class="bbb-next-btn" id="bbb-next-btn" onclick="bbbNext()">Next →</button>
+    </div>
+  </div>
+
+  <script src="../js/lang.js"></script>
+  <script src="../js/main.js"></script>
+  <script>
+    /* ═══════════════════════════════════════
+       HELPERS
+    ═══════════════════════════════════════ */
+    const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const money = n => '₹' + Number(n || 0).toLocaleString('en-IN');
+    const $ = id => document.getElementById(id);
+    const setText = (id, v) => { const e = $(id); if (e) e.textContent = v; };
+    const icons = () => { if (typeof lucide !== 'undefined') lucide.createIcons(); };
+    const fmtDate = (d, opts) => d ? new Date(d + 'T12:00:00').toLocaleDateString('en-IN', opts || { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }) : '—';
+
+    /* ═══════════════════════════════════════
+       FILE UPLOAD — compress images client-side, then upload to
+       Netlify Blobs via a serverless function (private, admin-only).
+    ═══════════════════════════════════════ */
+    const MAX_FILE_BYTES = 15 * 1024 * 1024;
+    const COMPRESS_MAX_DIM = 1600;
+    const COMPRESS_QUALITY = 0.72;
+
+    function readFileAsDataUrl(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload  = () => resolve(reader.result);
+        reader.onerror = () => reject(new Error('Could not read file: ' + file.name));
+        reader.readAsDataURL(file);
+      });
+    }
+    function loadImage(src) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload  = () => resolve(img);
+        img.onerror = () => reject(new Error('Could not decode image'));
+        img.src = src;
+      });
+    }
+    async function compressFile(file) {
+      if (!file.type.startsWith('image/')) return file;
+      try {
+        const img = await loadImage(await readFileAsDataUrl(file));
+        const { width, height } = img;
+        if (width <= COMPRESS_MAX_DIM && height <= COMPRESS_MAX_DIM && file.size < 1.5 * 1024 * 1024) return file;
+        const scale = Math.min(1, COMPRESS_MAX_DIM / Math.max(width, height));
+        const canvas = document.createElement('canvas');
+        canvas.width  = Math.round(width * scale);
+        canvas.height = Math.round(height * scale);
+        canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+        const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', COMPRESS_QUALITY));
+        if (!blob || blob.size >= file.size) return file;
+        return new File([blob], file.name.replace(/\.[^.]+$/, '') + '.jpg', { type: 'image/jpeg' });
+      } catch (err) {
+        console.warn('Compression failed, using original file:', err);
+        return file;
+      }
+    }
+    async function uploadFile(file, folder) {
+      if (file.size > MAX_FILE_BYTES) throw new Error(`"${file.name}" is too large (max 15MB).`);
+      const processed = await compressFile(file);
+      if (processed.size > 4 * 1024 * 1024) {
+        throw new Error(`"${file.name}" is too large (max 4 MB). Please upload a photo of the document or a smaller PDF.`);
+      }
+      const base64 = (await readFileAsDataUrl(processed)).split(',')[1];
+      const res = await fetch('/.netlify/functions/upload-file', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ folder, filename: processed.name, contentType: processed.type, dataBase64: base64 })
+      });
+      const result = await res.json();
+      if (!res.ok) throw new Error(result.error || 'Upload failed');
+      return result.key;
+    }
+
+    async function postJson(url, body) {
+      const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || 'Request failed');
+      return data;
+    }
+
+    /* ═══════════════════════════════════════
+       CATALOG (parks, zones, slots, pickup/drop rates come from the database)
+    ═══════════════════════════════════════ */
+    let C = { parks: [], slots: [], zones: [], routes: [], rates: [] };
+    const PARK_PHOTO = { kaziranga: '../images/kazi.jpg', manas: '../images/manas.jpg' };
+    const PARK_TAG   = { kaziranga: 'UNESCO World Heritage Site', manas: 'Biosphere Reserve · Tiger Reserve' };
+    const ID_LABEL   = { aadhaar: 'Aadhaar Card', passport: 'Passport', other: 'Other ID card (national ID, driving licence, …)' };
+
+    const parkById = id => C.parks.find(p => p.id === id);
+    // Private and shared safaris have different time slots; shared safaris run in one fixed zone per park.
+    const slotsFor = (parkId, type) => C.slots.filter(s => s.park_id === parkId && (s.for_type || 'private') === type);
+    const sharedZoneOf = parkId => { const p = parkById(parkId); return p && p.shared_zone_id ? zoneById(p.shared_zone_id) : null; };
+    const zoneById = id => C.zones.find(z => z.id === id);
+    const logoSrc  = p => p && p.logo_path ? '../' + p.logo_path : '';
+
+    // Parks with camera fees in the database (Manas) charge them here, added to the total. Others are only shown:
+    // Kaziranga's camera fees are paid at the park gate.
+    const CAMERA_GATE_INFO = { kaziranga: [['Still camera', 100, 200], ['Video camera', 1000, 1000]] };
+    const camFee = (parkId, kind) => { const p = parkById(parkId); return p ? p[`camera_${kind}_${S.nationality === 'foreigner' ? 'foreigner' : 'indian'}`] : null; };
+    const parkHasCameraFees = parkId => camFee(parkId, 'still') != null || camFee(parkId, 'video') != null;
+
+    function parkRules(parkId) {
+      const p = parkById(parkId);
+      const rules = [
+        'Children below 5 years — entry free.',
+        'Plastic is strictly not allowed inside the national park.',
+        'Share your pick-up location / hotel name at least 24 hours before the safari.',
+        'Vehicle and driver details are sent on WhatsApp 24 hours before your safari.'
+      ];
+      if (parkId === 'manas') {
+        rules.unshift('Maximum 5 guests per jeep.',
+          'Carry your <strong>original ID</strong> on the safari day (Aadhaar for Indian guests; passport or any ID card for foreign guests).');
+      }
+      if (parkId === 'kaziranga') {
+        rules.unshift('Maximum 5 guests per jeep (children included).',
+          '<strong>An ID is required for every guest</strong>, including children — Aadhaar for Indian guests, passport or any ID card for foreign guests. This applies to shared jeep too.',
+          'Carry the original ID of all guests on the safari day.');
+      }
+      if (p && p.closed_weekday != null) rules.push(`<strong>${esc(p.name)} is closed every ${dayName(p.closed_weekday)}.</strong>`);
+      return rules;
+    }
+    const dayName = n => ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][n];
+
+    /* ═══════════════════════════════════════
+       STATE
+    ═══════════════════════════════════════ */
+    const S = {
+      park: '', type: 'private', zone: '', nationality: 'indian',
+      date: '', slot: '', adults: 1, children: 0,
+      contact: { name: '', phone: '', business: '', gst: '' },
+      guests: [], cam: { still: 0, video: 0 },
+      step: 0, order: null
+    };
+    const STEP_NAMES = ['Choose Your Destination', 'Your Safari', 'Guest Details', '', 'Payment'];
+
+    // 'request' (default): guests submit a booking request and pay later via a link we send. 'instant': pay now.
+    const requestMode = () => !C.mode || C.mode !== 'instant';
+    function applyMode() {
+      if (!requestMode()) return;
+      STEP_NAMES[4] = 'Review & Submit';
+      document.querySelector('#step-ind-4 .step-label-text').textContent = 'Submit';
+      $('pay-title').innerHTML = 'SUBMIT<br>BOOKING';
+      $('pay-label').textContent = 'Estimated Amount (No GST)';
+      $('pay-intro').textContent = 'No payment is needed now. Submit your booking and we will check the slot and contact you soon on WhatsApp with the final amount and a secure payment link.';
+      $('pay-btn').textContent = 'Submit Booking';
+      $('bbb-total-label').textContent = 'Estimate';
+    }
+
+    const stepList = () => [0, 1, 2, 4];   // park, safari, guests, submit
+    const maxAdults   = () => S.type === 'shared' ? 3 : 20;
+    const maxChildren = () => S.type === 'shared' ? 2 : 10;
+
+    /* ═══════════════════════════════════════
+       PRICING — mirrors netlify/functions/create-order.js; the server recalculates
+    ═══════════════════════════════════════ */
+    function quote() {
+      const zone = zoneById(S.zone), park = parkById(S.park);
+      if (!zone || !park) return null;
+      const foreign = S.nationality === 'foreigner';
+      let unit, jeeps = null, safari;
+      if (S.type === 'shared') {
+        // one fixed per-person price per park; foreign guests pay the foreigner price (it includes the entry fee)
+        unit = foreign ? park.shared_price_foreigner : park.shared_price_per_person;
+        safari = unit == null ? 0 : unit * S.adults;
+      } else {
+        unit = foreign ? zone.price_foreigner : zone.price_indian;
+        const seats = S.adults + (park.children_need_seat ? S.children : 0);
+        jeeps = Math.max(1, Math.ceil(seats / zone.max_per_jeep));
+        safari = unit == null ? 0 : unit * jeeps;
+      }
+      // Camera charges (per camera) are part of the total at parks that have them (Manas).
+      const feeStill = camFee(park.id, 'still'), feeVideo = camFee(park.id, 'video');
+      const camera = { still: feeStill == null ? 0 : S.cam.still, video: feeVideo == null ? 0 : S.cam.video };
+      camera.amount = camera.still * (feeStill || 0) + camera.video * (feeVideo || 0);
+      return { zone, park, unit, jeeps, safari, camera, total: safari + camera.amount };
+    }
+
+    /* ═══════════════════════════════════════
+       DETAILS MODAL
+    ═══════════════════════════════════════ */
+    window.openModal = function () {
+      renderModalPricing();
+      const section = $('modal-rules-section');
+      if (S.park) {
+        section.style.display = 'block';
+        $('modal-rules-label').innerHTML = `<i data-lucide="info" style="width:13px;height:13px;"></i> ${esc(parkById(S.park).name)} — Park Rules`;
+        $('modal-rules-list').innerHTML = parkRules(S.park).map(r => `<li>${r}</li>`).join('');
+      } else section.style.display = 'none';
+      $('details-modal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+      icons();
+    };
+    window.closeModal = function () {
+      $('details-modal').classList.remove('open');
+      document.body.style.overflow = '';
+    };
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+    function renderModalPricing() {
+      const parks = S.park ? C.parks.filter(p => p.id === S.park) : C.parks;
+      $('modal-pricing').innerHTML = parks.map(p => `
+        <div class="modal-pricing-col-title" style="margin-top:0.6rem;"><i data-lucide="map-pin" style="width:13px;height:13px;"></i> ${esc(p.name)}</div>
+        <div style="overflow-x:auto;"><table class="fee-table">
+          <tr><th>Zone</th><th>Indian (per jeep)</th><th>Foreigner (per jeep)</th></tr>
+          ${C.zones.filter(z => z.park_id === p.id).map(z => `<tr>
+            <td>${esc(z.name)}${z.full_day ? ' <small>(whole day)</small>' : ''}</td>
+            <td>${money(z.price_indian)}</td><td>${z.price_foreigner == null ? '—' : money(z.price_foreigner)}</td></tr>`).join('')}
+        </table></div>
+        ${p.shared_price_per_person == null ? '' : `<div style="font-size:0.82rem;margin:0.5rem 0 0.2rem;"><b>Shared jeep:</b> ${money(p.shared_price_per_person)} per person (Indian)${p.shared_price_foreigner != null ? ` · ${money(p.shared_price_foreigner)} per person (foreigner, includes the foreigner entry fee)` : ''} in ${sharedZoneOf(p.id) ? esc(sharedZoneOf(p.id).name) : 'its fixed zone'} only · ${esc(slotsFor(p.id, 'shared').map(s => `${s.name} ${s.time_range}`).join(' · '))}</div>`}
+        <div style="font-size:0.72rem;color:#888;margin:0.3rem 0 0.8rem;">Private jeep prices are per jeep, up to ${Math.max(...C.zones.filter(z => z.park_id === p.id).map(z => z.max_per_jeep))} guests.</div>`).join('');
+    }
+
+    /* ═══════════════════════════════════════
+       STEP 1 — PARK
+    ═══════════════════════════════════════ */
+    function renderParks() {
+      $('park-selector').innerHTML = C.parks.map(p => {
+        const zs = C.zones.filter(z => z.park_id === p.id);
+        const from = Math.min(...zs.map(z => z.price_indian));
+        return `<div class="park-option ${S.park === p.id ? 'selected' : ''}" id="opt-${esc(p.id)}" onclick="selectPark('${esc(p.id)}')">
+          <img class="park-logo" src="${esc(logoSrc(p))}" alt="${esc(p.name)} logo">
+          <div class="park-option-img" style="background-image:url('${PARK_PHOTO[p.id] || ''}');"></div>
+          <div class="park-option-info">
+            <span class="park-option-tag">${esc(PARK_TAG[p.id] || '')}</span>
+            <div class="park-option-name">${esc(p.name.replace(/ National Park$/, '').toUpperCase())}</div>
+            ${p.shared_price_per_person != null ? `<div class="park-rate-row" style="margin-top:0.6rem;"><span class="park-rate-label">Shared Jeep</span><span class="park-rate-val">${money(p.shared_price_per_person)} <small>/ person</small></span></div>` : ''}
+            <div class="park-rate-row park-rate-private"><span class="park-rate-label">Private Jeep</span><span class="park-rate-val">from ${money(from)} <small>/ jeep · up to 5</small></span></div>
+          </div>
+          <div class="selected-check"><i data-lucide="check" style="width:14px;height:14px;color:white;"></i></div>
+        </div>`;
+      }).join('');
+      icons();
+    }
+
+    window.selectPark = function (id) {
+      if (S.park !== id) {
+        S.park = id; S.zone = ''; S.slot = ''; S.cam = { still: 0, video: 0 };
+        clampGuests();
+      }
+      if (S.type === 'shared' && parkById(S.park).shared_price_per_person == null) S.type = 'private';
+      if (S.type === 'shared') { const z = sharedZoneOf(S.park); S.zone = z ? z.id : ''; }
+      document.querySelectorAll('.park-option').forEach(el => el.classList.toggle('selected', el.id === 'opt-' + id));
+      updateSummary();
+    };
+
+
+    /* ═══════════════════════════════════════
+       STEP 2 — SAFARI (type, zone, date, slot)
+    ═══════════════════════════════════════ */
+    function renderSafariStep() {
+      const p = parkById(S.park);
+      $('safari-title').innerHTML = esc(p.name.replace(/ National Park$/, '').toUpperCase()) + '<br>SAFARI';
+      $('service-block').style.display = S.park === 'manas' ? '' : 'none';
+
+      const sharedPrice = parkById(S.park).shared_price_per_person;
+      $('jeeptype-block').style.display = sharedPrice != null ? '' : 'none';
+      $('jeeptype-grid').innerHTML = `
+        <div class="choice-card ${S.type === 'private' ? 'selected' : ''}" onclick="setType('private')">
+          <div class="choice-title">Private Jeep</div>
+          <div class="choice-sub">Your own jeep, up to 5 guests. Indian &amp; foreign guests. Price is per jeep.</div>
+        </div>
+        <div class="choice-card ${S.type === 'shared' ? 'selected' : ''}" onclick="setType('shared')">
+          <div class="choice-title">Shared Jeep — ${money(S.nationality === 'foreigner' && parkById(S.park).shared_price_foreigner != null ? parkById(S.park).shared_price_foreigner : sharedPrice)} / person</div>
+          <div class="choice-sub">Solo travellers &amp; couples (1–3 guests) sharing a jeep. Indian &amp; foreign guests. Fixed zone and fixed timings.</div>
+        </div>`;
+
+      $('nationality-block').style.display = '';
+      $('nat-indian').classList.toggle('on', S.nationality === 'indian');
+      $('nat-foreigner').classList.toggle('on', S.nationality === 'foreigner');
+      $('nat-hint').style.display = S.nationality === 'foreigner' ? '' : 'none';
+      renderZones();
+      renderSlots();
+      renderWeekdayWarning();
+      updatePreview();
+      $('booking-date').value = S.date;
+      icons();
+    }
+
+    window.setType = function (t) {
+      S.type = t; S.slot = '';                          // private and shared have different time slots
+      if (t === 'shared') { const z = sharedZoneOf(S.park); S.zone = z ? z.id : ''; }   // shared: fixed zone
+      clampGuests();
+      S.order = null;
+      renderSafariStep(); updateSummary();
+    };
+    window.setNationality = function (n) {
+      S.nationality = n; S.order = null;
+      const z = zoneById(S.zone);
+      if (z && n === 'foreigner' && z.price_foreigner == null) S.zone = '';   // that zone is Indian-only
+      S.guests.forEach(g => { g.idType = ''; }); S.cam = { still: 0, video: 0 };
+      renderSafariStep(); updateSummary();
+    };
+
+    function renderZones() {
+      const p = parkById(S.park);
+      const shared = S.type === 'shared';
+      const foreign = !shared && S.nationality === 'foreigner';
+      const zones = C.zones.filter(z => z.park_id === S.park);
+      $('zone-label').textContent = 'Select zone';
+      // Shared safari: no zone choice — show the fixed zone and its timings instead.
+      $('zone-label').style.display = $('zone-list').style.display = shared ? 'none' : '';
+      $('shared-zone-card').style.display = shared ? '' : 'none';
+      if (shared) {
+        const sz = sharedZoneOf(S.park);
+        const sharedUnit = S.nationality === 'foreigner' ? p.shared_price_foreigner : p.shared_price_per_person;
+        $('shared-zone-card').innerHTML = sharedUnit == null ? '<div class="info-note warn">Shared jeep is not available for foreign guests here. Please choose a private jeep.</div>' : sz ? `<div class="choice-label">Your zone</div>
+          <div class="zone-card selected" style="cursor:default;">
+            <img class="zone-logo" src="${esc(logoSrc(p))}" alt="">
+            <div class="zone-info"><div class="zone-name">${esc(sz.name)}</div>
+              <div class="zone-meta">Shared jeep zone — fixed · ${esc(slotsFor(S.park, 'shared').map(s => `${s.name} ${s.time_range}`).join(' · '))}</div></div>
+            <div class="zone-price">${money(sharedUnit)}<small>per person${S.nationality === 'foreigner' ? ' · includes foreigner entry fee' : ''}</small></div>
+          </div>` : '<div class="info-note warn">Shared jeep is not available right now. Please choose a private jeep.</div>';
+        $('zone-note').innerHTML = '';
+        return;
+      }
+      $('zone-list').innerHTML = zones.map(z => {
+        const price = shared ? p.shared_price_per_person : foreign ? z.price_foreigner : z.price_indian;
+        const blocked = price == null;
+        const meta = [
+          z.full_day ? 'Whole day' : slotsFor(z.park_id, 'private').map(s => `${s.name} ${s.time_range}`).join(' · '),
+          shared ? '1–3 guests share the jeep' : `Up to ${z.max_per_jeep} guests`,
+          z.note
+        ].filter(Boolean).join(' · ');
+        return `<div class="zone-card ${S.zone === z.id ? 'selected' : ''}" ${blocked ? 'style="opacity:.5;cursor:not-allowed;"' : `onclick="selectZone('${esc(z.id)}')"`}>
+          <img class="zone-logo" src="${esc(logoSrc(p))}" alt="">
+          <div class="zone-info">
+            <div class="zone-name">${esc(z.name)}</div>
+            <div class="zone-meta">${esc(meta)}</div>
+          </div>
+          <div class="zone-price">${blocked ? 'Indian guests only' : money(price)}<small>${blocked ? '' : shared ? 'per person' : 'per jeep'}</small></div>
+        </div>`;
+      }).join('');
+      const z = zoneById(S.zone);
+      $('zone-note').innerHTML = z && z.note && !shared ? `<div class="info-note">${esc(z.note)}</div>` : '';
+    }
+
+    window.selectZone = function (id) {
+      S.zone = id; S.order = null;
+      const z = zoneById(id);
+      if (z.full_day) S.slot = '';
+      renderZones(); renderSlots(); updatePreview(); updateSummary();
+    };
+
+    function renderSlots() {
+      const z = zoneById(S.zone);
+      const group = $('slot-group'), box = $('time-slots-container');
+      if (!z) { group.style.display = ''; box.innerHTML = '<div style="font-size:0.82rem;color:#999;">Select a zone first.</div>'; return; }
+      group.style.display = '';
+      if (z.full_day) { box.innerHTML = '<div class="info-note" style="margin-top:0;">Whole-day safari — no time slot to choose.</div>'; return; }
+      box.innerHTML = slotsFor(S.park, S.type).map(s =>
+        `<div class="time-slot ${S.slot === s.id ? 'selected' : ''}" onclick="selectSlot('${esc(s.id)}')">
+          <div class="time-slot-name">${esc(s.name)}</div>
+          <div class="time-slot-time">${esc(s.time_range)}</div>
+        </div>`).join('');
+    }
+    window.selectSlot = function (id) { S.slot = id; renderSlots(); updatePreview(); };
+
+    function renderWeekdayWarning() {
+      const p = parkById(S.park), warn = $('tuesday-warning');
+      const closed = p && p.closed_weekday != null && S.date && new Date(S.date + 'T12:00:00').getDay() === p.closed_weekday;
+      warn.classList.toggle('visible', !!closed);
+      if (closed) setText('tuesday-warning-text', `${p.name} is closed every ${dayName(p.closed_weekday)}. Please pick another date.`);
+    }
+    window.onDateChange = function () {
+      S.date = $('booking-date').value;
+      renderWeekdayWarning(); updatePreview(); updateSummary();
+    };
+
+    function updatePreview() {
+      const z = zoneById(S.zone), s = C.slots.find(x => x.id === S.slot);
+      $('booking-preview').classList.toggle('visible', !!(S.date || z));
+      setText('preview-park', z ? `${parkById(S.park).name} — ${z.name}` : '—');
+      setText('preview-date', fmtDate(S.date));
+      setText('preview-time', z && z.full_day ? 'Whole day' : s ? `${s.name} (${s.time_range})` : '—');
+    }
+
+    /* ═══════════════════════════════════════
+       STEP 3 — GUESTS
+    ═══════════════════════════════════════ */
+    function clampGuests() {
+      S.adults = Math.min(maxAdults(), Math.max(1, S.adults));
+      S.children = Math.min(maxChildren(), Math.max(0, S.children));
+    }
+    window.changeAdults = function (d) { S.adults = Math.min(maxAdults(), Math.max(1, S.adults + d)); afterCountChange(); };
+    window.changeChildren = function (d) { S.children = Math.min(maxChildren(), Math.max(0, S.children + d)); afterCountChange(); };
+    function afterCountChange() {
+      S.order = null;
+      setText('adult-count-display', S.adults);
+      setText('child-count-display', S.children);
+      renderGuestForms(); renderJeepNote(); updateSummary();
+    }
+
+    function renderJeepNote() {
+      const q = quote(), note = $('jeep-count-note');
+      if (!q) { note.style.display = 'none'; return; }
+      note.style.display = '';
+      if (S.type === 'shared') {
+        note.innerHTML = `Shared jeep: ${money(q.unit)} × ${S.adults} adult${S.adults > 1 ? 's' : ''} = <strong>${money(q.safari)}</strong>. For 4 or more guests, book a private jeep.`;
+      } else {
+        note.innerHTML = `<strong>${q.jeeps} jeep${q.jeeps > 1 ? 's' : ''}</strong> needed (max ${q.zone.max_per_jeep} guests per jeep): ${q.jeeps} × ${money(q.unit)} = <strong>${money(q.safari)}</strong>.`;
+      }
+    }
+
+    const needsId = i => i === 0 || (parkById(S.park) && parkById(S.park).id_docs_for_all);
+    const isForeign = () => S.nationality === 'foreigner';
+    const newGuest = () => ({ name: '', age: '', idType: '', file: null, idKey: null });
+
+    function renderGuestForms() {
+      const c = $('guest-forms-container'), p = parkById(S.park);
+      if (!c || !p) return;
+      const total = S.adults + S.children;
+      while (S.guests.length < total) S.guests.push(newGuest());
+      S.guests.length = total;
+      setText('child-fee-note', p.children_need_seat ? 'counts as a seat' : 'free, no seat needed');
+      $('adult-label').innerHTML = `Adults <span style="font-weight:400;">(above 5 yrs · max ${maxAdults()})</span>`;
+      const allIds = p.id_docs_for_all;
+      const doc = isForeign() ? 'passport or any other ID card' : 'Aadhaar card';
+      $('id-note').innerHTML = allIds
+        ? `<strong>${esc(p.name)} requires an ID for every guest</strong>, including children and shared-jeep guests. Upload a clear photo or PDF of each guest's ${doc}.`
+        : `The <strong>primary guest</strong> uploads their ${doc}. Other guests only need a name and age.${S.park === 'manas' ? ' Carry your original ID on the safari day.' : ''}`;
+
+      let html = '';
+      for (let i = 0; i < total; i++) {
+        const isChild = i >= S.adults, g = S.guests[i];
+        const title = i === 0 ? 'Primary Guest' : isChild ? `Child ${i - S.adults + 1}` : `Adult ${i + 1}`;
+        if (i === 0) html += '<div class="choice-label" style="margin-top:0;">Adults</div>';
+        if (i === S.adults) html += '<div class="choice-label">Children (5 yrs &amp; under)</div>';
+        const idHtml = needsId(i) ? `
+          ${isForeign() ? `<div class="form-group form-group-tight full">
+            <label class="form-label">ID type</label>
+            <select class="form-input" onchange="setGuest(${i},'idType',this.value)">
+              ${['passport', 'other'].map(t => `<option value="${t}" ${(g.idType || 'passport') === t ? 'selected' : ''}>${ID_LABEL[t]}</option>`).join('')}
+            </select>
+          </div>` : ''}
+          <div class="form-group form-group-tight">
+            <label class="form-label">${isForeign() ? 'ID card' : 'Aadhaar Card'} <span class="req">*</span> <span style="font-weight:400;text-transform:none;letter-spacing:0;">(JPG, PNG or PDF)</span></label>
+            <div class="aadhaar-upload-area ${g.file ? 'has-file' : ''}" onclick="$('id-file-${i}').click()">
+              <i data-lucide="upload-cloud" style="width:24px;height:24px;color:#aaa;margin:0 auto;display:block;"></i>
+              <span class="aadhaar-upload-label">Tap to upload photo / PDF</span>
+              <span class="aadhaar-upload-name">${g.file ? '✓ ' + esc(g.file.name) : ''}</span>
+              <input type="file" id="id-file-${i}" accept=".jpg,.jpeg,.png,.pdf" style="display:none;" onchange="onIdFile(${i},this)">
+            </div>
+          </div>` : '';
+        html += `<div class="guest-card">
+          <div class="guest-card-title">${title}</div>
+          <div class="guest-fields-grid">
+            <div class="form-group form-group-tight">
+              <label class="form-label">Full Name <span class="req">*</span></label>
+              <input type="text" class="form-input" placeholder="As on ID" value="${esc(g.name)}" oninput="setGuest(${i},'name',this.value)">
+            </div>
+            <div class="form-group form-group-tight">
+              <label class="form-label">Age <span class="req">*</span></label>
+              <input type="number" class="form-input" placeholder="${isChild ? 'Age (0–5)' : 'Age'}" min="${isChild ? 0 : 6}" max="${isChild ? 5 : 120}" value="${esc(g.age)}" oninput="setGuest(${i},'age',this.value)">
+            </div>
+            ${idHtml}
+          </div>
+        </div>`;
+      }
+      c.innerHTML = html;
+      icons();
+    }
+
+    window.setGuest = function (i, field, val) { if (S.guests[i]) { S.guests[i][field] = val; S.order = null; } };
+    window.onIdFile = function (i, input) {
+      const file = input.files[0];
+      if (!file) return;
+      if (file.size > MAX_FILE_BYTES) { showToast('File too large. Please choose a photo or PDF under 15 MB.', 'error'); input.value = ''; return; }
+      S.guests[i].file = file; S.guests[i].idKey = null; S.order = null;
+      renderGuestForms();
+    };
+
+    /* ═══════════════════════════════════════
+       SUMMARY (bottom bar + payment page)
+    ═══════════════════════════════════════ */
+    function updateSummary() {
+      const q = quote();
+      setText('bbb-park', q ? q.zone.name : (parkById(S.park) ? parkById(S.park).name.replace(/ National Park$/, '') : '—'));
+      setText('bbb-date', S.date ? fmtDate(S.date, { day: 'numeric', month: 'short' }) : '—');
+      setText('bbb-guests', S.adults + ' Adult' + (S.adults > 1 ? 's' : '') + (S.children ? ` · ${S.children} Child${S.children > 1 ? 'ren' : ''}` : ''));
+      const total = q ? q.total : 0;
+      setText('bbb-total', money(total));
+      setText('pay-total-display', money(total));
+      if (!q) { $('pay-breakdown').innerHTML = ''; return; }
+      const lines = [];
+      lines.push(S.type === 'shared'
+        ? [`Shared jeep · ${q.zone.name}: ${S.adults} × ${money(q.unit)}`, q.safari]
+        : [`Private jeep · ${q.zone.name}: ${q.jeeps} × ${money(q.unit)}`, q.safari]);
+      if (q.camera.still) lines.push([`Still camera × ${q.camera.still} (${money(camFee(q.park.id, 'still'))} each)`, q.camera.still * camFee(q.park.id, 'still')]);
+      if (q.camera.video) lines.push([`Video camera × ${q.camera.video} (${money(camFee(q.park.id, 'video'))} each)`, q.camera.video * camFee(q.park.id, 'video')]);
+      $('pay-breakdown').innerHTML = lines.map(l => `<div class="quote-line"><span>${esc(l[0])}</span><span>${money(l[1])}</span></div>`).join('')
+        + `<div class="quote-line total"><span>Total (no GST)</span><span>${money(q.total)}</span></div>`;
+    }
+
+    function renderPaymentExtras() {
+      const box = $('camera-box');
+      if (parkHasCameraFees(S.park)) {
+        // Camera charges are part of the total (Manas). The guest says how many cameras they will carry.
+        const row = (kind, label) => { const fee = camFee(S.park, kind); return fee == null ? '' : `
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding:0.7rem 0;border-bottom:1px solid #eee3c4;">
+            <div><b>${label}</b><div style="font-size:0.78rem;color:#8a7430;">${money(fee)} per camera · ${S.nationality === 'foreigner' ? 'foreigner' : 'Indian'} rate</div></div>
+            <div class="guest-count-row" style="gap:0.8rem;"><button class="count-btn" type="button" onclick="changeCam('${kind}',-1)">−</button><span class="count-display" id="cam-${kind}" style="font-size:1.6rem;">${S.cam[kind]}</span><button class="count-btn" type="button" onclick="changeCam('${kind}',1)">+</button></div>
+          </div>`; };
+        box.innerHTML = `<div class="park-rules-title">Camera charges — included in your total</div>
+          <p style="font-size:0.84rem;color:#5a4a1a;line-height:1.6;margin:0.2rem 0 0.4rem;">Cameras need a fee at ${esc(parkById(S.park).name)}. Tell us how many you will carry — the charge is added to your total below. Leave both at 0 if you carry none.</p>
+          ${row('still', 'Still camera (DSLR)')}${row('video', 'Video camera')}
+          <div id="cam-total" style="margin-top:0.7rem;font-weight:700;"></div>`;
+        showCameraTotal();
+      } else {
+        const rows = CAMERA_GATE_INFO[S.park] || [];
+        box.innerHTML = rows.length ? `<div class="park-rules-title">Camera charges (paid at the park gate)</div>
+          <table class="fee-table"><tr><th>Camera</th><th>Indian</th><th>Foreigner</th></tr>
+          ${rows.map(r => `<tr><td>${r[0]}</td><td>${money(r[1])}</td><td>${money(r[2])}</td></tr>`).join('')}</table>` : '';
+      }
+      box.style.display = box.innerHTML ? '' : 'none';
+      $('payment-rules-list').innerHTML = parkRules(S.park).map(r => `<li>${r}</li>`).join('');
+    }
+    function showCameraTotal() {
+      const q = quote(); const el = $('cam-total');
+      if (el && q) el.textContent = q.camera.amount ? `Camera charges: ${money(q.camera.amount)} (included in the total)` : 'No camera charges';
+    }
+    window.changeCam = function (kind, d) {
+      S.cam[kind] = Math.min(10, Math.max(0, S.cam[kind] + d)); S.order = null;
+      const el = $('cam-' + kind); if (el) el.textContent = S.cam[kind];
+      updateSummary(); showCameraTotal();
+    };
+
+    /* ═══════════════════════════════════════
+       STEP NAVIGATION
+    ═══════════════════════════════════════ */
+    function showStep(n) {
+      const list = stepList();
+      for (let i = 0; i < 5; i++) {
+        const s = $('step-' + i), ind = $('step-ind-' + i);
+        const visible = list.includes(i);
+        if (s) s.style.display = i === n ? 'block' : 'none';
+        if (ind) {
+          ind.style.display = visible ? '' : 'none';
+          ind.classList.toggle('active', i === n);
+          ind.classList.toggle('completed', visible && list.indexOf(i) < list.indexOf(n));
+          if (visible) ind.querySelector('.step-num').textContent = list.indexOf(i) + 1;
+        }
+        const label = s && s.querySelector('.section-label');
+        if (label && visible) label.textContent = `Step ${list.indexOf(i) + 1} of ${list.length} — ${STEP_NAMES[i]}`;
+      }
+      S.step = n;
+      $('bbb-back-btn').classList.toggle('show', n > 0);
+      $('bbb-next-btn').style.display = n === 4 ? 'none' : '';
+      setTimeout(() => $('step-bar').scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+    }
+
+    window.bbbNext = () => goNext(S.step);
+    window.bbbBack = () => goBack(S.step);
+
+    window.goNext = function (from) {
+      const err = validate(from);
+      if (err) { showToast(err, 'error'); return; }
+      const list = stepList(), next = list[list.indexOf(from) + 1];
+      if (next === 1) {
+        const d = new Date(); d.setDate(d.getDate() + 1);
+        $('booking-date').min = d.toISOString().split('T')[0];
+        renderSafariStep();
+      }
+      if (next === 2) {
+        setText('adult-count-display', S.adults); setText('child-count-display', S.children);
+        renderGuestForms(); renderJeepNote();
+      }
+      if (next === 4) { renderPaymentExtras(); updateSummary(); }
+      showStep(next);
+    };
+    window.goBack = function (from) {
+      if (from === 4) S.order = null;
+      const list = stepList();
+      showStep(list[Math.max(0, list.indexOf(from) - 1)]);
+    };
+
+    function validate(step) {
+      if (step === 0) return S.park ? '' : 'Please select a national park first.';
+      if (step === 1) {
+        const z = zoneById(S.zone), p = parkById(S.park);
+        if (!z) return 'Please select a safari zone.';
+        if (S.type === 'shared' && S.nationality === 'foreigner' && p.shared_price_foreigner == null) return 'Shared jeep is not available for foreign guests here. Please choose a private jeep.';
+        if (!S.date) return 'Please select a safari date.';
+        if (p.closed_weekday != null && new Date(S.date + 'T12:00:00').getDay() === p.closed_weekday) return `${p.name} is closed on ${dayName(p.closed_weekday)}s. Please choose another date.`;
+        if (!z.full_day && !S.slot) return 'Please select a time slot.';
+        return '';
+      }
+      if (step === 2) {
+        const c = S.contact;
+        if (!c.name.trim()) return 'Please enter your name.';
+        if (c.phone.replace(/\D/g, '').length < 10) return 'Please enter a valid mobile number.';
+        const gstErr = gstProblem(c.business, c.gst); if (gstErr) return gstErr;
+        for (let i = 0; i < S.adults + S.children; i++) {
+          const g = S.guests[i], isChild = i >= S.adults;
+          const label = i === 0 ? 'Primary guest' : isChild ? `Child ${i - S.adults + 1}` : `Adult ${i + 1}`;
+          if (!g.name.trim()) return `${label}: name is required.`;
+          const age = parseInt(g.age, 10);
+          if (!(age >= 0)) return `${label}: age is required.`;
+          if (isChild && age > 5) return `${label}: children must be 5 years or younger. Please add them as an adult.`;
+          if (!isChild && age < 6) return `${label}: adults must be above 5 years.`;
+          if (needsId(i) && !g.file) return `${label}: please upload the ${isForeign() ? 'ID document' : 'Aadhaar card'}.`;
+        }
+        return '';
+      }
+      return '';
+    }
+
+    /* ═══════════════════════════════════════
+       PAY — upload IDs, create the order (server prices and saves the
+       booking), open Razorpay, then verify-payment confirms it.
+    ═══════════════════════════════════════ */
+    window.payNow = async function () {
+      if (!$('tnc-agree').checked) { showToast('Please agree to the Refund Policy.', 'error'); return; }
+      const loading = $('upload-loading');
+      const setLoading = text => { loading.classList.toggle('active', !!text); if (text) setText('upload-loading-text', text); };
+      try {
+        if (!requestMode() && typeof Razorpay === 'undefined') throw new Error('Payment service failed to load. Please reload the page and try again.');
+
+        const total = S.adults + S.children;
+        for (let i = 0; i < total; i++) {
+          const g = S.guests[i];
+          if (needsId(i) && g.file && !g.idKey) {
+            setLoading(`Uploading ID ${i + 1} of ${S.guests.filter((_, k) => needsId(k)).length}…`);
+            g.idKey = await uploadFile(g.file, 'aadhaar');
+          }
+        }
+
+        if (!S.order) {
+          setLoading(requestMode() ? 'Submitting your booking…' : 'Preparing secure payment…');
+          S.order = await postJson('/.netlify/functions/create-order', {
+            type: S.type, zoneId: S.zone, slotId: S.slot, date: S.date, nationality: S.nationality,
+            adults: S.adults, children: S.children,
+            guests: S.guests.slice(0, total).map((g, i) => ({ name: g.name, age: g.age, idKey: needsId(i) ? g.idKey : undefined, idType: isForeign() ? (g.idType || 'passport') : undefined })),
+            contact: S.contact,
+            cameras: { still: S.cam.still, video: S.cam.video }
+          });
+        }
+        setLoading(null);
+
+        if (S.order.requested) { showRequestSuccess(S.order); return; }
+
+        const order = S.order, q = quote();
+        const rzp = new Razorpay({
+          key: order.keyId, order_id: order.orderId, amount: order.amount, currency: 'INR',
+          name: 'Assam Wild Safari', description: `${q.zone.name} · ${fmtDate(S.date, { day: 'numeric', month: 'short', year: 'numeric' })}`,
+          prefill: { name: S.contact.name.trim(), contact: S.contact.phone.trim() },
+          notes: { booking_ref: order.ref },
+          theme: { color: '#1a3a1e' },
+          handler: async (resp) => {
+            try {
+              setLoading('Confirming your payment…');
+              const result = await postJson('/.netlify/functions/verify-payment', resp);
+              setLoading(null);
+              showSuccess(result, resp.razorpay_payment_id);
+            } catch (err) {
+              setLoading(null);
+              showToast('Error: ' + err.message, 'error');
+              console.error(err);
+            }
+          },
+          modal: { ondismiss: () => showToast('Payment not completed. You can try again.', 'error') }
+        });
+        rzp.on('payment.failed', resp => console.warn('Razorpay payment failed:', resp.error));
+        rzp.open();
+      } catch (err) {
+        setLoading(null);
+        showToast('Error: ' + err.message, 'error');
+        console.error(err);
+      }
+    };
+
+    /* ═══════════════════════════════════════
+       SUCCESS SCREEN
+    ═══════════════════════════════════════ */
+    // Opens a WhatsApp chat with the business, with the booking details already written.
+    const BUSINESS_WA = '919365609948';
+    function requestWhatsAppUrl(result) {
+      const q = quote(), slot = q.zone.full_day ? 'Whole day' : (() => { const s = C.slots.find(x => x.id === S.slot); return s ? `${s.name} (${s.time_range})` : ''; })();
+      const lines = ['Hello Assam Wild Safari, I just sent a safari booking request.', '',
+        `Booking: ${result.ref}`, `Park: ${q.park.name} — ${q.zone.name}`, `Date: ${fmtDate(S.date)}`, `Time: ${slot}`,
+        `Guests: ${S.adults} adult(s)${S.children ? ', ' + S.children + ' child(ren)' : ''}`, `Jeep: ${S.type === 'shared' ? 'Shared' : 'Private'}`];
+      if (q.camera.amount) lines.push(`Cameras: ${q.camera.still ? q.camera.still + ' still' : ''}${q.camera.still && q.camera.video ? ', ' : ''}${q.camera.video ? q.camera.video + ' video' : ''} — ${money(q.camera.amount)} (included)`);
+      lines.push(`Estimated amount: ${money(result.total)}`, '', `Name: ${S.contact.name.trim()}`, `Phone: ${S.contact.phone.trim()}`, ...(S.contact.business.trim() ? [`Business: ${S.contact.business.trim()}`] : []), ...(S.contact.gst.trim() ? [`GST: ${S.contact.gst.replace(/\s+/g, '').toUpperCase()}`] : []));
+      return 'https://wa.me/' + BUSINESS_WA + '?text=' + encodeURIComponent(lines.join('\n'));
+    }
+
+    function showRequestSuccess(result) {
+      const q = quote();
+      $('bbb-next-btn').style.display = 'none';
+      $('bbb-back-btn').style.display = 'none';
+      const slot = q.zone.full_day ? 'Whole day' : (() => { const s = C.slots.find(x => x.id === S.slot); return s ? `${s.name} (${s.time_range})` : ''; })();
+      $('booking-form-area').innerHTML = `
+        <div class="booking-success">
+          <div style="margin-bottom:1.4rem;"><i data-lucide="check-circle-2" style="width:62px;height:62px;color:var(--gold,#b5943b);"></i></div>
+          <span class="section-label">Booking Received</span>
+          <h2 style="font-family:var(--font-display,Georgia,serif);font-size:clamp(2.2rem,6vw,3.8rem);color:var(--forest-black,#050d06);margin-bottom:1rem;line-height:1;">THANK YOU!</h2>
+          <p style="font-size:0.92rem;color:#777;margin-bottom:1.8rem;line-height:1.8;max-width:540px;">
+            Your booking request is received. We will contact you soon on WhatsApp to confirm your slot and share the payment details. Please keep your Booking ID.
+          </p>
+          <a class="btn-primary" target="_blank" rel="noopener" href="${esc(requestWhatsAppUrl(result))}" style="background:#25d366;color:#05340f;display:inline-flex;align-items:center;gap:0.5rem;margin-bottom:1.6rem;">Send these details to us on WhatsApp</a>
+          <div class="success-details">
+            <div class="success-row"><span class="success-label">Booking ID</span><span class="success-value">${esc(result.ref)}</span></div>
+            <div class="success-row"><span class="success-label">Park</span><span class="success-value">${esc(q.park.name)}</span></div>
+            <div class="success-row"><span class="success-label">Zone</span><span class="success-value">${esc(q.zone.name)}</span></div>
+            <div class="success-row"><span class="success-label">Date</span><span class="success-value">${esc(fmtDate(S.date))}</span></div>
+            <div class="success-row"><span class="success-label">Time</span><span class="success-value">${esc(slot)}</span></div>
+            <div class="success-row"><span class="success-label">Guests</span><span class="success-value">${S.adults} adult(s)${S.children ? ', ' + S.children + ' child(ren)' : ''}</span></div>
+            ${q.camera.amount ? `<div class="success-row"><span class="success-label">Camera charges</span><span class="success-value">${money(q.camera.amount)} <small>(included)</small></span></div>` : ''}
+            <div class="success-row" style="border-color:var(--gold,#b5943b);">
+              <span class="success-label" style="color:var(--gold,#b5943b);">Estimated Amount</span>
+              <span class="success-value" style="color:var(--gold,#b5943b);font-family:var(--font-display,Georgia,serif);font-size:1.7rem;">${money(result.total)}</span>
+            </div>
+          </div>
+          <div class="post-booking-info">
+            <div class="pbi-title">What Happens Next</div>
+            <div class="pbi-item"><i data-lucide="message-circle" class="pbi-icon" style="width:18px;height:18px;"></i>
+              <div class="pbi-text">We will check your slot and <strong>contact you soon on WhatsApp</strong> at <strong>${esc(S.contact.phone)}</strong>.</div></div>
+            <div class="pbi-item"><i data-lucide="credit-card" class="pbi-icon" style="width:18px;height:18px;"></i>
+              <div class="pbi-text">Once the slot is confirmed we will send the <strong>final amount and a secure payment link</strong>. Your booking is confirmed when the payment is received.</div></div>
+            <div class="pbi-item"><i data-lucide="phone" class="pbi-icon" style="width:18px;height:18px;"></i>
+              <div class="pbi-text">For queries call: <strong>+91 97098 84206</strong> / <strong>+91 93656 09948</strong></div></div>
+          </div>
+          <div style="margin-top:2rem;display:flex;gap:1rem;flex-wrap:wrap;">
+            <a href="../index.html" class="btn-primary">Return to Home</a>
+            <a href="itineraries.html" class="btn-ghost">View Itineraries</a>
+          </div>
+        </div>`;
+      icons();
+      $('step-bar').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function showSuccess(result, paymentId) {
+      const q = quote();
+      $('bbb-next-btn').style.display = 'none';
+      $('bbb-back-btn').style.display = 'none';
+      const slot = q.zone.full_day ? 'Whole day' : (() => { const s = C.slots.find(x => x.id === S.slot); return s ? `${s.name} (${s.time_range})` : ''; })();
+      $('booking-form-area').innerHTML = `
+        <div class="booking-success">
+          <div style="margin-bottom:1.4rem;"><i data-lucide="check-circle-2" style="width:62px;height:62px;color:var(--gold,#b5943b);"></i></div>
+          <span class="section-label">Payment Successful</span>
+          <h2 style="font-family:var(--font-display,Georgia,serif);font-size:clamp(2.2rem,6vw,3.8rem);color:var(--forest-black,#050d06);margin-bottom:1rem;line-height:1;">BOOKING CONFIRMED!</h2>
+          <p style="font-size:0.92rem;color:#777;margin-bottom:1.8rem;line-height:1.8;max-width:540px;">
+            Your payment was received and your safari is booked. A confirmation is on its way to your WhatsApp. Please keep your Booking ID for reference.
+          </p>
+          <div class="success-details">
+            <div class="success-row"><span class="success-label">Booking ID</span><span class="success-value">${esc(result.ref)}</span></div>
+            <div class="success-row"><span class="success-label">Payment ID</span><span class="success-value" style="font-size:0.8rem;word-break:break-all;">${esc(paymentId)}</span></div>
+            <div class="success-row"><span class="success-label">Park</span><span class="success-value">${esc(q.park.name)}</span></div>
+            <div class="success-row"><span class="success-label">Zone</span><span class="success-value">${esc(q.zone.name)}</span></div>
+            <div class="success-row"><span class="success-label">Date</span><span class="success-value">${esc(fmtDate(S.date))}</span></div>
+            <div class="success-row"><span class="success-label">Time</span><span class="success-value">${esc(slot)}</span></div>
+            <div class="success-row"><span class="success-label">Guests</span><span class="success-value">${S.adults} adult(s)${S.children ? ', ' + S.children + ' child(ren)' : ''}</span></div>
+            ${q.camera.amount ? `<div class="success-row"><span class="success-label">Camera charges</span><span class="success-value">${money(q.camera.amount)} <small>(included)</small></span></div>` : ''}
+            <div class="success-row" style="border-color:var(--gold,#b5943b);">
+              <span class="success-label" style="color:var(--gold,#b5943b);">Amount Paid</span>
+              <span class="success-value" style="color:var(--gold,#b5943b);font-family:var(--font-display,Georgia,serif);font-size:1.7rem;">${money(result.total)}</span>
+            </div>
+          </div>
+          <div class="post-booking-info">
+            <div class="pbi-title">What Happens Next</div>
+            <div class="pbi-item"><i data-lucide="truck" class="pbi-icon" style="width:18px;height:18px;"></i>
+              <div class="pbi-text"><strong>Vehicle &amp; driver details</strong> will be shared <strong>24 hours before your safari</strong> on WhatsApp at <strong>${esc(S.contact.phone)}</strong>.</div></div>
+            <div class="pbi-item"><i data-lucide="map-pin" class="pbi-icon" style="width:18px;height:18px;"></i>
+              <div class="pbi-text"><strong>Please send your hotel name or pickup location</strong> at least <strong>24 hours before the safari</strong>.</div></div>
+            <div class="pbi-item"><i data-lucide="phone" class="pbi-icon" style="width:18px;height:18px;"></i>
+              <div class="pbi-text">For queries call: <strong>+91 97098 84206</strong> / <strong>+91 93656 09948</strong></div></div>
+          </div>
+          <div style="margin-top:2rem;display:flex;gap:1rem;flex-wrap:wrap;">
+            <a href="../index.html" class="btn-primary">Return to Home</a>
+            <a href="itineraries.html" class="btn-ghost">View Itineraries</a>
+          </div>
+        </div>`;
+      icons();
+      $('step-bar').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    /* ═══════════════════════════════════════
+       INIT
+    ═══════════════════════════════════════ */
+    async function init() {
+      updateBottomBarInitial();
+      try {
+        const res = await fetch('/.netlify/functions/public-data?type=catalog');
+        const body = await res.json();
+        if (!res.ok) throw new Error(body.error || 'Request failed');
+        C = body.data;
+        applyMode();
+      } catch (err) {
+        console.error(err);
+        $('park-selector').innerHTML = '<div class="catalog-error" style="grid-column:1/-1;">We could not load the safari rates. Please reload the page, or call <a href="tel:+919365609948">+91 93656 09948</a> to book.</div>';
+        return;
+      }
+      const params = new URLSearchParams(location.search);
+      if (params.get('type') === 'shared') S.type = 'shared';
+      const wanted = params.get('park');
+      renderParks();
+      if (wanted && parkById(wanted)) selectPark(wanted);
+      updateSummary();
+    }
+    function updateBottomBarInitial() { $('bbb-back-btn').classList.remove('show'); }
+    // The bottom bar is taller on a phone: keep the page's own bottom padding equal to the bar's real height,
+    // so the last field or button is never hidden behind it.
+    function fitBottomBar() {
+      const bar = $('booking-bottom-bar'); if (!bar) return;
+      const fit = () => { const h = bar.offsetHeight; document.documentElement.style.setProperty('--bar-h', h + 'px'); document.body.style.paddingBottom = (h + 16) + 'px'; };
+      fit();
+      if (typeof ResizeObserver !== 'undefined') new ResizeObserver(fit).observe(bar); else window.addEventListener('resize', fit);
+    }
+    document.addEventListener('DOMContentLoaded', () => { icons(); fitBottomBar(); init(); });
+  </script>
+</body>
+</html>

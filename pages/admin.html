@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — Assam Wild Safari</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --black: #050d06; --dark: #143618; --mid: #3a6b3e; --light: #eff7ef; --white: #fff;
+      --gold: #b5943b; --gold2: #d4ae50; --red: #b3261e; --green: #1a5c2a; --amber: #a86a00;
+      --line: #e3e7e3; --muted: #6b7a6d; --bg: #eef1ee;
+    }
+    html, body { overflow-x: hidden; }
+    body { font-family: 'DM Sans', system-ui, sans-serif; background: var(--bg); color: #1a2e1c; min-height: 100vh; font-size: 15px; line-height: 1.45; }
+    button { font-family: inherit; cursor: pointer; }
+    a { color: var(--green); }
+
+    /* ── Login ── */
+    #login-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--black); padding: 1rem; }
+    .login-box { background: var(--white); padding: 3rem 2.5rem; width: 100%; max-width: 380px; border-top: 5px solid var(--gold); }
+    .login-logo { font-size: 1.6rem; font-weight: 700; color: var(--black); } .login-logo span { color: var(--gold); }
+    .login-sub { font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin: 0.3rem 0 2rem; }
+    .l-label { display: block; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.4rem; }
+    .l-input { width: 100%; padding: 0.85rem 1rem; border: 2px solid var(--line); font-size: 1rem; font-family: inherit; margin-bottom: 1.2rem; }
+    .l-input:focus { outline: none; border-color: var(--gold); }
+    .l-btn { width: 100%; padding: 0.95rem; background: var(--dark); color: #fff; border: none; font-weight: 700; font-size: 0.95rem; }
+    .l-btn:hover { background: var(--black); }
+    .l-err { color: var(--red); font-size: 0.85rem; margin-top: 0.8rem; display: none; }
+
+    /* ── Shell ── */
+    #admin-app { display: none; }
+    .shell { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
+    .side { background: var(--black); color: #fff; padding: 1.2rem 0.8rem; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+    .brand { font-size: 1.15rem; font-weight: 700; padding: 0.3rem 0.8rem 1.2rem; }
+    .brand span { color: var(--gold2); } .brand small { display: block; font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.4); font-weight: 400; margin-top: 0.2rem; }
+    .nav-group { font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.35); padding: 1.1rem 0.8rem 0.4rem; }
+    .nav-btn { display: flex; align-items: center; justify-content: space-between; width: 100%; text-align: left; background: none; border: none; color: rgba(255,255,255,0.78); padding: 0.65rem 0.8rem; border-radius: 6px; font-size: 0.92rem; font-weight: 500; }
+    .nav-btn:hover { background: rgba(255,255,255,0.07); color: #fff; }
+    .nav-btn.active { background: var(--gold); color: var(--black); font-weight: 700; }
+    .nav-count { background: var(--red); color: #fff; font-size: 0.7rem; font-weight: 700; padding: 0.05rem 0.5rem; border-radius: 20px; min-width: 1.4rem; text-align: center; }
+    .nav-btn.active .nav-count { background: var(--black); }
+    .side-foot { padding: 1.2rem 0.8rem 0; font-size: 0.75rem; color: rgba(255,255,255,0.4); }
+    .logout-btn { margin-top: 0.6rem; background: none; border: 1px solid rgba(255,255,255,0.25); color: #fff; padding: 0.45rem 0.9rem; border-radius: 6px; font-size: 0.8rem; }
+    .logout-btn:hover { background: rgba(255,255,255,0.1); }
+    .main { padding: 1.8rem 2rem 4rem; min-width: 0; }
+    .page { display: none; } .page.active { display: block; }
+    .page-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.4rem; }
+    .page-title { font-size: 1.7rem; font-weight: 700; color: var(--black); }
+    .page-help { color: var(--muted); font-size: 0.92rem; max-width: 640px; margin-top: 0.3rem; }
+
+    @media (max-width: 860px) {
+      .shell { grid-template-columns: 1fr; }
+      .side { position: static; height: auto; display: flex; flex-wrap: wrap; gap: 0.3rem; padding: 0.7rem; align-items: center; }
+      .brand { padding: 0.3rem 0.6rem; } .brand small, .nav-group, .side-foot { display: none; }
+      .nav-btn { width: auto; padding: 0.5rem 0.75rem; font-size: 0.85rem; gap: 0.5rem; }
+      .main { padding: 1.2rem 1rem 4rem; }
+    }
+
+    /* ── Building blocks ── */
+    .card { background: var(--white); border: 1px solid var(--line); border-radius: 10px; padding: 1.2rem 1.3rem; margin-bottom: 1.2rem; }
+    .card-title { font-size: 1rem; font-weight: 700; margin-bottom: 0.2rem; }
+    .card-help { color: var(--muted); font-size: 0.85rem; margin-bottom: 0.9rem; }
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 1rem; margin-bottom: 1.4rem; }
+    .stat { background: var(--white); border: 1px solid var(--line); border-radius: 10px; padding: 1.1rem 1.2rem; }
+    .stat-num { font-size: 2rem; font-weight: 700; color: var(--dark); line-height: 1.1; }
+    .stat-lbl { font-size: 0.85rem; color: var(--muted); margin-top: 0.2rem; }
+    .stat.alert .stat-num { color: var(--red); }
+    .todo { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.8rem 0; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+    .todo:last-child { border-bottom: none; }
+    .todo b { font-weight: 700; } .todo small { color: var(--muted); display: block; }
+    .empty { color: var(--muted); text-align: center; padding: 2rem 1rem; }
+    .good { color: var(--green); font-weight: 600; }
+
+    .filters { display: flex; gap: 0.7rem; flex-wrap: wrap; margin-bottom: 1rem; align-items: center; }
+    .filters label { font-size: 0.78rem; color: var(--muted); font-weight: 600; display: flex; flex-direction: column; gap: 0.2rem; }
+    .fi, .vi, select.vi { padding: 0.55rem 0.7rem; border: 1.5px solid #d4dad4; border-radius: 6px; font-size: 0.9rem; font-family: inherit; background: #fff; color: inherit; }
+    .fi:focus, .vi:focus { outline: none; border-color: var(--gold); }
+    .vi { width: 100%; } textarea.vi { resize: vertical; }
+    .lbl { display: block; font-size: 0.74rem; font-weight: 700; color: var(--muted); margin-bottom: 0.3rem; letter-spacing: 0.04em; }
+
+    .btn { border: 1.5px solid transparent; border-radius: 6px; padding: 0.55rem 1rem; font-size: 0.88rem; font-weight: 600; }
+    .btn-primary { background: var(--dark); color: #fff; } .btn-primary:hover { background: var(--black); }
+    .btn-gold { background: var(--gold); color: var(--black); } .btn-gold:hover { background: var(--gold2); }
+    .btn-wa { background: #25d366; color: #05340f; } .btn-wa:hover { background: #1fb858; }
+    .btn-ghost { background: #fff; border-color: #cdd5cd; color: #1a2e1c; } .btn-ghost:hover { background: var(--light); }
+    .btn-danger { background: #fff; border-color: #e5b4b0; color: var(--red); } .btn-danger:hover { background: #fdeceb; }
+    .btn-sm { padding: 0.35rem 0.7rem; font-size: 0.8rem; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .tbl-wrap { background: var(--white); border: 1px solid var(--line); border-radius: 10px; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; }
+    th { text-align: left; font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); padding: 0.75rem 0.9rem; background: #f8faf8; border-bottom: 1px solid var(--line); white-space: nowrap; }
+    td { padding: 0.8rem 0.9rem; border-bottom: 1px solid var(--line); vertical-align: top; font-size: 0.9rem; }
+    tr:last-child td { border-bottom: none; }
+    tr.click { cursor: pointer; } tr.click:hover td { background: #f7faf6; }
+    td small, .sub { display: block; color: var(--muted); font-size: 0.78rem; }
+    .num { text-align: right; white-space: nowrap; }
+
+    .chip { display: inline-block; font-size: 0.74rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 20px; white-space: nowrap; }
+    .chip.green { background: #dff1e2; color: var(--green); } .chip.amber { background: #fdf0d2; color: var(--amber); }
+    .chip.red { background: #fbe1df; color: var(--red); } .chip.grey { background: #e9ecea; color: #56635a; } .chip.blue { background: #dfeaf8; color: #1d4f91; }
+
+    /* ── Drawer ── */
+    .overlay { position: fixed; inset: 0; background: rgba(5,13,6,0.5); z-index: 50; display: none; }
+    .overlay.open { display: block; }
+    .drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(620px, 100vw); background: #f7f9f7; z-index: 51; transform: translateX(100%); transition: transform 0.25s; overflow-y: auto; box-shadow: -8px 0 30px rgba(0,0,0,0.2); }
+    .drawer.open { transform: none; }
+    .drawer-head { position: sticky; top: 0; background: var(--black); color: #fff; padding: 1rem 1.3rem; display: flex; justify-content: space-between; align-items: center; z-index: 2; }
+    .drawer-head h2 { font-size: 1.15rem; } .drawer-head .sub { color: rgba(255,255,255,0.6); }
+    .x-btn { background: none; border: none; color: #fff; font-size: 1.6rem; line-height: 1; }
+    .drawer-body { padding: 1.2rem 1.3rem 3rem; }
+    .sec { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 1rem 1.1rem; margin-bottom: 1rem; }
+    .sec h3 { font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.7rem; }
+    .kv { display: flex; justify-content: space-between; gap: 1rem; padding: 0.35rem 0; font-size: 0.9rem; border-bottom: 1px dashed #edf0ed; }
+    .kv:last-child { border-bottom: none; } .kv span:first-child { color: var(--muted); flex-shrink: 0; } .kv span:last-child { text-align: right; word-break: break-word; }
+    .actions { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.8rem; }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; } .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; }
+    @media (max-width: 560px) { .grid2, .grid3 { grid-template-columns: 1fr; } }
+    .hint { font-size: 0.8rem; color: var(--muted); margin-top: 0.4rem; }
+    .banner { border-radius: 8px; padding: 0.8rem 1rem; font-size: 0.88rem; margin-bottom: 1rem; }
+    .banner.amber { background: #fdf0d2; color: #6b4300; } .banner.red { background: #fbe1df; color: #7a1a14; } .banner.green { background: #dff1e2; color: #124a1f; } .banner.blue { background: #e3edf9; color: #173e75; }
+
+    /* ── Settings tables ── */
+    .edit-table input.vi, .edit-table select.vi { padding: 0.4rem 0.5rem; min-width: 70px; }
+    .edit-table td { vertical-align: middle; }
+    .tabs { display: flex; gap: 0.4rem; margin-bottom: 1.2rem; flex-wrap: wrap; }
+    .tab { background: #fff; border: 1.5px solid #cdd5cd; border-radius: 20px; padding: 0.45rem 1rem; font-size: 0.88rem; font-weight: 600; color: #3a4a3c; }
+    .tab.on { background: var(--dark); color: #fff; border-color: var(--dark); }
+    .rv { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 1rem 1.2rem; margin-bottom: 0.8rem; }
+    .rv.pending { border-left: 4px solid var(--gold); }
+    .stars { color: var(--gold); letter-spacing: 2px; }
+    .help-list { padding-left: 1.2rem; } .help-list li { margin: 0.4rem 0; }
+
+    .toast { position: fixed; bottom: 1.5rem; left: 50%; transform: translate(-50%, 20px); padding: 0.8rem 1.4rem; border-radius: 8px; font-weight: 600; font-size: 0.9rem; opacity: 0; transition: all 0.3s; z-index: 100; pointer-events: none; max-width: 92vw; }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+    .toast.success { background: var(--dark); color: #fff; } .toast.error { background: var(--red); color: #fff; }
+  </style>
+</head>
+
+<body>
+
+  <!-- LOGIN -->
+  <div id="login-screen">
+    <div class="login-box">
+      <div class="login-logo">Assam <span>Wild</span> Safari</div>
+      <div class="login-sub">Admin Panel</div>
+      <label class="l-label">Password</label>
+      <input type="password" id="lpwd" class="l-input" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')doLogin()">
+      <button class="l-btn" onclick="doLogin()">Log in</button>
+      <p class="l-err" id="lerr">Incorrect password.</p>
+    </div>
+  </div>
+
+  <!-- APP -->
+  <div id="admin-app">
+    <div class="shell">
+      <nav class="side">
+        <div class="brand">Assam <span>Wild</span> Safari<small>Admin</small></div>
+        <div class="nav-group">Daily work</div>
+        <button class="nav-btn" data-page="today" onclick="go('today')">Today <span class="nav-count" id="nc-today" style="display:none"></span></button>
+        <button class="nav-btn" data-page="safaris" onclick="go('safaris')">Safari Bookings <span class="nav-count" id="nc-safaris" style="display:none"></span></button>
+        <button class="nav-btn" data-page="cars" onclick="go('cars')">Car Bookings <span class="nav-count" id="nc-cars" style="display:none"></span></button>
+        <button class="nav-btn" data-page="tours" onclick="go('tours')">Tour Bookings <span class="nav-count" id="nc-tours" style="display:none"></span></button>
+        <button class="nav-btn" data-page="customers" onclick="go('customers')">Customers</button>
+        <div class="nav-group">Set up</div>
+        <button class="nav-btn" data-page="itineraries" onclick="go('itineraries')">Itineraries</button>
+        <button class="nav-btn" data-page="prices" onclick="go('prices')">Prices &amp; Zones</button>
+        <button class="nav-btn" data-page="content" onclick="go('content')">Website Content <span class="nav-count" id="nc-content" style="display:none"></span></button>
+        <div class="nav-group">Help</div>
+        <button class="nav-btn" data-page="guide" onclick="go('guide')">How this works</button>
+        <div class="side-foot"><span id="ttime"></span><br><button class="logout-btn" onclick="doLogout()">Log out</button></div>
+      </nav>
+
+      <main class="main">
+
+        <!-- TODAY -->
+        <section class="page" id="page-today">
+          <div class="page-head"><div>
+            <h1 class="page-title">Today</h1>
+            <p class="page-help">What needs your attention right now, and who is coming in the next few days.</p>
+          </div><button class="btn btn-ghost" onclick="refreshAll()">↻ Refresh</button></div>
+          <div id="today-body"><p class="empty">Loading…</p></div>
+        </section>
+
+        <!-- SAFARI BOOKINGS -->
+        <section class="page" id="page-safaris">
+          <div class="page-head"><div>
+            <h1 class="page-title">Safari Bookings</h1>
+            <p class="page-help">Safari booking requests from the website. For each new request: check the slot, send the payment link on WhatsApp, and when the guest pays the booking turns <b>Paid &amp; confirmed</b> by itself. Click a row to open it.</p>
+          </div><button class="btn btn-ghost" onclick="exportSafaris()">⬇ Download as spreadsheet</button></div>
+          <div class="filters">
+            <label>Show<select class="fi" id="sf-status" onchange="renderSafaris()">
+              <option value="active">All active bookings</option>
+              <option value="requested">New requests (check availability)</option>
+              <option value="awaiting_payment">Waiting for payment</option>
+              <option value="confirmed">Paid &amp; confirmed</option>
+              <option value="pending_review">Needs review</option>
+              <option value="cancelled">Cancelled</option>
+              <option value="all">Everything</option>
+            </select></label>
+            <label>Safari date<select class="fi" id="sf-when" onchange="renderSafaris()">
+              <option value="all">Any date</option><option value="today">Today</option><option value="tomorrow">Tomorrow</option>
+              <option value="week">Next 7 days</option><option value="upcoming">All upcoming</option><option value="past">Past</option>
+            </select></label>
+            <label>Park<select class="fi" id="sf-park" onchange="renderSafaris()"><option value="">Both parks</option></select></label>
+            <label>Search<input class="fi" id="sf-q" placeholder="Name, phone, booking no." oninput="renderSafaris()"></label>
+          </div>
+          <div class="tbl-wrap"><table>
+            <thead><tr><th>Booking</th><th>Guest</th><th>Park &amp; zone</th><th>Safari</th><th>Guests</th><th class="num">Amount</th><th>Status</th><th>Driver</th></tr></thead>
+            <tbody id="sf-body"><tr><td colspan="8" class="empty">Loading…</td></tr></tbody>
+          </table></div>
+        </section>
+
+        <!-- CAR BOOKINGS -->
+        <section class="page" id="page-cars">
+          <div class="page-head"><div>
+            <h1 class="page-title">Car Bookings</h1>
+            <p class="page-help">Car booking requests from the Car Rental page (a car for one of our itineraries, or a customised trip). Contact the guest to discuss the trip and the budget, then confirm. <b>Pickup &amp; drop</b> added to a safari booking is also listed here so you can assign its driver.</p>
+          </div></div>
+          <div class="filters">
+            <label>Show<select class="fi" id="cf-status" onchange="renderCars()">
+              <option value="action">New requests</option>
+              <option value="confirmed">Confirmed</option>
+              <option value="awaiting_payment">Not paid</option>
+              <option value="cancelled">Cancelled</option>
+              <option value="all">Everything</option>
+            </select></label>
+            <label>Type<select class="fi" id="cf-type" onchange="renderCars()">
+              <option value="">All</option><option value="tour">Car requests</option><option value="transfer">Pickup &amp; drop (with a safari)</option>
+            </select></label>
+            <label>Search<input class="fi" id="cf-q" placeholder="Name, phone, booking no." oninput="renderCars()"></label>
+          </div>
+          <div class="tbl-wrap"><table>
+            <thead><tr><th>Booking</th><th>Customer</th><th>Trip</th><th>Car</th><th>Days</th><th>Status</th></tr></thead>
+            <tbody id="cf-body"><tr><td colspan="6" class="empty">Loading…</td></tr></tbody>
+          </table></div>
+        </section>
+
+        <!-- TOUR BOOKINGS -->
+        <section class="page" id="page-tours">
+          <div class="page-head"><div>
+            <h1 class="page-title">Tour Bookings</h1>
+            <p class="page-help">Itinerary booking requests from the website (one of our itineraries, or a customised one). Open one to see what the guest wants and their contact details, then contact them and confirm. No payment is taken on the website for itineraries.</p>
+          </div></div>
+          <div class="filters">
+            <label>Show<select class="fi" id="tf-status" onchange="renderTours()">
+              <option value="action">New requests (need action)</option><option value="confirmed">Confirmed</option>
+              <option value="cancelled">Cancelled</option><option value="all">Everything</option>
+            </select></label>
+            <label>Search<input class="fi" id="tf-q" placeholder="Name, phone, package, booking no." oninput="renderTours()"></label>
+          </div>
+          <div class="tbl-wrap"><table>
+            <thead><tr><th>Booking</th><th>Contact</th><th>Itinerary</th><th>Duration</th><th>Type</th><th>Status</th></tr></thead>
+            <tbody id="tf-body"><tr><td colspan="6" class="empty">Loading…</td></tr></tbody>
+          </table></div>
+        </section>
+
+        <!-- CUSTOMERS -->
+        <section class="page" id="page-customers">
+          <div class="page-head"><div>
+            <h1 class="page-title">Customers</h1>
+            <p class="page-help">Everyone who has booked, with their contact details. A customer is identified by their mobile number, so repeat guests appear once.</p>
+          </div></div>
+          <div class="filters"><label>Search<input class="fi" id="cu-q" placeholder="Name or phone" oninput="renderCustomers()"></label></div>
+          <div class="tbl-wrap"><table>
+            <thead><tr><th>Name</th><th>Mobile</th><th class="num">Safaris</th><th class="num">Car bookings</th><th class="num">Tours</th><th class="num">Total paid</th><th>Last booking</th></tr></thead>
+            <tbody id="cu-body"><tr><td colspan="8" class="empty">Loading…</td></tr></tbody>
+          </table></div>
+        </section>
+
+        <!-- PRICES & ZONES -->
+        <section class="page" id="page-prices">
+          <div class="page-head"><div>
+            <h1 class="page-title">Prices &amp; Zones</h1>
+            <p class="page-help">Everything the website charges. Change a price here and press <b>Save</b> on that row — the booking page uses the new price immediately. Existing bookings never change.</p>
+          </div></div>
+          <div id="prices-body"><p class="empty">Loading…</p></div>
+        </section>
+
+        <!-- WEBSITE CONTENT -->
+        <section class="page" id="page-content">
+          <div class="page-head"><div>
+            <h1 class="page-title">Website Content</h1>
+            <p class="page-help">Guest reviews and the cars shown on the Car Rental page.</p>
+          </div></div>
+          <div class="tabs">
+            <button class="tab on" data-tab="reviews" onclick="contentTab('reviews')">Reviews <span id="cnt-r"></span></button>
+            <button class="tab" data-tab="vehicles" onclick="contentTab('vehicles')">Cars</button>
+          </div>
+
+          <div id="ct-reviews">
+            <p class="page-help" style="margin-bottom:1rem;">Reviews guests submit are hidden until you approve them.</p>
+            <div class="filters"><label>Show<select class="fi" id="rf" onchange="renderReviews()">
+              <option value="pending">Waiting for approval</option><option value="approved">Approved (visible)</option><option value="all">All</option>
+            </select></label></div>
+            <div id="rlist"></div>
+          </div>
+
+          <div id="ct-vehicles" style="display:none;">
+            <p class="page-help" style="margin-bottom:1rem;">Cars shown on the Car Rental page. (Pickup &amp; drop prices are under <b>Prices &amp; Zones</b>.)</p>
+            <div class="card">
+              <div class="card-title" id="veh-form-title">Add a vehicle</div>
+              <div class="grid3" style="margin-top:0.7rem;">
+                <div><label class="lbl">Name</label><input class="vi" id="veh-name" placeholder="e.g. Innova Crysta"></div>
+                <div><label class="lbl">Seats</label><input class="vi" id="veh-cap" type="number" min="1" placeholder="e.g. 7"></div>
+                <div><label class="lbl">Price per day (₹, for your reference)</label><input class="vi" id="veh-price" type="number" min="0" placeholder="e.g. 3500"></div>
+              </div>
+              <div style="margin-top:0.8rem;"><label class="lbl">Short description (optional)</label><input class="vi" id="veh-desc"></div>
+              <div class="actions"><button class="btn btn-primary" onclick="saveVehicle()">Save vehicle</button><button class="btn btn-ghost" id="veh-cancel-btn" style="display:none" onclick="cancelVehicleEdit()">Cancel</button></div>
+              <input type="hidden" id="veh-edit-id">
+            </div>
+            <div id="veh-list"></div>
+          </div>
+
+        </section>
+
+        <!-- ITINERARIES -->
+        <section class="page" id="page-itineraries">
+          <div class="page-head"><div>
+            <h1 class="page-title">Itineraries</h1>
+            <p class="page-help">The itineraries shown on the home page and the Itineraries page. They also appear in the booking form and in the Car Rental page, where the days and nights are filled in from here. Add, edit, hide or reorder them.</p>
+          </div></div>
+          <div class="card">
+            <div class="card-title" id="it-form-title">Add an itinerary</div>
+            <div class="grid3" style="margin-top:0.7rem;">
+              <div><label class="lbl">Title *</label><input class="vi" id="it-title" placeholder="e.g. Manas National Park &amp; Panbang (Bhutan)"></div>
+              <div><label class="lbl">Small label (optional)</label><input class="vi" id="it-badge" placeholder="e.g. Wildlife + Bhutan"></div>
+              <div><label class="lbl">Show order (1 = first)</label><input class="vi" id="it-order" type="number" min="1" placeholder="e.g. 3"></div>
+            </div>
+            <div class="grid3" style="margin-top:0.8rem;">
+              <div><label class="lbl">Days *</label><input class="vi" id="it-numdays" type="number" min="1" placeholder="e.g. 4"></div>
+              <div><label class="lbl">Nights *</label><input class="vi" id="it-numnights" type="number" min="0" placeholder="e.g. 3"></div>
+              <div><label class="lbl">Route in one line (optional)</label><input class="vi" id="it-route" placeholder="e.g. Guwahati → Shillong → Guwahati"></div>
+            </div>
+            <div style="border-top:1px solid var(--line);margin-top:1rem;padding-top:1rem;">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.7rem;"><b>Day by day</b><button class="btn btn-ghost btn-sm" onclick="addItDay()">+ Add day</button></div>
+              <div id="it-days-builder"></div>
+            </div>
+            <div style="border-top:1px solid var(--line);margin-top:1rem;padding-top:1rem;">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.3rem;"><b>Extra sections</b><button class="btn btn-ghost btn-sm" onclick="addItSection()">+ Add section</button></div>
+              <div class="hint" style="margin:0 0 0.7rem;">For things like "Package includes", "Package excludes" or "Important notes". One point per line.</div>
+              <div id="it-secs-builder"></div>
+            </div>
+            <div style="margin-top:0.8rem;"><label class="lbl">Closing note (optional)</label><textarea class="vi" id="it-notes" rows="2" placeholder="e.g. Only for Indian tourists. Carry your original Aadhaar card."></textarea></div>
+            <div class="actions"><button class="btn btn-primary" onclick="saveItinerary()">Save itinerary</button><button class="btn btn-ghost" id="it-cancel-btn" style="display:none" onclick="cancelItineraryEdit()">Cancel</button></div>
+            <input type="hidden" id="it-edit-id">
+          </div>
+          <div id="it-list"><p class="empty">Loading…</p></div>
+        </section>
+
+        <!-- GUIDE -->
+        <section class="page" id="page-guide">
+          <div class="page-head"><div><h1 class="page-title">How this works</h1><p class="page-help">A short guide for running the admin day to day.</p></div></div>
+          <div class="card">
+            <div class="card-title">What happens when a guest books</div>
+            <ol class="help-list">
+              <li>The guest picks a park, zone, date and time, enters everyone's details and uploads their ID (Manas guests also choose cameras, which are added to the total), and submits. <b>Nothing is paid at this point</b> — it arrives as a <span class="chip blue">New request</span> under <b>Safari Bookings</b> and the guest gets an email saying it was received.</li>
+              <li>Check whether seats are available for the slot. If they are, open the booking, check the <b>amount</b> (it is worked out from the rate card, you can change it) and press <b>Seats available — send payment link on WhatsApp</b>. WhatsApp opens with the message, the breakdown and the payment link already written — you just press send. If there are no seats, press <b>Seats not available</b> to message the guest instead.</li>
+              <li>When the guest pays through the link, the booking turns <span class="chip green">Paid &amp; confirmed</span> by itself. Open it and press <b>Send confirmation on WhatsApp</b> to send the confirmation message.</li>
+              <li>About 2 days before the safari, enter the <b>vehicle number and driver</b> and press <b>Send driver details on WhatsApp</b>.</li>
+            </ol>
+          </div>
+          <div class="card">
+            <div class="card-title">What the statuses mean</div>
+            <table><tbody>
+              <tr><td><span class="chip blue">New request</span></td><td>The guest submitted a booking. Check the seats and send the payment link (or tell them there are none).</td></tr>
+              <tr><td><span class="chip amber">Waiting for payment</span></td><td>You sent the payment link. It turns Paid &amp; confirmed by itself when the guest pays.</td></tr>
+              <tr><td><span class="chip green">Paid &amp; confirmed</span></td><td>Payment received. The safari is booked.</td></tr>
+              <tr><td><span class="chip amber">Needs review</span></td><td>An older booking waiting for you to check the payment. Check it, then press <b>Confirm booking</b>.</td></tr>
+              <tr><td><span class="chip red">Cancelled</span></td><td>Cancelled by you. Refunds are made from the Razorpay dashboard.</td></tr>
+            </tbody></table>
+          </div>
+          <div class="card">
+            <div class="card-title">Good to know</div>
+            <ul class="help-list">
+              <li><b>Prices:</b> change them under <b>Prices &amp; Zones</b>. Old bookings keep the price they were booked at.</li>
+              <li><b>Jeeps:</b> a private jeep takes up to 5 guests. The website works out how many jeeps a group needs and charges per jeep.</li>
+              <li><b>Aadhaar cards</b> are private. Only this admin page can open them.</li>
+              <li><b>Itinerary bookings</b> and <b>car bookings</b> are requests only (no payment on the website): the guest sends their contact details and what they want. You contact them, agree the price, then press <b>Confirm</b>. Manage the itineraries themselves under <b>Itineraries</b>.</li>
+              <li><b>WhatsApp buttons</b> open WhatsApp with the message already written — you just press send. Automatic confirmations are sent by the system itself.</li>
+              <li><b>Refunds</b> are done in the Razorpay dashboard. After refunding, mark the booking <span class="chip red">Cancelled</span> here so your list stays correct.</li>
+            </ul>
+          </div>
+        </section>
+
+      </main>
+    </div>
+
+    <div class="overlay" id="overlay" onclick="closeDrawer()"></div>
+    <aside class="drawer" id="drawer"><div class="drawer-head"><div><h2 id="dr-title"></h2><div class="sub" id="dr-sub"></div></div><button class="x-btn" onclick="closeDrawer()" aria-label="Close">×</button></div><div class="drawer-body" id="dr-body"></div></aside>
+  </div>
+
+  <div class="toast" id="t"></div>
+
+  <script>
+    /* ═══════════ Data access ═══════════
+       Every read/write goes through /.netlify/functions/admin-api, which checks the
+       admin token server-side. `db` mimics the small part of supabase-js used here. */
+    const TOKEN_KEY = 'aw_admin_token';
+    const getToken = () => { try { return sessionStorage.getItem(TOKEN_KEY); } catch { return null; } };
+
+    async function adminApi(body) {
+      const res = await fetch('/.netlify/functions/admin-api', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + (getToken() || '') },
+        body: JSON.stringify(body)
+      });
+      const out = await res.json().catch(() => ({}));
+      if (res.status === 401 && body.op !== 'login') { doLogout(); }
+      return res.ok ? { data: out.data ?? out, error: null } : { data: null, error: { message: out.error || 'Request failed' } };
+    }
+    const db = {
+      from(table) {
+        const req = { table, op: 'select', order: [] };
+        const q = {
+          select() { req.op = 'select'; return q; },
+          insert(values) { req.op = 'insert'; req.values = values; return q; },
+          update(values) { req.op = 'update'; req.values = values; return q; },
+          delete() { req.op = 'delete'; return q; },
+          eq(col, val) { if (col !== 'id') throw new Error('Only eq("id") is supported'); req.id = val; return q; },
+          order(column, opts) { req.order.push({ column, ascending: !opts || opts.ascending !== false }); return q; },
+          then(resolve, reject) { return adminApi(req).then(resolve, reject); }
+        };
+        return q;
+      }
+    };
+
+    /* ═══════════ Helpers ═══════════ */
+    const $ = id => document.getElementById(id);
+    const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const money = n => '₹' + Number(n || 0).toLocaleString('en-IN');
+    const istToday = () => new Date(Date.now() + 5.5 * 3600e3).toISOString().slice(0, 10);
+    const addDays = (iso, n) => new Date(new Date(iso + 'T12:00:00Z').getTime() + n * 86400e3).toISOString().slice(0, 10);
+    const fmt = (iso, long) => iso ? new Date(iso.length === 10 ? iso + 'T12:00:00' : iso).toLocaleDateString('en-IN', long ? { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' } : { day: 'numeric', month: 'short', year: 'numeric' }) : '—';
+    const fmtTime = iso => iso ? new Date(iso).toLocaleString('en-IN', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : '—';
+    const digits = s => String(s || '').replace(/\D/g, '');
+    const numOrNull = v => { v = String(v ?? '').trim(); if (v === '') return null; const n = parseInt(v, 10); return Number.isFinite(n) ? n : NaN; };
+    const waLink = (phone, msg) => 'https://wa.me/' + digits(phone) + '?text=' + encodeURIComponent(msg);
+    const guestsText = b => `${b.num_adults} adult${b.num_adults > 1 ? 's' : ''}${b.num_children ? `, ${b.num_children} child${b.num_children > 1 ? 'ren' : ''}` : ''}`;
+
+    function toast(msg, type = 'success') {
+      const t = $('t'); t.textContent = msg; t.className = `toast ${type} show`;
+      clearTimeout(toast.h); toast.h = setTimeout(() => t.classList.remove('show'), 3500);
+    }
+    async function run(promise, okMsg) {
+      const { data, error } = await promise;
+      if (error) { toast('Error: ' + error.message, 'error'); return null; }
+      if (okMsg) toast(okMsg);
+      return data || true;
+    }
+
+    const SAFARI_STATUS = {
+      requested: ['New request', 'blue'], awaiting_payment: ['Waiting for payment', 'amber'],
+      confirmed: ['Paid & confirmed', 'green'], pending_review: ['Needs review', 'amber'], cancelled: ['Cancelled', 'red']
+    };
+    const CAR_STATUS = {
+      confirmed: ['Confirmed', 'green'], requested: ['New request', 'blue'],
+      awaiting_payment: ['Waiting for payment', 'amber'], cancelled: ['Cancelled', 'red']
+    };
+    const chip = (map, s) => { const [l, c] = map[s] || [s, 'grey']; return `<span class="chip ${c}">${esc(l)}</span>`; };
+    const TOUR_STATUS = { requested: ['New request', 'blue'], confirmed: ['Confirmed', 'green'], cancelled: ['Cancelled', 'red'] };
+    const DIRECTION = { pickup: 'Pickup', drop: 'Drop', both: 'Pickup & drop' };
+    const WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const ID_LABEL = { aadhaar: 'Aadhaar', voter_id: 'Voter ID', passport: 'Passport', other: 'Other ID' };
+
+    /* ═══════════ Auth & boot ═══════════ */
+    async function doLogin() {
+      $('lerr').style.display = 'none';
+      const { data, error } = await adminApi({ op: 'login', password: $('lpwd').value });
+      if (error) { $('lerr').style.display = 'block'; return; }
+      sessionStorage.setItem(TOKEN_KEY, data.token);
+      $('login-screen').style.display = 'none'; $('admin-app').style.display = 'block';
+      boot();
+    }
+    function doLogout() { sessionStorage.removeItem(TOKEN_KEY); location.reload(); }
+    if (getToken()) { $('login-screen').style.display = 'none'; $('admin-app').style.display = 'block'; }
+
+    let SF = [], CAR = [], TOUR = [], CUS = [], RV = [], VEH = [], IT = [];
+    let PARKS = [], ZONES = [], SLOTS = [], ROUTES = [], RATES = [];
+    let currentPage = 'today';
+
+    function boot() {
+      clock(); setInterval(clock, 60000);
+      refreshAll();
+      go(location.hash.slice(1) || 'today');
+    }
+    if (getToken()) boot();
+    function clock() { $('ttime').textContent = new Date().toLocaleString('en-IN', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }); }
+
+    async function refreshAll() {
+      await Promise.all([loadSafaris(), loadCars(), loadTours(), loadCustomers(), loadReviews()]);
+      renderToday();
+    }
+
+    const PAGES = ['today', 'safaris', 'cars', 'tours', 'customers', 'itineraries', 'prices', 'content', 'guide'];
+    function go(p) {
+      if (!PAGES.includes(p)) p = 'today';
+      currentPage = p; location.hash = p; closeDrawer();
+      PAGES.forEach(n => { $('page-' + n).classList.toggle('active', n === p); });
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.toggle('active', b.dataset.page === p));
+      if (p === 'prices' && !PARKS.length) loadPrices();
+      if (p === 'content' && !VEH.length) loadVehicles();
+      if (p === 'itineraries' && !IT.length) loadItineraries();
+      window.scrollTo(0, 0);
+    }
+
+    function setBadge(id, n) { const e = $(id); e.style.display = n ? '' : 'none'; e.textContent = n; }
+
+    /* ═══════════ Drawer ═══════════ */
+    function openDrawer(title, sub, html) {
+      $('dr-title').textContent = title; $('dr-sub').textContent = sub || ''; $('dr-body').innerHTML = html;
+      $('drawer').classList.add('open'); $('overlay').classList.add('open');
+    }
+    function closeDrawer() { $('drawer').classList.remove('open'); $('overlay').classList.remove('open'); }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
+    const kv = (k, v) => `<div class="kv"><span>${k}</span><span>${v}</span></div>`;
+
+    /* ── Pickup & drop added to a safari ── */
+    const transferOf = b => (b.transfers || []).find(t => t.status !== 'cancelled') || null;
+    const transferHasDriver = t => !!(t && (t.vehicle_number || t.driver_name));
+    // Small badge for lists: shows a pickup/drop is attached, and whether its vehicle is arranged.
+    const transferBadge = b => {
+      const t = transferOf(b); if (!t) return '';
+      return transferHasDriver(t) ? '<span class="chip green" title="Pickup/drop vehicle assigned">+ Pickup/drop ✓</span>'
+        : '<span class="chip amber" title="Pickup/drop needs a vehicle and driver">+ Pickup/drop · needs vehicle</span>';
+    };
+
+    /* ═══════════ TODAY ═══════════ */
+    function renderToday() {
+      const today = istToday(), tomorrow = addDays(today, 1), soon = addDays(today, 2), week = addDays(today, 7);
+      const paid = SF.filter(b => b.status === 'confirmed' || b.status === 'pending_review');
+      const needsDriver = paid.filter(b => b.status === 'confirmed' && b.safari_date >= today && b.safari_date <= soon
+        && ((!b.vehicle_number && !b.driver_name) || (transferOf(b) && !transferHasDriver(transferOf(b)))));
+      const review = SF.filter(b => b.status === 'pending_review');
+      const newRequests = SF.filter(b => b.status === 'requested');
+      const waitingPay = SF.filter(b => b.status === 'awaiting_payment');
+      const newCars = CAR.filter(r => r.status === 'requested');
+      const newTours = TOUR.filter(t => t.status === 'requested');
+      const pendingRv = RV.filter(r => !r.approved);
+      const todays = paid.filter(b => b.safari_date === today), tomorrows = paid.filter(b => b.safari_date === tomorrow);
+      const month = today.slice(0, 7);
+      const revenue = SF.filter(b => b.status === 'confirmed' && (b.paid_at || b.created_at).slice(0, 7) === month).reduce((s, b) => s + b.total_amount, 0)
+        + CAR.filter(r => r.status === 'confirmed' && !r.safari_booking_id && (r.paid_at || r.created_at).slice(0, 7) === month).reduce((s, r) => s + (r.amount || 0), 0);
+      const attention = newRequests.length + needsDriver.length + review.length + newCars.length + newTours.length + pendingRv.length;
+
+      setBadge('nc-today', attention); setBadge('nc-safaris', newRequests.length + review.length + needsDriver.length);
+      setBadge('nc-cars', newCars.length); setBadge('nc-tours', newTours.length); setBadge('nc-content', pendingRv.length);
+
+      const row = (title, sub, btn) => `<div class="todo"><div><b>${title}</b><small>${sub}</small></div>${btn}</div>`;
+      const todos = [];
+      if (newRequests.length) todos.push(row(`${newRequests.length} new safari booking request${newRequests.length > 1 ? 's' : ''}`, 'Check the seats, then send the guest the payment link.', `<button class="btn btn-primary btn-sm" onclick="showSafaris('requested','all')">Open</button>`));
+      if (waitingPay.length) todos.push(row(`${waitingPay.length} booking${waitingPay.length > 1 ? 's' : ''} waiting for payment`, 'Payment link sent — they turn Paid &amp; confirmed by themselves when the guest pays.', `<button class="btn btn-ghost btn-sm" onclick="showSafaris('awaiting_payment','all')">View</button>`));
+      if (needsDriver.length) todos.push(row(`${needsDriver.length} safari${needsDriver.length > 1 ? 's' : ''} in the next 2 days ${needsDriver.length > 1 ? 'have' : 'has'} no vehicle / driver yet`, 'Guests expect these details on WhatsApp 24 hours before.', `<button class="btn btn-primary btn-sm" onclick="showSafaris('confirmed','soon')">Add driver details</button>`));
+      if (review.length) todos.push(row(`${review.length} booking${review.length > 1 ? 's' : ''} need${review.length > 1 ? '' : 's'} review`, 'Check the payment, then confirm.', `<button class="btn btn-primary btn-sm" onclick="showSafaris('pending_review','all')">Review</button>`));
+      if (newCars.length) todos.push(row(`${newCars.length} new car request${newCars.length > 1 ? 's' : ''}`, 'Guests waiting for you to get in touch.', `<button class="btn btn-primary btn-sm" onclick="go('cars')">Open</button>`));
+      if (newTours.length) todos.push(row(`${newTours.length} new itinerary booking request${newTours.length > 1 ? 's' : ''}`, 'Guests waiting for you to get in touch.', `<button class="btn btn-primary btn-sm" onclick="go('tours')">Open</button>`));
+      if (pendingRv.length) todos.push(row(`${pendingRv.length} review${pendingRv.length > 1 ? 's' : ''} waiting for approval`, 'Approved reviews appear on the website.', `<button class="btn btn-primary btn-sm" onclick="go('content')">Review</button>`));
+
+      const upcoming = paid.filter(b => b.safari_date >= today && b.safari_date <= week).sort((a, b) => a.safari_date.localeCompare(b.safari_date) || a.id - b.id);
+      const byDay = {};
+      upcoming.forEach(b => (byDay[b.safari_date] = byDay[b.safari_date] || []).push(b));
+      const days = Object.keys(byDay).map(d => {
+        const list = byDay[d], people = list.reduce((s, b) => s + b.num_adults + b.num_children, 0);
+        return `<div style="margin-bottom:1.1rem;"><div style="font-weight:700;margin-bottom:0.4rem;">${d === today ? 'Today · ' : d === tomorrow ? 'Tomorrow · ' : ''}${fmt(d, true)} <span class="sub" style="display:inline;margin-left:0.4rem;">${list.length} booking${list.length > 1 ? 's' : ''} · ${people} guests</span></div>
+          <div class="tbl-wrap"><table><tbody>${list.map(b => `<tr class="click" onclick="openSafari(${b.id})">
+            <td style="width:70px;"><b>S-${b.id}</b></td>
+            <td>${esc(b.customer?.name)}<small>${esc(b.customer?.phone)}</small></td>
+            <td>${esc(b.zone_name)}<small>${esc(b.slot_label)}</small></td>
+            <td>${guestsText(b)}${b.num_jeeps ? `<small>${b.num_jeeps} jeep${b.num_jeeps > 1 ? 's' : ''}</small>` : '<small>shared jeep</small>'}</td>
+            <td>${b.vehicle_number || b.driver_name ? '<span class="chip green">Driver added</span>' : '<span class="chip amber">No driver yet</span>'}${transferOf(b) ? '<br>' + transferBadge(b) : ''}</td></tr>`).join('')}</tbody></table></div></div>`;
+      }).join('');
+
+      $('today-body').innerHTML = `
+        <div class="stats">
+          <div class="stat"><div class="stat-num">${todays.length}</div><div class="stat-lbl">Safaris today (${todays.reduce((s, b) => s + b.num_adults + b.num_children, 0)} guests)</div></div>
+          <div class="stat"><div class="stat-num">${tomorrows.length}</div><div class="stat-lbl">Safaris tomorrow (${tomorrows.reduce((s, b) => s + b.num_adults + b.num_children, 0)} guests)</div></div>
+          <div class="stat ${attention ? 'alert' : ''}"><div class="stat-num">${attention}</div><div class="stat-lbl">Things needing your attention</div></div>
+          <div class="stat"><div class="stat-num">${money(revenue)}</div><div class="stat-lbl">Money received this month</div></div>
+        </div>
+        <div class="card"><div class="card-title">Needs your attention</div>
+          ${todos.length ? todos.join('') : '<p class="good" style="padding:0.6rem 0;">✓ All caught up. Nothing needs action right now.</p>'}</div>
+        <div class="card"><div class="card-title">Coming up — next 7 days</div><div class="card-help">Confirmed and paid safaris, by date. Click a booking to open it.</div>
+          ${days || '<p class="empty">No safaris booked in the next 7 days.</p>'}</div>`;
+    }
+    function showSafaris(status, when) {
+      $('sf-status').value = status; $('sf-when').value = when === 'soon' ? 'week' : when; $('sf-park').value = ''; $('sf-q').value = '';
+      go('safaris'); renderSafaris();
+    }
+
+    /* ═══════════ SAFARI BOOKINGS ═══════════ */
+    async function loadSafaris() {
+      const data = await run(db.from('safari_bookings').select().order('created_at', { ascending: false }));
+      SF = data && data !== true ? data : SF;
+      renderSafaris(); renderToday();
+    }
+
+    function filteredSafaris() {
+      const st = $('sf-status').value, when = $('sf-when').value, park = $('sf-park').value, q = $('sf-q').value.trim().toLowerCase();
+      const today = istToday();
+      return SF.filter(b => {
+        if (st === 'active' ? b.status === 'cancelled' : st !== 'all' && b.status !== st) return false;
+        if (park && b.park_id !== park) return false;
+        if (when === 'today' && b.safari_date !== today) return false;
+        if (when === 'tomorrow' && b.safari_date !== addDays(today, 1)) return false;
+        if (when === 'week' && !(b.safari_date >= today && b.safari_date <= addDays(today, 7))) return false;
+        if (when === 'upcoming' && b.safari_date < today) return false;
+        if (when === 'past' && b.safari_date >= today) return false;
+        if (q) {
+          const hay = `S-${b.id} ${b.id} ${b.customer?.name} ${b.customer?.phone} ${(b.guests || []).map(g => g.name).join(' ')}`.toLowerCase();
+          if (!hay.includes(q)) return false;
+        }
+        return true;
+      }).sort((a, b) => ['today', 'tomorrow', 'week', 'upcoming'].includes(when) ? a.safari_date.localeCompare(b.safari_date) : b.id - a.id);
+    }
+
+    function renderSafaris() {
+      if (!PARKS.length) {
+        // Until the price list is loaded, fill the park filter from the bookings themselves.
+        const seen = {}; SF.forEach(b => { if (b.park) seen[b.park.id] = b.park.name; });
+        const cur = $('sf-park').value;
+        $('sf-park').innerHTML = '<option value="">Both parks</option>' + Object.entries(seen).map(([id, n]) => `<option value="${esc(id)}">${esc(n)}</option>`).join('');
+        $('sf-park').value = cur;
+      }
+      const list = filteredSafaris();
+      $('sf-body').innerHTML = list.length ? list.map(b => `<tr class="click" onclick="openSafari(${b.id})">
+        <td><b>S-${b.id}</b><small>${fmtTime(b.created_at)}</small></td>
+        <td>${esc(b.customer?.name)}<small>${esc(b.customer?.phone)}</small></td>
+        <td>${esc(b.park?.name)}<small>${esc(b.zone_name)} · ${b.booking_type === 'shared' ? 'Shared jeep' : 'Private jeep'}</small></td>
+        <td>${fmt(b.safari_date)}<small>${esc(b.slot_label)}</small></td>
+        <td>${guestsText(b)}<small>${b.num_jeeps ? b.num_jeeps + ' jeep' + (b.num_jeeps > 1 ? 's' : '') : ''}${b.nationality === 'foreigner' ? ' · Foreigner' : ''}</small></td>
+        <td class="num">${money(b.total_amount)}${b.transfer_amount ? `<small>incl. pickup/drop</small>` : ''}</td>
+        <td>${chip(SAFARI_STATUS, b.status)}${transferOf(b) ? '<br>' + transferBadge(b) : ''}</td>
+        <td>${b.vehicle_number || b.driver_name ? esc(b.driver_name || b.vehicle_number) : '<span class="sub">—</span>'}</td></tr>`).join('')
+        : '<tr><td colspan="8" class="empty">No bookings match these filters.</td></tr>';
+    }
+
+    function openSafari(id) {
+      const b = SF.find(x => x.id === id); if (!b) return;
+      const guests = (b.guests || []).slice().sort((a, c) => a.position - c.position);
+      const tr = transferOf(b);
+      const phone = b.customer?.phone || '';
+      const isOpen = b.status === 'requested' || b.status === 'awaiting_payment';
+      const soon = b.status === 'confirmed' && b.safari_date <= addDays(istToday(), 2) && b.safari_date >= istToday()
+        && ((!b.vehicle_number && !b.driver_name) || (tr && !transferHasDriver(tr)));
+      const banner = {
+        requested: `<div class="banner blue"><b>New booking request.</b> Check that seats are available for the slot on ${esc(fmt(b.safari_date, true))}. If it is, check the amount below and send the payment link. If there are no seats, tell the guest.</div>`,
+        awaiting_payment: `<div class="banner amber"><b>Waiting for payment.</b> Payment link for ${money(b.payment_link_amount)} sent ${esc(fmtTime(b.payment_requested_at))}. This booking turns <b>Paid &amp; confirmed</b> by itself when the guest pays.</div>`,
+        pending_review: `<div class="banner amber"><b>Needs review.</b> Check that the payment has arrived, then confirm.</div>`,
+        cancelled: `<div class="banner red"><b>Cancelled.</b> If money was paid, refund it from the Razorpay dashboard.</div>`,
+        confirmed: b.paid_at ? `<div class="banner green"><b>Paid.</b> Payment received ${esc(fmtTime(b.paid_at))}. Send the guest their confirmation below.</div>` : ''
+      }[b.status] || '';
+      const actions = isOpen ? `
+          <button class="btn btn-wa" onclick="sendPaymentLink(${b.id})">${b.status === 'awaiting_payment' ? 'Send the payment link again on WhatsApp' : 'Seats available — send payment link on WhatsApp'}</button>
+          <a class="btn btn-ghost" target="_blank" rel="noopener" href="${waLink(phone, declineMsg(b))}">Seats not available — message guest</a>
+          <button class="btn btn-ghost" onclick="markPaidManually(${b.id})">Mark as paid (paid another way)</button>
+          <button class="btn btn-danger" onclick="setSafariStatus(${b.id},'cancelled')">Cancel booking</button>`
+        : b.status === 'cancelled' ? `<button class="btn btn-ghost" onclick="setSafariStatus(${b.id},'requested')">Reopen</button>`
+        : `${b.status !== 'confirmed' ? `<button class="btn btn-primary" onclick="setSafariStatus(${b.id},'confirmed')">Confirm booking</button>` : ''}
+          <button class="btn btn-danger" onclick="setSafariStatus(${b.id},'cancelled')">Cancel booking</button>`;
+      openDrawer(`Booking S-${b.id}`, `${b.park?.name} · booked ${fmtTime(b.created_at)}`, `
+        ${banner}${soon ? '<div class="banner amber"><b>Safari is coming up.</b> Add the vehicle and driver below and send them to the guest.</div>' : ''}
+        <div class="sec"><h3>Status</h3>
+          <div style="margin-bottom:0.6rem;">${chip(SAFARI_STATUS, b.status)}</div>
+          <div class="actions" style="margin-top:0;">${actions}</div></div>
+        ${isOpen ? `<div class="sec"><h3>Amount to collect</h3>
+          <div class="grid2">
+            <div><label class="lbl">Safari (₹)</label><input class="vi" id="am-safari" type="number" min="0" value="${b.safari_amount}" oninput="amountPreview()"></div>
+            ${b.camera_amount ? `<div><label class="lbl">Cameras (₹) — ${b.camera_still || 0} still, ${b.camera_video || 0} video</label><input class="vi" id="am-camera" type="number" min="0" value="${b.camera_amount}" oninput="amountPreview()"></div>` : ''}
+            ${tr ? `<div><label class="lbl">Pickup &amp; drop (₹)</label><input class="vi" id="am-transfer" type="number" min="0" value="${b.transfer_amount}" oninput="amountPreview()"></div>` : '<div></div>'}
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:0.8rem;">
+            <div>Total to collect: <b id="am-total" style="font-size:1.2rem;">${money(b.total_amount)}</b></div>
+            <button class="btn btn-ghost btn-sm" onclick="saveAmounts(${b.id})">Save amount</button></div>
+          <div class="hint">Worked out from the rate card when the guest booked (${b.booking_type === 'shared' ? 'shared jeep' : `private jeep${b.num_jeeps > 1 ? 's × ' + b.num_jeeps : ''}`}). Change it if you agree a different amount. Sending the payment link saves it automatically.</div></div>` : ''}
+        <div class="sec"><h3>Safari</h3>
+          ${kv('Park', esc(b.park?.name))}${kv('Zone', esc(b.zone_name))}${kv('Date', fmt(b.safari_date, true))}${kv('Time', esc(b.slot_label))}
+          ${kv('Jeep', b.booking_type === 'shared' ? 'Shared jeep' : `Private · ${b.num_jeeps} jeep${b.num_jeeps > 1 ? 's' : ''}`)}
+          ${kv('Guests', guestsText(b))}${kv('Nationality', b.nationality === 'foreigner' ? 'Foreigner' : 'Indian')}</div>
+        <div class="sec"><h3>Customer</h3>
+          ${kv('Name', esc(b.customer?.name))}${kv('Mobile', `<a href="tel:+${digits(phone)}">+${esc(digits(phone))}</a>`)}${b.gst_number || b.business_name ? kv('Business', esc(b.business_name || '—')) + kv('GST number', esc(b.gst_number || '—')) : ''}
+          <div class="actions">${b.status === 'confirmed' ? `<a class="btn btn-wa" target="_blank" rel="noopener" href="${waLink(phone, safariConfirmMsg(b))}">Send confirmation on WhatsApp</a>` : `<a class="btn btn-ghost" target="_blank" rel="noopener" href="https://wa.me/${digits(phone)}">Open WhatsApp chat</a>`}</div></div>
+        <div class="sec"><h3>Guests (${guests.length})</h3>
+          <table><tbody>${guests.map(g => `<tr><td style="padding-left:0;"><b>${esc(g.name)}</b><small>${g.is_child ? 'Child' : 'Adult'} · age ${esc(g.age)}</small></td>
+            <td class="num" style="padding-right:0;">${g.id_doc_path ? `<button class="btn btn-ghost btn-sm" onclick="viewFile('${esc(g.id_doc_path)}')">View ${esc(ID_LABEL[g.id_doc_type] || 'ID')}</button>` : '<span class="sub">No ID needed</span>'}</td></tr>`).join('')}</tbody></table></div>
+        ${tr ? `<div class="sec"><h3>Pickup &amp; drop (added to this booking)</h3>
+          ${kv('Route', esc(tr.route_label))}${kv('Vehicle booked', `${esc(tr.vehicle_name)} × ${tr.num_vehicles}`)}${kv('Trip', DIRECTION[tr.direction])}
+          ${kv('Date', fmt(tr.start_date, true) + (tr.return_date ? ' → ' + fmt(tr.return_date, true) : ''))}${kv('Pickup address', esc(tr.pickup_location))}${kv('Price', money(tr.amount))}
+          <div style="border-top:1px dashed #dfe5df;margin-top:0.8rem;padding-top:0.8rem;">
+            <div class="lbl" style="margin-bottom:0.5rem;">Vehicle &amp; driver for the pickup/drop ${transferHasDriver(tr) ? '<span class="chip green">Assigned</span>' : '<span class="chip amber">Not assigned yet</span>'}</div>
+            <div class="grid3">
+              <div><label class="lbl">Vehicle number</label><input class="vi" id="pv-vn" value="${esc(tr.vehicle_number)}"></div>
+              <div><label class="lbl">Driver name</label><input class="vi" id="pv-dn" value="${esc(tr.driver_name)}"></div>
+              <div><label class="lbl">Driver phone</label><input class="vi" id="pv-dc" value="${esc(tr.driver_contact)}"></div>
+            </div>
+            <div class="actions"><button class="btn btn-primary" onclick="saveTransferDriver(${b.id},${tr.id})">Save</button>
+              <button class="btn btn-wa" onclick="sendTransferWA(${b.id},${tr.id})">Send pickup/drop details on WhatsApp</button></div>
+          </div></div>` : ''}
+        <div class="sec"><h3>Payment</h3>
+          ${kv('Safari', money(b.safari_amount))}${b.camera_amount ? kv('Cameras (' + [b.camera_still ? b.camera_still + ' still' : '', b.camera_video ? b.camera_video + ' video' : ''].filter(Boolean).join(', ') + ')', money(b.camera_amount)) : ''}${b.transfer_amount ? kv('Pickup & drop', money(b.transfer_amount)) : ''}${kv('<b>Total</b>', `<b>${money(b.total_amount)}</b>`)}
+          ${b.payment_link_url ? kv('Payment link', `<a href="${esc(b.payment_link_url)}" target="_blank" rel="noopener">${esc(b.payment_link_url)}</a>`) + kv('Link amount', money(b.payment_link_amount)) + kv('Link sent', fmtTime(b.payment_requested_at)) : ''}
+          ${kv('Paid on', b.paid_at ? fmtTime(b.paid_at) : '—')}${kv('Razorpay payment ID', esc(b.payment_id || '—'))}</div>
+        <div class="sec"><h3>Vehicle &amp; driver for the safari</h3>
+          <div class="grid3">
+            <div><label class="lbl">Vehicle number</label><input class="vi" id="sv-vn" placeholder="AS-01-AB-1234" value="${esc(b.vehicle_number)}"></div>
+            <div><label class="lbl">Driver name</label><input class="vi" id="sv-dn" value="${esc(b.driver_name)}"></div>
+            <div><label class="lbl">Driver phone</label><input class="vi" id="sv-dc" value="${esc(b.driver_contact)}"></div>
+          </div>
+          <div class="actions"><button class="btn btn-primary" onclick="saveSafariDriver(${b.id})">Save</button>
+            <button class="btn btn-wa" onclick="sendDriverWA(${b.id})">Send driver details on WhatsApp</button></div>
+          <div class="hint">Save first, then send. The message opens in WhatsApp for you to press send.</div></div>
+        <div class="sec"><h3>Your private notes</h3>
+          <textarea class="vi" id="sv-notes" rows="3" placeholder="Only you can see this">${esc(b.admin_notes)}</textarea>
+          <div class="actions"><button class="btn btn-ghost" onclick="saveSafariNotes(${b.id})">Save notes</button></div></div>`);
+    }
+
+    /* ── Amount, payment link, messages ── */
+    function amountPreview() {
+      const n = id => Math.max(0, parseInt(($(id) || {}).value, 10) || 0);
+      $('am-total').textContent = money(n('am-safari') + (document.getElementById('am-camera') ? n('am-camera') : 0) + (document.getElementById('am-transfer') ? n('am-transfer') : 0));
+    }
+    // Saves the amounts typed in the booking. Returns false if they are not valid.
+    async function saveAmounts(id, quiet) {
+      const b = SF.find(x => x.id === id), tr = transferOf(b);
+      const safari = parseInt($('am-safari').value, 10), transfer = tr ? parseInt($('am-transfer').value, 10) : 0;
+      const camera = $('am-camera') ? parseInt($('am-camera').value, 10) : (b.camera_amount || 0);
+      if (!(safari >= 0) || !(transfer >= 0) || !(camera >= 0)) { toast('Enter valid amounts.', 'error'); return false; }
+      if (safari === b.safari_amount && transfer === b.transfer_amount && camera === (b.camera_amount || 0)) { if (!quiet) toast('Amount is already saved.'); return true; }
+      if (!await run(db.from('safari_bookings').update({ safari_amount: safari, transfer_amount: transfer, camera_amount: camera, total_amount: safari + camera + transfer }).eq('id', id))) return false;
+      if (tr && transfer !== b.transfer_amount) await run(db.from('car_rentals').update({ amount: transfer }).eq('id', tr.id));
+      if (!quiet) toast('Amount saved.');
+      await Promise.all([loadSafaris(), loadCars()]);
+      if (!quiet) openSafari(id);
+      return true;
+    }
+    async function sendPaymentLink(id) {
+      // Open the WhatsApp tab straight away (browsers block pop-ups opened after a delay), fill it in once the link exists.
+      const w = window.open('about:blank', '_blank');
+      const fail = m => { if (w) w.close(); toast(m, 'error'); };
+      if (!await saveAmounts(id, true)) { if (w) w.close(); return; }
+      const { data, error } = await adminApi({ op: 'payment_link', id });
+      if (error) return fail(error.message);
+      await loadSafaris();
+      const b = SF.find(x => x.id === id);
+      const url = waLink(b.customer?.phone, paymentMsg(b, data.url));
+      if (w) w.location.href = url; else window.open(url, '_blank');
+      toast(data.reused ? 'Payment link ready (same link as before).' : 'Payment link created.');
+      openSafari(id);
+    }
+    async function markPaidManually(id) {
+      if (!confirm('Mark this booking as paid? Use this only if the guest paid you another way (cash, bank transfer…).')) return;
+      const paid = { status: 'confirmed', paid_at: new Date().toISOString(), payment_id: 'paid outside the website' };
+      if (!await run(db.from('safari_bookings').update(paid).eq('id', id), 'Marked as paid.')) return;
+      for (const t of (SF.find(x => x.id === id).transfers || [])) await db.from('car_rentals').update({ status: 'confirmed', paid_at: paid.paid_at }).eq('id', t.id);
+      await Promise.all([loadSafaris(), loadCars()]); openSafari(id);
+    }
+    const paymentMsg = (b, url) => {
+      const t = transferOf(b);
+      const lines = [`• Safari — ${b.zone_name} (${b.booking_type === 'shared' ? 'shared jeep' : `private jeep${b.num_jeeps > 1 ? 's × ' + b.num_jeeps : ''}`}): ${money(b.safari_amount)}`];
+      if (b.camera_amount) lines.push(`• Camera charges (${[b.camera_still ? b.camera_still + ' still' : '', b.camera_video ? b.camera_video + ' video' : ''].filter(Boolean).join(', ')}): ${money(b.camera_amount)}`);
+      if (t && b.transfer_amount) lines.push(`• Pickup & drop — ${t.route_label}, ${t.vehicle_name} × ${t.num_vehicles} (${DIRECTION[t.direction].toLowerCase()}): ${money(b.transfer_amount)}`);
+      return `🦏 *Assam Wild Safari — Seats are available!*\n\nHello ${b.customer?.name || ''}, good news — we have seats for you and can take your booking.\n\n*Booking:* S-${b.id}\n*Park:* ${b.park?.name} — ${b.zone_name}\n*Date:* ${fmt(b.safari_date, true)}\n*Time:* ${b.slot_label}\n*Guests:* ${guestsText(b)}\n\n*Payment details*\n${lines.join('\n')}\n*Total to pay: ${money(b.total_amount)}*\n\nPlease pay securely here to confirm your booking:\n${url}\n\nYour booking is confirmed once the payment is received.\n\nQueries: +91 97098 84206 / +91 93656 09948`;
+    };
+    const declineMsg = b => `🦏 *Assam Wild Safari — About your booking S-${b.id}*\n\nHello ${b.customer?.name || ''}, thank you for your request for ${b.zone_name} on ${fmt(b.safari_date, true)} (${b.slot_label}).\n\nSorry — we do not have seats available for the slot. Please tell us another date or time that works for you and we will check it right away.\n\nQueries: +91 97098 84206 / +91 93656 09948`;
+
+    async function setSafariStatus(id, status) {
+      if (status === 'cancelled' && !confirm('Cancel this booking? Remember to refund the guest from the Razorpay dashboard if they paid.')) return;
+      const r = await run(db.from('safari_bookings').update({ status }).eq('id', id), 'Status updated.');
+      if (!r) return;
+      // A pickup/drop added to this safari follows its status.
+      const b = SF.find(x => x.id === id);
+      if (status === 'cancelled') for (const t of b.transfers || []) await db.from('car_rentals').update({ status: 'cancelled' }).eq('id', t.id);
+      await Promise.all([loadSafaris(), loadCars()]);
+      openSafari(id);
+    }
+    async function saveTransferDriver(bookingId, rentalId) {
+      const v = { vehicle_number: $('pv-vn').value.trim() || null, driver_name: $('pv-dn').value.trim() || null, driver_contact: $('pv-dc').value.trim() || null };
+      if (await run(db.from('car_rentals').update(v).eq('id', rentalId), 'Pickup/drop vehicle saved.')) { await Promise.all([loadSafaris(), loadCars()]); openSafari(bookingId); }
+    }
+    function sendTransferWA(bookingId, rentalId) {
+      const b = SF.find(x => x.id === bookingId), t = (b.transfers || []).find(x => x.id === rentalId);
+      const vn = $('pv-vn').value.trim(), dn = $('pv-dn').value.trim(), dc = $('pv-dc').value.trim();
+      if (!vn && !dn) { toast('Enter the vehicle number or driver name first, then Save.', 'error'); return; }
+      const msg = `🚗 *Assam Wild Safari — Your pickup & drop*\n\n*Booking:* S-${b.id}\n*Route:* ${t.route_label}\n*Trip:* ${DIRECTION[t.direction]}\n*Date:* ${fmt(t.start_date, true)}${t.return_date ? ' → ' + fmt(t.return_date, true) : ''}\n*Pickup address:* ${t.pickup_location || ''}\n\n🚗 Vehicle: ${vn || 'to be shared'}\n👤 Driver: ${dn || 'to be shared'}\n📞 Driver phone: ${dc || 'to be shared'}\n\nPlease be ready at the pickup point on time.\nQueries: +91 97098 84206 / +91 93656 09948`;
+      window.open(waLink(b.customer?.phone, msg), '_blank');
+    }
+    async function saveSafariDriver(id) {
+      const v = { vehicle_number: $('sv-vn').value.trim() || null, driver_name: $('sv-dn').value.trim() || null, driver_contact: $('sv-dc').value.trim() || null };
+      if (await run(db.from('safari_bookings').update(v).eq('id', id), 'Driver details saved.')) { await loadSafaris(); openSafari(id); }
+    }
+    async function saveSafariNotes(id) {
+      if (await run(db.from('safari_bookings').update({ admin_notes: $('sv-notes').value.trim() || null }).eq('id', id), 'Notes saved.')) loadSafaris();
+    }
+    function sendDriverWA(id) {
+      const b = SF.find(x => x.id === id);
+      const vn = $('sv-vn').value.trim(), dn = $('sv-dn').value.trim(), dc = $('sv-dc').value.trim();
+      if (!vn && !dn) { toast('Enter the vehicle number or driver name first.', 'error'); return; }
+      const msg = `🦏 *Assam Wild Safari — Your safari details*\n\n*Booking:* S-${b.id}\n*Park:* ${b.park?.name} — ${b.zone_name}\n*Date:* ${fmt(b.safari_date, true)}\n*Time:* ${b.slot_label}\n\n*Vehicle & driver*\n🚗 Vehicle: ${vn || 'to be shared'}\n👤 Driver: ${dn || 'to be shared'}\n📞 Driver phone: ${dc || 'to be shared'}\n\n⚠ Please send us your hotel / pickup location if you have not already. Be ready 30 minutes before the safari.\n\nQueries: +91 97098 84206 / +91 93656 09948\n\n_Happy wildlifing! 🌿_`;
+      window.open(waLink(b.customer?.phone, msg), '_blank');
+    }
+    const safariConfirmMsg = b => `🦏 *Assam Wild Safari — Booking confirmed!*\n\n*Booking:* S-${b.id}\n*Name:* ${b.customer?.name}\n*Park:* ${b.park?.name} — ${b.zone_name}\n*Date:* ${fmt(b.safari_date, true)}\n*Time:* ${b.slot_label}\n*Guests:* ${guestsText(b)}\n*Amount paid:* ${money(b.total_amount)}\n\nWe will send the vehicle & driver details 24 hours before your safari.\n\nQueries: +91 97098 84206 / +91 93656 09948\n\n_Happy wildlifing! 🌿_`;
+
+    async function viewFile(key) {
+      try {
+        const res = await fetch('/.netlify/functions/get-file?key=' + encodeURIComponent(key), { headers: { Authorization: 'Bearer ' + getToken() } });
+        if (!res.ok) throw new Error('File not found (' + res.status + ')');
+        const url = URL.createObjectURL(await res.blob());
+        const a = document.createElement('a'); a.href = url; a.target = '_blank'; a.rel = 'noopener';
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 60000);
+      } catch (err) { toast('Could not open file: ' + err.message, 'error'); }
+    }
+
+    function exportSafaris() {
+      const rows = [['Booking', 'Status', 'Booked on', 'Customer', 'Mobile', 'Business', 'GST number', 'Park', 'Zone', 'Safari date', 'Time', 'Jeep type', 'Jeeps', 'Adults', 'Children', 'Nationality', 'Safari amount', 'Camera amount', 'Pickup/drop amount', 'Pickup/drop trip', 'Pickup/drop vehicle & driver', 'Total', 'Vehicle', 'Driver', 'Driver phone', 'Payment ID']];
+      filteredSafaris().forEach(b => rows.push([`S-${b.id}`, SAFARI_STATUS[b.status]?.[0], b.created_at?.slice(0, 10), b.customer?.name, '+' + digits(b.customer?.phone), b.business_name, b.gst_number, b.park?.name, b.zone_name, b.safari_date, b.slot_label, b.booking_type, b.num_jeeps, b.num_adults, b.num_children, b.nationality, b.safari_amount, b.camera_amount, b.transfer_amount, (transferOf(b) ? `${transferOf(b).route_label} · ${DIRECTION[transferOf(b).direction]} · ${fmt(transferOf(b).start_date)}` : ''), (transferOf(b) ? [transferOf(b).vehicle_number, transferOf(b).driver_name, transferOf(b).driver_contact].filter(Boolean).join(' / ') : ''), b.total_amount, b.vehicle_number, b.driver_name, b.driver_contact, b.payment_id]));
+      const csv = rows.map(r => r.map(v => `"${String(v ?? '').replace(/"/g, '""')}"`).join(',')).join('\n');
+      const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['﻿' + csv], { type: 'text/csv' }));
+      a.download = `safari-bookings-${istToday()}.csv`; a.click();
+    }
+
+    /* ═══════════ CAR BOOKINGS ═══════════ */
+    async function loadCars() {
+      const data = await run(db.from('car_rentals').select().order('created_at', { ascending: false }));
+      CAR = data && data !== true ? data : CAR;
+      renderCars(); renderToday();
+    }
+    const short = (t, n) => { t = String(t || ''); return t.length > n ? t.slice(0, n - 1) + '…' : t; };
+    const carTrip = r => r.rental_type === 'transfer'
+      ? `${esc(r.route_label)}<small>${DIRECTION[r.direction]} · ${esc(r.vehicle_name)} × ${r.num_vehicles}${r.safari_booking_id ? ` · with safari S-${r.safari_booking_id}` : ''}</small>`
+      : `${esc(r.itinerary || 'Customised trip')}<small>${r.route_description ? esc(short(r.route_description, 90)) : (r.pickup_location ? 'Pickup: ' + esc(short(r.pickup_location, 60)) : '')}</small>`;
+
+    function renderCars() {
+      const st = $('cf-status').value, type = $('cf-type').value, q = $('cf-q').value.trim().toLowerCase();
+      const list = CAR.filter(r => {
+        if (st === 'action' ? r.status !== 'requested' : st !== 'all' && r.status !== st) return false;
+        if (type && r.rental_type !== type) return false;
+        return !q || `C-${r.id} ${r.customer?.name} ${r.customer?.phone} ${r.itinerary || ''}`.toLowerCase().includes(q);
+      });
+      $('cf-body').innerHTML = list.length ? list.map(r => `<tr class="click" onclick="openCar(${r.id})">
+        <td><b>C-${r.id}</b><small>${fmtTime(r.created_at)}</small></td>
+        <td>${esc(r.customer?.name)}<small>${esc(r.customer?.phone)}</small></td>
+        <td>${carTrip(r)}</td>
+        <td>${esc(r.vehicle_name)}${r.num_vehicles > 1 ? ' × ' + r.num_vehicles : ''}</td>
+        <td>${r.num_days || '—'}</td>
+        <td>${chip(CAR_STATUS, r.status)}</td></tr>`).join('')
+        : '<tr><td colspan="6" class="empty">Nothing here.</td></tr>';
+    }
+
+    function openCar(id) {
+      const r = CAR.find(x => x.id === id); if (!r) return;
+      const phone = r.customer?.phone || '';
+      const isTransfer = r.rental_type === 'transfer', withSafari = !!r.safari_booking_id;
+      const banner = r.status === 'requested' ? `<div class="banner blue"><b>New car request.</b> Contact the guest to talk about the trip, the fare and the budget, then press <b>Confirm</b> once it is agreed.</div>`
+        : r.status === 'awaiting_payment' ? `<div class="banner blue"><b>Waiting for payment.</b> This pickup/drop belongs to a safari booking and is confirmed when that booking is paid.</div>` : '';
+      openDrawer(`Car booking C-${r.id}`, isTransfer ? (withSafari ? 'Pickup & drop with a safari' : 'Pickup / drop request') : 'Car request', `
+        ${banner}
+        <div class="sec"><h3>Status</h3><div style="margin-bottom:0.6rem;">${chip(CAR_STATUS, r.status)}</div>
+          <div class="actions" style="margin-top:0;">
+            ${r.status !== 'confirmed' && !withSafari ? `<button class="btn btn-primary" onclick="setCarStatus(${r.id},'confirmed')">Confirm</button>` : ''}
+            ${r.status !== 'cancelled' ? `<button class="btn btn-danger" onclick="setCarStatus(${r.id},'cancelled')">Cancel</button>` : `<button class="btn btn-ghost" onclick="setCarStatus(${r.id},'requested')">Reopen</button>`}
+          </div></div>
+        <div class="sec"><h3>Trip</h3>
+          ${kv('Car', `${esc(r.vehicle_name)}${r.num_vehicles > 1 ? ' × ' + r.num_vehicles : ''}`)}
+          ${isTransfer ? kv('Route', esc(r.route_label)) + kv('Trip', DIRECTION[r.direction]) + kv('Date', fmt(r.start_date, true) + (r.return_date ? ' → ' + fmt(r.return_date, true) : '')) + kv('Price', money(r.amount))
+            : kv('Trip', esc(r.itinerary || 'Customised trip')) + (r.route_description ? kv('Route / destination', esc(r.route_description)) : '') + kv('Days', r.num_days || '—')}
+          ${r.pickup_location ? kv(isTransfer ? 'Pickup address' : 'Pickup location', esc(r.pickup_location)) : ''}
+          ${r.safari_booking_id ? kv('Booked with', `<a href="#" onclick="openSafari(${r.safari_booking_id});return false;">Safari S-${r.safari_booking_id}</a>`) : ''}</div>
+        <div class="sec"><h3>Customer</h3>
+          ${kv('Name', esc(r.customer?.name))}${kv('Mobile', `<a href="tel:+${digits(phone)}">+${esc(digits(phone))}</a>`)}${r.gst_number || r.business_name ? kv('Business', esc(r.business_name || '—')) + kv('GST number', esc(r.gst_number || '—')) : ''}
+          <div class="actions"><a class="btn btn-wa" target="_blank" rel="noopener" href="${waLink(phone, carMsg(r))}">Message on WhatsApp</a></div></div>
+        <div class="sec"><h3>Vehicle &amp; driver</h3>
+          <div class="grid3">
+            <div><label class="lbl">Vehicle number</label><input class="vi" id="cv-vn" value="${esc(r.vehicle_number)}"></div>
+            <div><label class="lbl">Driver name</label><input class="vi" id="cv-dn" value="${esc(r.driver_name)}"></div>
+            <div><label class="lbl">Driver phone</label><input class="vi" id="cv-dc" value="${esc(r.driver_contact)}"></div>
+          </div>
+          <div class="actions"><button class="btn btn-primary" onclick="saveCarDriver(${r.id})">Save</button>
+            <button class="btn btn-wa" onclick="sendCarDriverWA(${r.id})">Send driver details on WhatsApp</button></div></div>
+        <div class="sec"><h3>Your private notes</h3>
+          <textarea class="vi" id="cv-notes" rows="3">${esc(r.admin_notes)}</textarea>
+          <div class="actions"><button class="btn btn-ghost" onclick="saveCarNotes(${r.id})">Save notes</button></div></div>`);
+    }
+    async function setCarStatus(id, status) {
+      if (status === 'cancelled' && !confirm('Cancel this car booking?')) return;
+      if (await run(db.from('car_rentals').update({ status }).eq('id', id), 'Status updated.')) { await loadCars(); openCar(id); }
+    }
+    async function saveCarDriver(id) {
+      const v = { vehicle_number: $('cv-vn').value.trim() || null, driver_name: $('cv-dn').value.trim() || null, driver_contact: $('cv-dc').value.trim() || null };
+      if (await run(db.from('car_rentals').update(v).eq('id', id), 'Driver details saved.')) { await loadCars(); openCar(id); }
+    }
+    async function saveCarNotes(id) {
+      if (await run(db.from('car_rentals').update({ admin_notes: $('cv-notes').value.trim() || null }).eq('id', id), 'Notes saved.')) loadCars();
+    }
+    const carWhat = r => r.rental_type === 'transfer' ? `${r.route_label} (${DIRECTION[r.direction].toLowerCase()})` : (r.itinerary || 'Customised trip');
+    const carMsg = r => `🚗 *Assam Wild Safari — Your car booking*\n\n*Booking:* C-${r.id}\n*Trip:* ${carWhat(r)}\n*Car:* ${r.vehicle_name}${r.num_days ? `\n*Days:* ${r.num_days}` : ''}\n\n${r.status === 'confirmed' ? 'Your car booking is confirmed.' : 'We have received your request and will be in touch about the details.'}\n\nQueries: +91 93656 09948`;
+    function sendCarDriverWA(id) {
+      const r = CAR.find(x => x.id === id);
+      const vn = $('cv-vn').value.trim(), dn = $('cv-dn').value.trim(), dc = $('cv-dc').value.trim();
+      if (!vn && !dn) { toast('Enter the vehicle number or driver name first.', 'error'); return; }
+      window.open(waLink(r.customer?.phone, `🚗 *Assam Wild Safari — Driver details*\n\n*Booking:* C-${r.id}\n*Trip:* ${carWhat(r)}\n${r.start_date ? `*Date:* ${fmt(r.start_date, true)}\n` : ''}*Pickup:* ${r.pickup_location || ''}\n\n🚗 Vehicle: ${vn || 'to be shared'}\n👤 Driver: ${dn || 'to be shared'}\n📞 Driver phone: ${dc || 'to be shared'}\n\nQueries: +91 93656 09948`), '_blank');
+    }
+
+    /* ═══════════ TOUR (ITINERARY) BOOKINGS ═══════════ */
+    async function loadTours() {
+      const data = await run(db.from('tour_bookings').select().order('created_at', { ascending: false }));
+      TOUR = data && data !== true ? data : TOUR;
+      renderTours(); renderToday();
+    }
+    const tourDuration = t => (t.num_nights != null || t.num_days != null) ? `${t.num_nights ?? '—'} nights / ${t.num_days ?? '—'} days` : '—';
+    function renderTours() {
+      const st = $('tf-status').value, q = $('tf-q').value.trim().toLowerCase();
+      const list = TOUR.filter(t => {
+        if (st === 'action' ? t.status !== 'requested' : st !== 'all' && t.status !== st) return false;
+        return !q || `T-${t.id} ${t.package_title} ${t.customer?.name} ${t.customer?.phone} `.toLowerCase().includes(q);
+      });
+      $('tf-body').innerHTML = list.length ? list.map(t => `<tr class="click" onclick="openTour(${t.id})">
+        <td><b>T-${t.id}</b><small>${fmtTime(t.created_at)}</small></td>
+        <td>${esc(t.customer?.name)}<small>${esc(t.customer?.phone)}</small></td>
+        <td>${esc(t.package_title)}${t.description ? `<small>${esc(short(t.description, 80))}</small>` : ''}</td>
+        <td>${esc(tourDuration(t))}</td>
+        <td>${t.request_kind === 'custom' ? '<span class="chip blue">Customised</span>' : '<span class="chip grey">Our itinerary</span>'}</td>
+        <td>${chip(TOUR_STATUS, t.status)}</td></tr>`).join('') : '<tr><td colspan="6" class="empty">Nothing here.</td></tr>';
+    }
+    function openTour(id) {
+      const t = TOUR.find(x => x.id === id); if (!t) return;
+      const phone = t.customer?.phone || '';
+      const custom = t.request_kind === 'custom';
+      openDrawer(`Itinerary booking T-${t.id}`, `${t.package_title} · requested ${fmtTime(t.created_at)}`, `
+        ${t.status === 'requested' ? '<div class="banner blue"><b>New request.</b> Contact the guest to talk about the trip and the pricing, then press <b>Confirm</b> once it is agreed.</div>' : ''}
+        ${t.status === 'cancelled' ? '<div class="banner red"><b>Cancelled.</b></div>' : ''}
+        <div class="sec"><h3>Status</h3><div style="margin-bottom:0.6rem;">${chip(TOUR_STATUS, t.status)}</div>
+          <div class="actions" style="margin-top:0;">
+            ${t.status !== 'confirmed' ? `<button class="btn btn-primary" onclick="setTourStatus(${t.id},'confirmed')">Confirm</button>` : ''}
+            ${t.status !== 'cancelled' ? `<button class="btn btn-danger" onclick="setTourStatus(${t.id},'cancelled')">Cancel</button>` : `<button class="btn btn-ghost" onclick="setTourStatus(${t.id},'requested')">Reopen</button>`}
+          </div></div>
+        <div class="sec"><h3>${custom ? 'Customised itinerary' : 'Itinerary'}</h3>
+          ${kv('Type', custom ? 'Customised by the guest' : 'One of our itineraries')}${kv('Itinerary', esc(t.package_title))}${custom && t.base?.title ? kv('Starting from', esc(t.base.title)) : ''}${kv('Duration', esc(tourDuration(t)))}
+          ${t.pickup_drop ? kv('Pickup / drop', esc(t.pickup_drop)) : ''}
+          ${t.description ? `<div style="margin-top:0.7rem;"><div class="lbl">${custom ? 'What the guest wants' : 'Guest notes'}</div><div style="white-space:pre-wrap;font-size:0.92rem;">${esc(t.description)}</div></div>` : ''}</div>
+        <div class="sec"><h3>Contact</h3>
+          ${kv('Name', esc(t.customer?.name))}${kv('Mobile', `<a href="tel:+${digits(phone)}">+${esc(digits(phone))}</a>`)}${t.gst_number || t.business_name ? kv('Business', esc(t.business_name || '—')) + kv('GST number', esc(t.gst_number || '—')) : ''}
+          <div class="actions"><a class="btn btn-wa" target="_blank" rel="noopener" href="${waLink(phone, tourMsg(t))}">Message on WhatsApp</a></div></div>
+        <div class="sec"><h3>Your private notes</h3>
+          <textarea class="vi" id="tv-notes" rows="3">${esc(t.admin_notes)}</textarea>
+          <div class="actions"><button class="btn btn-ghost" onclick="saveTourNotes(${t.id})">Save notes</button></div></div>`);
+    }
+    const tourMsg = t => `🌿 *Assam Wild Safari — Your itinerary booking*\n\n*Booking:* T-${t.id}\n*Itinerary:* ${t.package_title}${t.base?.title ? ' (starting from ' + t.base.title + ')' : ''}\n*Duration:* ${tourDuration(t)}\n\n${t.status === 'confirmed' ? 'Your itinerary booking is confirmed.' : 'We have received your request and will be in touch shortly to talk about your trip.'}\n\nQueries: +91 97098 84206 / +91 93656 09948`;
+    async function setTourStatus(id, status) {
+      if (status === 'cancelled' && !confirm('Cancel this itinerary booking?')) return;
+      if (await run(db.from('tour_bookings').update({ status }).eq('id', id), 'Status updated.')) { await loadTours(); openTour(id); }
+    }
+    async function saveTourNotes(id) {
+      if (await run(db.from('tour_bookings').update({ admin_notes: $('tv-notes').value.trim() || null }).eq('id', id), 'Notes saved.')) loadTours();
+    }
+
+    /* ═══════════ CUSTOMERS ═══════════ */
+    async function loadCustomers() {
+      const data = await run(db.from('customers').select().order('created_at', { ascending: false }));
+      CUS = data && data !== true ? data : CUS;
+      renderCustomers();
+    }
+    function customerStats() {
+      const s = {};
+      const at = id => (s[id] = s[id] || { safaris: 0, cars: 0, tours: 0, paid: 0, last: '' });
+      SF.filter(b => b.status === 'confirmed' || b.status === 'pending_review').forEach(b => { const c = at(b.customer_id); c.safaris++; c.paid += b.total_amount; if (b.created_at > c.last) c.last = b.created_at; });
+      TOUR.filter(t => t.status !== 'cancelled').forEach(t => { const c = at(t.customer_id); c.tours++; if (t.status === 'confirmed') c.paid += t.total_amount || 0; if (t.created_at > c.last) c.last = t.created_at; });
+      CAR.filter(r => r.status !== 'cancelled' && r.status !== 'awaiting_payment').forEach(r => { const c = at(r.customer_id); c.cars++; if (!r.safari_booking_id && r.status === 'confirmed') c.paid += r.amount || 0; if (r.created_at > c.last) c.last = r.created_at; });
+      return s;
+    }
+    function renderCustomers() {
+      const q = $('cu-q').value.trim().toLowerCase(), s = customerStats();
+      const list = CUS.filter(c => s[c.id] && (!q || `${c.name} ${c.phone}`.toLowerCase().includes(q)))
+        .sort((a, b) => (s[b.id].last || '').localeCompare(s[a.id].last || ''));
+      $('cu-body').innerHTML = list.length ? list.map(c => `<tr class="click" onclick="openCustomer(${c.id})">
+        <td><b>${esc(c.name)}</b></td><td>+${esc(digits(c.phone))}</td>
+        <td class="num">${s[c.id].safaris}</td><td class="num">${s[c.id].cars}</td><td class="num">${s[c.id].tours}</td><td class="num">${money(s[c.id].paid)}</td><td>${fmt(s[c.id].last)}</td></tr>`).join('')
+        : '<tr><td colspan="8" class="empty">No customers yet. People appear here once they have a paid booking or a car request.</td></tr>';
+    }
+    function openCustomer(id) {
+      const c = CUS.find(x => x.id === id); if (!c) return;
+      const sf = SF.filter(b => b.customer_id === id && b.status !== 'awaiting_payment').sort((a, b) => b.id - a.id);
+      const cr = CAR.filter(r => r.customer_id === id && r.status !== 'awaiting_payment').sort((a, b) => b.id - a.id);
+      const tb = TOUR.filter(t => t.customer_id === id).sort((a, b) => b.id - a.id);
+      openDrawer(c.name, `Customer since ${fmt(c.created_at)}`, `
+        <div class="sec"><h3>Contact</h3>${kv('Mobile', `<a href="tel:+${digits(c.phone)}">+${esc(digits(c.phone))}</a>`)}
+          <div class="actions"><a class="btn btn-wa" target="_blank" rel="noopener" href="https://wa.me/${digits(c.phone)}">Open WhatsApp chat</a></div></div>
+        <div class="sec"><h3>Safari bookings (${sf.length})</h3>${sf.length ? sf.map(b => `<div class="kv"><span><a href="#" onclick="openSafari(${b.id});return false;">S-${b.id}</a> · ${esc(b.zone_name)}</span><span>${fmt(b.safari_date)} · ${chip(SAFARI_STATUS, b.status)}</span></div>`).join('') : '<span class="sub">None</span>'}</div>
+        <div class="sec"><h3>Tour bookings (${tb.length})</h3>${tb.length ? tb.map(t => `<div class="kv"><span><a href="#" onclick="openTour(${t.id});return false;">T-${t.id}</a> · ${esc(t.package_title)}</span><span>${fmt(t.start_date)} · ${chip(TOUR_STATUS, t.status)}</span></div>`).join('') : '<span class="sub">None</span>'}</div>
+        <div class="sec"><h3>Car bookings (${cr.length})</h3>${cr.length ? cr.map(r => `<div class="kv"><span><a href="#" onclick="openCar(${r.id});return false;">C-${r.id}</a> · ${esc(carWhat(r))}</span><span>${fmt(r.start_date)} · ${chip(CAR_STATUS, r.status)}</span></div>`).join('') : '<span class="sub">None</span>'}</div>`);
+    }
+
+    /* ═══════════ PRICES & ZONES ═══════════ */
+    async function loadPrices() {
+      const [p, z, s, r, t] = await Promise.all([
+        db.from('parks').select().order('sort_order'), db.from('safari_zones').select().order('sort_order'),
+        db.from('safari_slots').select().order('sort_order'), db.from('transfer_routes').select().order('sort_order'),
+        db.from('transfer_rates').select().order('sort_order')]);
+      for (const x of [p, z, s, r, t]) if (x.error) { toast('Error: ' + x.error.message, 'error'); return; }
+      PARKS = p.data; ZONES = z.data; SLOTS = s.data; ROUTES = r.data; RATES = t.data;
+      const cur = $('sf-park').value;
+      $('sf-park').innerHTML = '<option value="">Both parks</option>' + PARKS.map(x => `<option value="${esc(x.id)}">${esc(x.name)}</option>`).join('');
+      $('sf-park').value = cur;
+      renderPrices();
+    }
+
+    const inp = (id, v, w) => `<input class="vi" id="${id}" value="${esc(v ?? '')}" style="width:${w || 90}px">`;
+    const chk = (id, v) => `<input type="checkbox" id="${id}" ${v ? 'checked' : ''} style="width:18px;height:18px;">`;
+
+    function renderPrices() {
+      $('prices-body').innerHTML = PARKS.map(p => {
+        const zs = ZONES.filter(z => z.park_id === p.id), ss = SLOTS.filter(s => s.park_id === p.id);
+        return `<div class="card">
+          <div class="card-title" style="font-size:1.2rem;">${esc(p.name)}</div>
+          <div class="filters" style="margin:0.6rem 0 1rem;"><label>Closed every<select class="fi" id="pk-${esc(p.id)}-closed">
+            <option value="">Open all week</option>${WEEKDAYS.map((d, i) => `<option value="${i}" ${p.closed_weekday === i ? 'selected' : ''}>${d}</option>`).join('')}</select></label>
+            <label>Shared jeep price per person (₹)<input class="fi" id="pk-${esc(p.id)}-shared" type="number" min="0" value="${esc(p.shared_price_per_person ?? '')}" style="width:140px;"></label>
+            <label>Shared price, foreigner (₹, incl. entry fee)<input class="fi" id="pk-${esc(p.id)}-sharedf" type="number" min="0" value="${esc(p.shared_price_foreigner ?? '')}" style="width:140px;"></label>
+            <label>Shared jeep zone (fixed)<select class="fi" id="pk-${esc(p.id)}-szone"><option value="">None</option>${ZONES.filter(z => z.park_id === p.id).map(z => `<option value="${esc(z.id)}" ${p.shared_zone_id === z.id ? 'selected' : ''}>${esc(z.name)}</option>`).join('')}</select></label>
+            <div style="flex-basis:100%;font-size:0.8rem;opacity:.75;margin-top:0.4rem;">Camera charges per camera (₹) — added to the booking total. Leave all empty if the park has none.</div>
+            ${[['still_indian','Still · Indian'],['still_foreigner','Still · Foreigner'],['video_indian','Video · Indian'],['video_foreigner','Video · Foreigner']].map(([k, l]) => `<label>${l}<input class="fi" id="pk-${esc(p.id)}-cam-${k}" type="number" min="0" value="${esc(p['camera_' + k] ?? '')}" style="width:110px;"></label>`).join('')}
+            <button class="btn btn-ghost btn-sm" style="align-self:flex-end;" onclick="savePark('${esc(p.id)}')">Save</button></div>
+
+          <div class="card-title">Safari zones &amp; prices</div>
+          <div class="card-help">Private jeep prices are <b>per jeep</b> (up to the max guests). Leave <b>Foreigner</b> empty if foreign guests cannot book that zone. Every zone can also be booked as a shared seat (Indian guests) at the shared price set above. Untick <b>Shown</b> to hide a zone from the website.</div>
+          <div class="tbl-wrap"><table class="edit-table"><thead><tr><th>Zone</th><th>Indian (₹/jeep)</th><th>Foreigner (₹/jeep)</th><th>Max guests per jeep</th><th>Whole day</th><th>Shown</th><th></th></tr></thead><tbody>
+            ${zs.map(z => `<tr><td>${inp('z-' + z.id + '-name', z.name, 190)}</td><td>${inp('z-' + z.id + '-ind', z.price_indian)}</td><td>${inp('z-' + z.id + '-for', z.price_foreigner)}</td><td>${inp('z-' + z.id + '-max', z.max_per_jeep, 60)}</td><td>${chk('z-' + z.id + '-fd', z.full_day)}</td><td>${chk('z-' + z.id + '-act', z.active)}</td><td><button class="btn btn-primary btn-sm" onclick="saveZone('${esc(z.id)}')">Save</button></td></tr>`).join('')}
+            <tr style="background:#f8faf8;"><td>${inp('nz-' + p.id + '-name', '', 190).replace('class="vi"', 'class="vi" placeholder="New zone name"')}</td><td>${inp('nz-' + p.id + '-ind', '')}</td><td>${inp('nz-' + p.id + '-for', '')}</td><td>${inp('nz-' + p.id + '-max', '5', 60)}</td><td>${chk('nz-' + p.id + '-fd', false)}</td><td></td><td><button class="btn btn-gold btn-sm" onclick="addZone('${esc(p.id)}')">+ Add zone</button></td></tr>
+          </tbody></table></div>
+
+          <div class="card-title" style="margin-top:1.4rem;">Time slots</div>
+          <div class="card-help">The times guests can pick. <b>Private</b> slots are for private jeeps (zones that are not whole-day); <b>Shared</b> slots are for the shared jeep, which runs in its fixed zone.</div>
+          <div class="tbl-wrap"><table class="edit-table"><thead><tr><th>Name</th><th>Timing</th><th>For</th><th>Shown</th><th></th></tr></thead><tbody>
+            ${ss.map(s => `<tr><td>${inp('s-' + s.id + '-name', s.name, 130)}</td><td>${inp('s-' + s.id + '-time', s.time_range, 290)}</td><td><span class="chip ${s.for_type === 'shared' ? 'blue' : 'grey'}">${s.for_type === 'shared' ? 'Shared jeep' : 'Private jeep'}</span></td><td>${chk('s-' + s.id + '-act', s.active)}</td><td><button class="btn btn-primary btn-sm" onclick="saveSlot('${esc(s.id)}')">Save</button></td></tr>`).join('')}
+            <tr style="background:#f8faf8;"><td>${inp('ns-' + p.id + '-name', '', 130).replace('class="vi"', 'class="vi" placeholder="e.g. Noon"')}</td><td>${inp('ns-' + p.id + '-time', '', 290).replace('class="vi"', 'class="vi" placeholder="e.g. 11:00 AM – 1:00 PM"')}</td><td><select class="vi" id="ns-${esc(p.id)}-type" style="width:120px;"><option value="private">Private jeep</option><option value="shared">Shared jeep</option></select></td><td></td><td><button class="btn btn-gold btn-sm" onclick="addSlot('${esc(p.id)}')">+ Add slot</button></td></tr>
+          </tbody></table></div>
+        </div>`;
+      }).join('') + `
+        <div class="card"><div class="card-title" style="font-size:1.2rem;">Pickup &amp; drop prices</div>
+          <div class="card-help">Fixed <b>one-way</b> price per vehicle. A "both ways" booking is charged twice. These prices are used both on the Car Rental page and as an add-on while booking a safari.</div>
+          ${ROUTES.map(r => `<div style="margin-bottom:1.4rem;"><div style="font-weight:700;margin-bottom:0.5rem;">${esc(r.city)} ⇄ ${esc(r.park_place)} ${r.active ? '' : '<span class="chip grey">Hidden</span>'}
+            <button class="btn btn-ghost btn-sm" style="margin-left:0.6rem;" onclick="toggleRoute(${r.id},${!r.active})">${r.active ? 'Hide route' : 'Show route'}</button></div>
+            <div class="tbl-wrap"><table class="edit-table"><thead><tr><th>Vehicle</th><th>Seats</th><th>One-way price (₹)</th><th>Shown</th><th></th></tr></thead><tbody>
+              ${RATES.filter(x => x.route_id === r.id).map(x => `<tr><td>${inp('r-' + x.id + '-veh', x.vehicle_name, 170)}</td><td>${inp('r-' + x.id + '-seats', x.seats, 60)}</td><td>${inp('r-' + x.id + '-price', x.price)}</td><td>${chk('r-' + x.id + '-act', x.active)}</td>
+                <td><button class="btn btn-primary btn-sm" onclick="saveRate(${x.id})">Save</button> <button class="btn btn-danger btn-sm" onclick="deleteRate(${x.id})">Delete</button></td></tr>`).join('')}
+              <tr style="background:#f8faf8;"><td>${inp('nr-' + r.id + '-veh', '', 170).replace('class="vi"', 'class="vi" placeholder="New vehicle"')}</td><td>${inp('nr-' + r.id + '-seats', '', 60)}</td><td>${inp('nr-' + r.id + '-price', '')}</td><td></td><td><button class="btn btn-gold btn-sm" onclick="addRate(${r.id})">+ Add vehicle</button></td></tr>
+            </tbody></table></div></div>`).join('')}
+          <div class="filters" style="border-top:1px solid var(--line);padding-top:1rem;margin:0;">
+            <label>New route — city<input class="fi" id="nrt-city" placeholder="e.g. Tezpur"></label>
+            <label>Park end<input class="fi" id="nrt-place" placeholder="e.g. Manas National Park"></label>
+            <label>Park<select class="fi" id="nrt-park">${PARKS.map(p => `<option value="${esc(p.id)}">${esc(p.name)}</option>`).join('')}</select></label>
+            <button class="btn btn-gold" style="align-self:flex-end;" onclick="addRoute()">+ Add route</button></div>
+        </div>`;
+    }
+
+    const val = id => $(id).value.trim();
+    const intField = (id, label, required) => {
+      const n = numOrNull($(id).value);
+      if (isNaN(n) || (required && n == null) || (n != null && n < 0)) { toast(`${label}: please enter a number.`, 'error'); return undefined; }
+      return n;
+    };
+    async function savePrices(promise, msg) { if (await run(promise, msg)) { await loadPrices(); } }
+
+    function savePark(id) {
+      const v = $('pk-' + id + '-closed').value;
+      const sh = intField('pk-' + id + '-shared', 'Shared price');
+      if (sh === undefined) return;
+      const shf = intField('pk-' + id + '-sharedf', 'Foreigner shared price');
+      if (shf === undefined) return;
+      const cam = {};
+      for (const k of ['still_indian', 'still_foreigner', 'video_indian', 'video_foreigner']) {
+        const n = intField('pk-' + id + '-cam-' + k, 'Camera charge'); if (n === undefined) return; cam['camera_' + k] = n;
+      }
+      const sz = $('pk-' + id + '-szone').value;
+      savePrices(db.from('parks').update({ closed_weekday: v === '' ? null : parseInt(v, 10), shared_price_per_person: sh, shared_price_foreigner: shf, ...cam, shared_zone_id: sz || null }).eq('id', id), 'Saved.');
+    }
+    function readZone(p) {
+      const name = val(p + '-name'); if (!name) { toast('Zone name is required.', 'error'); return; }
+      const ind = intField(p + '-ind', 'Indian price', true), fo = intField(p + '-for', 'Foreigner price'), max = intField(p + '-max', 'Max guests', true);
+      if ([ind, fo, max].includes(undefined) || !(max > 0)) { if (max === 0) toast('Max guests must be at least 1.', 'error'); return; }
+      return { name, price_indian: ind, price_foreigner: fo, max_per_jeep: max, full_day: $(p + '-fd').checked };
+    }
+    function saveZone(id) {
+      const v = readZone('z-' + id); if (!v) return;
+      v.active = $('z-' + id + '-act').checked;
+      savePrices(db.from('safari_zones').update(v).eq('id', id), 'Zone saved.');
+    }
+    function addZone(parkId) {
+      const v = readZone('nz-' + parkId); if (!v) return;
+      const slug = v.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+      const id = `${parkId}-${slug}`;
+      if (ZONES.some(z => z.id === id)) { toast('A zone with that name already exists.', 'error'); return; }
+      savePrices(db.from('safari_zones').insert({ ...v, id, park_id: parkId, sort_order: ZONES.filter(z => z.park_id === parkId).length + 1, active: true }), 'Zone added.');
+    }
+    function saveSlot(id) {
+      const name = val('s-' + id + '-name'), time_range = val('s-' + id + '-time');
+      if (!name || !time_range) { toast('Name and timing are required.', 'error'); return; }
+      savePrices(db.from('safari_slots').update({ name, time_range, active: $('s-' + id + '-act').checked }).eq('id', id), 'Slot saved.');
+    }
+    function addSlot(parkId) {
+      const name = val('ns-' + parkId + '-name'), time_range = val('ns-' + parkId + '-time');
+      if (!name || !time_range) { toast('Name and timing are required.', 'error'); return; }
+      const forType = $('ns-' + parkId + '-type').value;
+      const id = `${parkId}-${forType === 'shared' ? 'shared-' : ''}${name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}`;
+      if (SLOTS.some(s => s.id === id)) { toast('A slot with that name already exists.', 'error'); return; }
+      savePrices(db.from('safari_slots').insert({ id, park_id: parkId, name, time_range, for_type: forType, sort_order: SLOTS.filter(s => s.park_id === parkId).length + 1, active: true }), 'Slot added.');
+    }
+    function saveRate(id) {
+      const vehicle_name = val('r-' + id + '-veh'), price = intField('r-' + id + '-price', 'Price', true), seats = intField('r-' + id + '-seats', 'Seats');
+      if (!vehicle_name || price === undefined || seats === undefined) { if (!vehicle_name) toast('Vehicle name is required.', 'error'); return; }
+      savePrices(db.from('transfer_rates').update({ vehicle_name, price, seats, active: $('r-' + id + '-act').checked }).eq('id', id), 'Price saved.');
+    }
+    function addRate(routeId) {
+      const vehicle_name = val('nr-' + routeId + '-veh'), price = intField('nr-' + routeId + '-price', 'Price', true), seats = intField('nr-' + routeId + '-seats', 'Seats');
+      if (!vehicle_name || price === undefined || seats === undefined) { if (!vehicle_name) toast('Vehicle name is required.', 'error'); return; }
+      savePrices(db.from('transfer_rates').insert({ route_id: routeId, vehicle_name, price, seats, sort_order: RATES.filter(x => x.route_id === routeId).length + 1, active: true }), 'Vehicle added.');
+    }
+    function deleteRate(id) {
+      if (!confirm('Delete this price? Existing bookings keep their price. (To just hide it, untick "Shown" instead.)')) return;
+      savePrices(db.from('transfer_rates').delete().eq('id', id), 'Deleted.');
+    }
+    function toggleRoute(id, active) { savePrices(db.from('transfer_routes').update({ active }).eq('id', id), active ? 'Route is now shown.' : 'Route hidden.'); }
+    function addRoute() {
+      const city = val('nrt-city'), park_place = val('nrt-place');
+      if (!city || !park_place) { toast('Enter the city and the park end.', 'error'); return; }
+      savePrices(db.from('transfer_routes').insert({ city, park_place, park_id: $('nrt-park').value, sort_order: ROUTES.length + 1, active: true }), 'Route added. Now add vehicles to it.');
+    }
+
+    /* ═══════════ WEBSITE CONTENT ═══════════ */
+    function contentTab(t) {
+      document.querySelectorAll('.tab').forEach(b => b.classList.toggle('on', b.dataset.tab === t));
+      ['reviews', 'vehicles'].forEach(n => { $('ct-' + n).style.display = n === t ? '' : 'none'; });
+    }
+
+    async function loadReviews() {
+      const data = await run(db.from('reviews').select().order('created_at', { ascending: false }));
+      RV = data && data !== true ? data : RV;
+      const n = RV.filter(r => !r.approved).length;
+      $('cnt-r').textContent = n ? `(${n})` : '';
+      renderReviews();
+    }
+    function renderReviews() {
+      const f = $('rf').value;
+      const list = f === 'pending' ? RV.filter(r => !r.approved) : f === 'approved' ? RV.filter(r => r.approved) : RV;
+      $('rlist').innerHTML = list.length ? list.map(r => `<div class="rv ${r.approved ? '' : 'pending'}">
+        <div style="display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
+          <div><span class="stars">${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}</span> <b style="margin-left:0.4rem;">${esc(r.name)}</b>
+            <span class="sub" style="display:inline;margin-left:0.4rem;">${esc(r.park || '')} · ${fmt(r.created_at)}</span> ${r.approved ? '<span class="chip green">Visible</span>' : '<span class="chip amber">Waiting</span>'}</div>
+          <div style="display:flex;gap:0.4rem;">${r.approved ? `<button class="btn btn-ghost btn-sm" onclick="setApproved(${r.id},false)">Hide</button>` : `<button class="btn btn-primary btn-sm" onclick="setApproved(${r.id},true)">Approve</button>`}
+            <button class="btn btn-danger btn-sm" onclick="delReview(${r.id})">Delete</button></div></div>
+        <p style="margin-top:0.6rem;">"${esc(r.message)}"</p>
+        ${r.address || r.phone || r.email ? `<p class="sub" style="margin-top:0.5rem;">${[r.address ? esc(r.address) : '', r.phone ? `<a href="tel:+${digits(r.phone)}">+${esc(digits(r.phone))}</a>` : '', r.email ? `<a href="mailto:${esc(r.email)}">${esc(r.email)}</a>` : ''].filter(Boolean).join(' · ')}</p>` : ''}</div>`).join('') : '<p class="empty">No reviews here.</p>';
+    }
+    async function setApproved(id, v) { if (await run(db.from('reviews').update({ approved: v }).eq('id', id), v ? 'Review approved — now visible.' : 'Review hidden.')) { await loadReviews(); renderToday(); } }
+    async function delReview(id) { if (confirm('Delete this review? This cannot be undone.') && await run(db.from('reviews').delete().eq('id', id), 'Review deleted.')) { await loadReviews(); renderToday(); } }
+
+    /* Tour vehicles */
+    async function loadVehicles() {
+      const data = await run(db.from('vehicles').select().order('capacity'));
+      VEH = data && data !== true ? data : VEH; renderVehicles();
+    }
+    function renderVehicles() {
+      $('veh-list').innerHTML = VEH.length ? `<div class="tbl-wrap"><table><thead><tr><th>Vehicle</th><th>Seats</th><th>Price/day</th><th>Shown</th><th></th></tr></thead><tbody>
+        ${VEH.map(v => `<tr><td><b>${esc(v.name)}</b><small>${esc(v.description || '')}</small></td><td>${v.capacity}</td><td>${money(v.price_per_day)}</td>
+          <td>${v.active ? '<span class="chip green">Shown</span>' : '<span class="chip grey">Hidden</span>'}</td>
+          <td style="white-space:nowrap;"><button class="btn btn-ghost btn-sm" onclick="editVehicle('${v.id}')">Edit</button> <button class="btn btn-ghost btn-sm" onclick="toggleVehicle('${v.id}',${!v.active})">${v.active ? 'Hide' : 'Show'}</button> <button class="btn btn-danger btn-sm" onclick="deleteVehicle('${v.id}')">Delete</button></td></tr>`).join('')}
+        </tbody></table></div>` : '<p class="empty">No vehicles yet.</p>';
+    }
+    async function saveVehicle() {
+      const name = val('veh-name'), cap = parseInt($('veh-cap').value, 10), price = parseInt($('veh-price').value, 10) || 0, desc = val('veh-desc'), id = $('veh-edit-id').value;
+      if (!name || !(cap > 0)) { toast('Name and number of seats are required.', 'error'); return; }
+      const v = { name, capacity: cap, price_per_day: price, description: desc || null };
+      const r = id ? await run(db.from('vehicles').update(v).eq('id', id), 'Vehicle updated.') : await run(db.from('vehicles').insert({ ...v, active: true }), 'Vehicle added.');
+      if (r) { cancelVehicleEdit(); loadVehicles(); }
+    }
+    function editVehicle(id) {
+      const v = VEH.find(x => x.id === id); if (!v) return;
+      $('veh-name').value = v.name; $('veh-cap').value = v.capacity; $('veh-price').value = v.price_per_day; $('veh-desc').value = v.description || '';
+      $('veh-edit-id').value = id; $('veh-form-title').textContent = 'Edit: ' + v.name; $('veh-cancel-btn').style.display = '';
+      $('veh-form-title').scrollIntoView({ behavior: 'smooth' });
+    }
+    function cancelVehicleEdit() {
+      ['veh-name', 'veh-cap', 'veh-price', 'veh-desc', 'veh-edit-id'].forEach(i => $(i).value = '');
+      $('veh-form-title').textContent = 'Add a vehicle'; $('veh-cancel-btn').style.display = 'none';
+    }
+    async function toggleVehicle(id, active) { if (await run(db.from('vehicles').update({ active }).eq('id', id), active ? 'Now shown.' : 'Hidden.')) loadVehicles(); }
+    async function deleteVehicle(id) { if (confirm('Delete this vehicle?') && await run(db.from('vehicles').delete().eq('id', id), 'Deleted.')) loadVehicles(); }
+
+    /* ═══════════ ITINERARIES ═══════════ */
+    async function loadItineraries() {
+      const data = await run(db.from('itineraries').select().order('sort_order'));
+      IT = data && data !== true ? data : IT; renderItineraries();
+    }
+    function renderItineraries() {
+      $('it-list').innerHTML = IT.length ? `<div class="tbl-wrap"><table><thead><tr><th>Order</th><th>Itinerary</th><th>Duration</th><th>Status</th><th></th></tr></thead><tbody>
+        ${IT.map(t => `<tr><td>${t.sort_order}</td><td><b>${esc(t.title)}</b><small>${esc(t.badge || '')}${t.route ? ' · ' + esc(t.route) : ''}</small></td>
+          <td>${t.num_nights} nights / ${t.num_days} days<small>${(t.days || []).length} days written</small></td>
+          <td>${t.active ? '<span class="chip green">Shown</span>' : '<span class="chip grey">Hidden</span>'}</td>
+          <td style="white-space:nowrap;"><button class="btn btn-ghost btn-sm" onclick="editItinerary(${t.id})">Edit</button> <button class="btn btn-ghost btn-sm" onclick="toggleItinerary(${t.id},${!t.active})">${t.active ? 'Hide' : 'Show'}</button> <button class="btn btn-danger btn-sm" onclick="deleteItinerary(${t.id})">Delete</button></td></tr>`).join('')}
+        </tbody></table></div>` : '<p class="empty">No itineraries yet.</p>';
+    }
+    let itDayN = 0, itSecN = 0;
+    function addItDay(title, text) {
+      const i = ++itDayN, div = document.createElement('div');
+      div.id = 'it-day-' + i; div.className = 'sec';
+      div.innerHTML = `<div style="display:flex;justify-content:space-between;margin-bottom:0.5rem;"><b>Day <span class="it-day-no"></span></b><button class="btn btn-danger btn-sm" onclick="removeItDay(${i})">Remove</button></div>
+        <label class="lbl">Heading</label><input class="vi" id="it-day-title-${i}" placeholder="e.g. Arrival at Manas" value="${esc(title || '')}">
+        <label class="lbl" style="margin-top:0.6rem;">What happens</label><textarea class="vi" id="it-day-text-${i}" rows="3">${esc(text || '')}</textarea>`;
+      $('it-days-builder').appendChild(div); numberItDays();
+    }
+    function removeItDay(i) { const el = $('it-day-' + i); if (el) el.remove(); numberItDays(); }
+    const numberItDays = () => document.querySelectorAll('#it-days-builder .it-day-no').forEach((e, n) => { e.textContent = n + 1; });
+    function addItSection(heading, items) {
+      const i = ++itSecN, div = document.createElement('div');
+      div.id = 'it-sec-' + i; div.className = 'sec';
+      div.innerHTML = `<div style="display:flex;justify-content:space-between;margin-bottom:0.5rem;"><b>Section</b><button class="btn btn-danger btn-sm" onclick="document.getElementById('it-sec-${i}').remove()">Remove</button></div>
+        <label class="lbl">Heading</label><input class="vi" id="it-sec-h-${i}" placeholder="e.g. Package includes" value="${esc(heading || '')}">
+        <label class="lbl" style="margin-top:0.6rem;">Points (one per line)</label><textarea class="vi" id="it-sec-t-${i}" rows="4">${esc((items || []).join('\n'))}</textarea>`;
+      $('it-secs-builder').appendChild(div);
+    }
+    function collectItDays() {
+      return [...document.querySelectorAll('#it-days-builder > div[id^="it-day-"]')].map(el => {
+        const i = el.id.replace('it-day-', '');
+        return { title: $('it-day-title-' + i).value.trim(), text: $('it-day-text-' + i).value.trim() };
+      }).filter(d => d.title || d.text);
+    }
+    function collectItSections() {
+      return [...document.querySelectorAll('#it-secs-builder > div[id^="it-sec-"]')].map(el => {
+        const i = el.id.replace('it-sec-', '');
+        return { heading: $('it-sec-h-' + i).value.trim(), items: $('it-sec-t-' + i).value.split('\n').map(x => x.trim()).filter(Boolean) };
+      }).filter(x => x.heading && x.items.length);
+    }
+    async function saveItinerary() {
+      const title = val('it-title'), days = parseInt($('it-numdays').value, 10), nights = parseInt($('it-numnights').value, 10), editId = $('it-edit-id').value;
+      if (!title) { toast('Please enter a title.', 'error'); return; }
+      if (!(days >= 1)) { toast('Please enter the number of days.', 'error'); return; }
+      if (!(nights >= 0)) { toast('Please enter the number of nights.', 'error'); return; }
+      const order = parseInt($('it-order').value, 10);
+      const payload = {
+        title, badge: val('it-badge') || null, route: val('it-route') || null, num_days: days, num_nights: nights,
+        days: collectItDays(), sections: collectItSections(), notes: val('it-notes') || null,
+        sort_order: order >= 1 ? order : (IT.length ? Math.max(...IT.map(t => t.sort_order)) + 1 : 1)
+      };
+      const r = editId ? await run(db.from('itineraries').update(payload).eq('id', editId), 'Itinerary updated.')
+        : await run(db.from('itineraries').insert({ ...payload, active: true }), 'Itinerary added.');
+      if (r) { cancelItineraryEdit(); loadItineraries(); }
+    }
+    function editItinerary(id) {
+      const t = IT.find(x => x.id === id); if (!t) return;
+      $('it-title').value = t.title; $('it-badge').value = t.badge || ''; $('it-route').value = t.route || ''; $('it-order').value = t.sort_order;
+      $('it-numdays').value = t.num_days; $('it-numnights').value = t.num_nights; $('it-notes').value = t.notes || '';
+      $('it-days-builder').innerHTML = ''; $('it-secs-builder').innerHTML = ''; itDayN = 0; itSecN = 0;
+      (t.days || []).forEach(d => addItDay(d.title, d.text)); (t.sections || []).forEach(x => addItSection(x.heading, x.items));
+      $('it-edit-id').value = id; $('it-form-title').textContent = 'Edit: ' + t.title; $('it-cancel-btn').style.display = '';
+      $('it-form-title').scrollIntoView({ behavior: 'smooth' });
+    }
+    function cancelItineraryEdit() {
+      ['it-title', 'it-badge', 'it-route', 'it-order', 'it-numdays', 'it-numnights', 'it-notes', 'it-edit-id'].forEach(i => $(i).value = '');
+      $('it-days-builder').innerHTML = ''; $('it-secs-builder').innerHTML = ''; itDayN = 0; itSecN = 0;
+      $('it-form-title').textContent = 'Add an itinerary'; $('it-cancel-btn').style.display = 'none';
+    }
+    async function toggleItinerary(id, active) { if (await run(db.from('itineraries').update({ active }).eq('id', id), active ? 'Now shown on the website.' : 'Hidden from the website.')) loadItineraries(); }
+    async function deleteItinerary(id) { if (confirm('Delete this itinerary? (To just take it off the website, use Hide instead.)') && await run(db.from('itineraries').delete().eq('id', id), 'Deleted.')) loadItineraries(); }
+  </script>
+</body>
+
+</html>

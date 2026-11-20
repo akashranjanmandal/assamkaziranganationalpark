@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Airport Pickup & Drop, Car Rental in Assam | Assam Wild Safari</title>
+  <meta name="description" content="Pickup and drop between Guwahati airport, railway stations and Manas / Kaziranga with fixed fares, plus car rental for North East itineraries and custom routes.">
+  <link rel="canonical" href="https://assamkaziranganationalpark.com/pages/car-rental.html">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Assam Wild Safari">
+  <meta property="og:title" content="Airport Pickup & Drop, Car Rental in Assam | Assam Wild Safari">
+  <meta property="og:description" content="Pickup and drop between Guwahati airport, railway stations and Manas / Kaziranga with fixed fares, plus car rental for North East itineraries and custom routes.">
+  <meta property="og:url" content="https://assamkaziranganationalpark.com/pages/car-rental.html">
+  <meta property="og:image" content="https://assamkaziranganationalpark.com/images/kaziranga.jpg">
+  <meta property="og:locale" content="en_IN">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Airport Pickup & Drop, Car Rental in Assam | Assam Wild Safari">
+  <meta name="twitter:description" content="Pickup and drop between Guwahati airport, railway stations and Manas / Kaziranga with fixed fares, plus car rental for North East itineraries and custom routes.">
+  <meta name="twitter:image" content="https://assamkaziranganationalpark.com/images/kaziranga.jpg">
+  <meta name="theme-color" content="#050d06">
+  <link rel="icon" href="../images/logo.jpeg">
+  <link rel="stylesheet" href="../css/style.css">
+  <script src="../js/vendor/lucide-1.52.0.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { overflow-x: hidden; max-width: 100vw; }
+
+    .rental-hero {
+      padding: 11rem 2rem 6rem;
+      background: var(--forest-black);
+      text-align: center;
+      color: var(--pure-white);
+      position: relative;
+      overflow: hidden;
+    }
+    .rental-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url('../images/kaziranga.jpg') center/cover;
+      opacity: 0.15;
+    }
+    .rental-hero-inner { position: relative; z-index: 2; }
+    .rental-hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.8rem, 9vw, 7rem);
+      line-height: 0.9;
+      margin-bottom: 1.5rem;
+      letter-spacing: 0.02em;
+    }
+    .rental-hero p { color: rgba(255,255,255,0.55); font-size: 1rem; max-width: 520px; margin: 0 auto; }
+
+    .rental-layout {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 5rem 2rem 8rem;
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 4rem;
+      align-items: start;
+    }
+    @media (max-width: 1050px) { .rental-layout { grid-template-columns: 1fr; gap: 3rem; } }
+    @media (max-width: 768px) { .rental-layout { padding: 3rem 1rem 6rem; } }
+
+    .rental-form-section { background: var(--pure-white); }
+
+    .form-block {
+      background: var(--pure-white);
+      border: 1px solid var(--off-white);
+      padding: 2.5rem;
+      margin-bottom: 2rem;
+    }
+    .form-block-title {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      color: var(--forest-black);
+      margin-bottom: 1.8rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid var(--gold);
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .vehicle-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    @media (max-width: 600px) { .vehicle-grid { grid-template-columns: 1fr; } }
+
+    .drop-price-box {
+      border: 1px solid var(--off-white);
+      background: #faf9f6;
+      padding: 1.2rem 1.4rem;
+    }
+    .drop-price-title {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.8rem;
+    }
+    .drop-price-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.45rem 0;
+      border-bottom: 1px solid var(--off-white);
+      font-size: 0.86rem;
+    }
+    .drop-price-row:last-child { border-bottom: none; }
+    .drop-price-veh { color: #333; }
+    .drop-price-seats { color: #999; font-size: 0.76rem; margin-left: 0.3rem; }
+    .drop-price-amt { font-weight: 700; color: var(--forest-black); }
+
+    .vehicle-option {
+      border: 2px solid var(--off-white);
+      padding: 1.2rem;
+      cursor: pointer;
+      transition: var(--transition);
+      position: relative;
+    }
+    .vehicle-option:hover { border-color: rgba(201,163,79,0.5); background: rgba(201,163,79,0.04); }
+    .vehicle-option.selected { border-color: var(--gold); background: rgba(201,163,79,0.07); }
+    .vehicle-option.selected::after {
+      content: '✓';
+      position: absolute;
+      top: 0.6rem;
+      right: 0.8rem;
+      color: var(--gold);
+      font-weight: 700;
+      font-size: 1rem;
+    }
+    .vehicle-name { font-weight: 700; font-size: 0.92rem; color: var(--forest-black); margin-bottom: 0.2rem; }
+    .vehicle-cap { font-size: 0.75rem; color: var(--forest-mid); margin-bottom: 0.4rem; }
+    .vehicle-price { font-size: 0.8rem; color: var(--gold); font-weight: 700; }
+    .vehicle-price-loading { font-size: 0.75rem; color: var(--forest-mid); font-style: italic; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+    @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+
+    .form-group { margin-bottom: 1.4rem; }
+    .form-label {
+      display: block;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--forest-mid);
+      margin-bottom: 0.6rem;
+    }
+    .form-input, .form-select {
+      width: 100%;
+      padding: 0.9rem 1rem;
+      border: 1px solid var(--off-white);
+      font-size: 0.9rem;
+      color: var(--forest-black);
+      background: var(--pure-white);
+      outline: none;
+      transition: border 0.2s;
+      font-family: inherit;
+      appearance: none;
+    }
+    .form-input:focus, .form-select:focus { border-color: var(--gold); }
+    .form-select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%23555' stroke-width='2' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 0.9rem center; padding-right: 2.5rem; }
+
+    /* Summary sidebar */
+    .rental-summary-wrap {
+      position: sticky;
+      top: 90px;
+      align-self: start;
+    }
+    .rental-summary {
+      background: var(--forest-black);
+      color: var(--pure-white);
+      padding: 2.5rem;
+    }
+    .summary-title {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      color: var(--gold);
+    }
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+      font-size: 0.85rem;
+      gap: 1rem;
+    }
+    .summary-label { color: rgba(255,255,255,0.5); flex-shrink: 0; }
+    .summary-val { font-weight: 600; text-align: right; }
+    .summary-divider { border: none; border-top: 1px solid rgba(255,255,255,0.08); margin: 1.2rem 0; }
+    .summary-total {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--gold);
+      margin-top: 1rem;
+    }
+    .summary-note { font-size: 0.72rem; color: rgba(255,255,255,0.35); margin-top: 1rem; line-height: 1.6; }
+
+    /* Payment */
+    .upi-qr-wrap { text-align: center; margin-bottom: 1.5rem; }
+    .upi-qr-img { width: 180px; height: 180px; object-fit: contain; border: 3px solid var(--gold); }
+    .upi-id-badge {
+      display: inline-block;
+      background: rgba(201,163,79,0.1);
+      border: 1px solid rgba(201,163,79,0.3);
+      color: var(--gold);
+      padding: 0.5rem 1.2rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      font-weight: 700;
+      margin-top: 0.8rem;
+    }
+    .upload-area {
+      border: 2px dashed var(--off-white);
+      padding: 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: border 0.2s;
+    }
+    .upload-area:hover { border-color: var(--gold); }
+    .upload-label { display: block; font-size: 0.8rem; color: var(--forest-mid); margin-top: 0.5rem; }
+    .upload-name { display: block; font-size: 0.78rem; color: var(--gold); margin-top: 0.3rem; font-weight: 600; }
+
+    .submit-btn {
+      width: 100%;
+      padding: 1.3rem;
+      background: var(--gold);
+      color: var(--forest-black);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      transition: var(--transition);
+      margin-top: 1.5rem;
+    }
+    .submit-btn:hover { background: #b8922e; }
+    .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .no-vehicles-msg { color: var(--forest-mid); font-size: 0.9rem; text-align: center; padding: 2rem; }
+
+    @keyframes priceFlash {
+      0%   { color: var(--gold); transform: scale(1.08); }
+      100% { color: var(--gold); transform: scale(1); }
+    }
+    .price-flash { animation: priceFlash 0.35s ease-out; }
+    .seg { display: inline-flex; border: 2px solid var(--off-white, #e5e0d2); background: #fff; flex-wrap: wrap; }
+    .seg button { border: none; background: none; padding: 0.8rem 1.2rem; font-size: 0.84rem; font-weight: 600; cursor: pointer; color: #666; font-family: inherit; line-height: 1.4; }
+    .seg button.on { background: var(--forest-dark, #1a3a1e); color: #fff; }
+    textarea.form-input { min-height: 90px; }
+  </style>
+</head>
+
+<body>
+  <div class="page-transition">
+    <div class="transition-shutter shutter-top"></div>
+    <div class="transition-shutter shutter-bottom"></div>
+    <div class="transition-logo">Assam <span>Wild</span> Safari</div>
+  </div>
+
+  <nav class="navbar solid">
+    <a href="../index.html" class="nav-logo-group">
+      <img src="../images/logo.jpeg" alt="Assam Wild Safari" class="nav-logo-img">
+      <div class="nav-logo-text">
+        <span class="nav-logo-name">Assam <span>Wild</span> Safari</span>
+        <span class="nav-logo-sub">Northeast India's Premium Safari</span>
+      </div>
+    </a>
+    <div class="hamburger"><span></span><span></span><span></span></div>
+  </nav>
+  <ul class="nav-links">
+    <button class="nav-close-btn" id="nav-close-btn" aria-label="Close menu">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <line x1="18" y1="6" x2="6" y2="18" />
+        <line x1="6" y1="6" x2="18" y2="18" />
+      </svg>
+    </button>
+    <li><a href="../index.html">Home</a></li>
+    <li><a href="itineraries.html">Itineraries</a></li>
+    <li><a href="booking.html">Booking</a></li>
+    <li><a href="car-rental.html" class="active">Car Rental</a></li>
+    <li><a href="reviews.html">Reviews</a></li>
+    <li class="nav-cta-item"><a href="booking.html" class="nav-cta">Book Safari</a></li>
+    <li class="nav-recognised">
+      <span class="rec-label">Recognised by Department of Tourism Government Assam, and Bodoland Tourism</span>
+      <div class="rec-logos">
+        <img src="../images/assam-logo.jpg" alt="Government of Assam" class="rec-logo">
+        <img src="../images/bodoland.jpg" alt="Bodoland Territorial Council" class="rec-logo">
+      </div>
+    </li>
+  </ul>
+  <div class="nav-overlay"></div>
+
+  <header class="rental-hero">
+    <div class="rental-hero-inner">
+      <span class="hero-eyebrow">Ground Transport</span>
+      <h1>CAR<br>RENTAL</h1>
+      <p>Pickup &amp; drop between the airport or railway station and Manas / Kaziranga, cars for our North East itineraries, or a car for your own route.</p>
+    </div>
+  </header>
+
+  <div style="background:var(--pure-white);">
+    <div class="rental-layout">
+      <div id="rental-main">
+
+        <!-- Which service -->
+        <div class="seg" id="mode-seg" style="width:100%;margin-bottom:2rem;">
+          <button type="button" id="mode-pickup" class="on" onclick="setMode('pickup')" style="flex:1;">Pickup &amp; drop<br><small style="font-weight:400;">Airport / station ⇄ Manas / Kaziranga</small></button>
+          <button type="button" id="mode-itinerary" onclick="setMode('itinerary')" style="flex:1;">Car for our itineraries<br><small style="font-weight:400;">North East itineraries</small></button>
+          <button type="button" id="mode-custom" onclick="setMode('custom')" style="flex:1;">Customise your route<br><small style="font-weight:400;">Tell us where you want to go</small></button>
+        </div>
+
+        <!-- 1 · Pickup & drop -->
+        <div class="form-block" id="block-pickup">
+          <div class="form-block-title"><i data-lucide="route" style="width:20px;height:20px;color:var(--gold);"></i> Pickup &amp; Drop</div>
+          <div id="rate-chart"></div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Route *</label>
+              <select class="form-input form-select" id="p-route" onchange="onRouteChange()"></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Vehicle *</label>
+              <select class="form-input form-select" id="p-rate" onchange="update()"></select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Trip *</label>
+            <div class="seg" id="p-dir">
+              <button type="button" data-d="pickup" onclick="setDir('pickup')">Pickup</button>
+              <button type="button" data-d="drop" onclick="setDir('drop')">Drop</button>
+              <button type="button" data-d="both" class="on" onclick="setDir('both')">Pickup &amp; drop (both ways)</button>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" id="p-date-label">Pickup date *</label>
+              <input type="date" class="form-input" id="p-date" oninput="update()">
+            </div>
+            <div class="form-group" id="p-return-group">
+              <label class="form-label">Drop date *</label>
+              <input type="date" class="form-input" id="p-return" oninput="update()">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Number of vehicles</label>
+              <input type="number" class="form-input" id="p-vehicles" min="1" max="5" value="1" oninput="update()">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Pickup location (optional)</label>
+              <input type="text" class="form-input" id="p-address" placeholder="e.g. Hotel name and area" oninput="update()">
+            </div>
+          </div>
+        </div>
+
+        <!-- 2 · A car for our itineraries / 3 · Customise your route -->
+        <div id="block-cars" style="display:none;">
+          <div class="form-block">
+            <div class="form-block-title"><i data-lucide="car" style="width:20px;height:20px;color:var(--gold);"></i> Choose Your Car</div>
+            <div class="vehicle-grid" id="vehicle-grid"><div class="no-vehicles-msg" style="grid-column:1/-1;">Loading cars...</div></div>
+          </div>
+          <div class="form-block">
+            <div class="form-block-title"><i data-lucide="map" style="width:20px;height:20px;color:var(--gold);"></i> <span id="trip-title">Your Itinerary</span></div>
+            <div id="trip-preset">
+              <div class="form-group">
+                <label class="form-label">Itinerary *</label>
+                <select class="form-input form-select" id="k-itinerary" onchange="update()"><option value="">Loading…</option></select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Duration</label>
+                <div class="form-input" id="k-duration" style="background:#f3f6f3;font-weight:700;">—</div>
+              </div>
+            </div>
+            <div id="trip-custom" style="display:none;">
+              <div class="form-group">
+                <label class="form-label">Explain your route or destination *</label>
+                <textarea class="form-input" id="k-route" rows="4" style="min-height:110px;" placeholder="Where do you want to go? Places, route, anything we should know…" oninput="update()"></textarea>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Number of days *</label>
+                <input type="number" class="form-input" id="k-days" min="1" max="60" placeholder="e.g. 4" oninput="update()">
+              </div>
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label">Pickup location (optional)</label>
+              <input type="text" class="form-input" id="k-address" placeholder="e.g. Guwahati airport, or your hotel name and area" oninput="update()">
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact -->
+        <div class="form-block">
+          <div class="form-block-title"><i data-lucide="user" style="width:20px;height:20px;color:var(--gold);"></i> Your Details</div>
+          <div class="form-row">
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label">Full name *</label>
+              <input type="text" class="form-input" id="c-name" autocomplete="name" placeholder="Your name">
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label">WhatsApp / contact number *</label>
+              <input type="tel" class="form-input" id="c-phone" autocomplete="tel" placeholder="+91 XXXXX XXXXX">
+            </div>
+          </div>
+          <div class="form-row" style="margin-top:1rem;">
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label">Business name <span style="opacity:.6;font-weight:400;">(optional)</span></label>
+              <input type="text" class="form-input" id="c-biz" autocomplete="organization" placeholder="For business bookings">
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label">GST number <span style="opacity:.6;font-weight:400;">(optional)</span></label>
+              <input type="text" class="form-input" id="c-gst" maxlength="20" autocapitalize="characters" placeholder="15-character GSTIN">
+            </div>
+          </div>
+          <button class="submit-btn" id="rental-submit-btn" onclick="submitRental()">Submit Booking</button>
+        </div>
+      </div>
+
+      <!-- RIGHT: Summary -->
+      <div class="rental-summary-wrap">
+        <div class="rental-summary">
+          <div class="summary-title">Your Booking</div>
+          <div id="summary-rows"></div>
+          <div class="summary-note" id="summary-note"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-logo-group">
+          <img src="../images/logo.jpeg" alt="Assam Wild Safari" class="footer-logo-img">
+          <div class="powered-by">Powered by Manas Holidays</div>
+        </div>
+        <p class="footer-desc">Jeep safari booking for Kaziranga and Manas National Parks, North East India tour packages and airport pickup &amp; drop in Assam.</p>
+        <p class="footer-contact-info" style="font-size:0.85rem;color:rgba(255,255,255,0.5);margin-top:1rem;">
+          Abhayapuri, Assam
+        </p>
+      </div>
+      <div>
+        <div class="footer-col-title">Safaris &amp; Tours</div>
+        <ul class="footer-links">
+          <li><a href="../kaziranga-jungle-safari/">Kaziranga Jeep Safari</a></li>
+          <li><a href="../manas-jungle-safari/">Manas Jeep Safari</a></li>
+          <li><a href="../north-east-india-tour-packages/">North East Tour Packages</a></li>
+          <li><a href="../guwahati-to-kaziranga-manas-taxi/">Airport Pickup &amp; Drop</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Quick Links</div>
+        <ul class="footer-links">
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="booking.html">Book Safari</a></li>
+          <li><a href="itineraries.html">Itineraries</a></li>
+          <li><a href="car-rental.html">Car Rental</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Contact</div>
+        <ul class="footer-links">
+          <li><a href="tel:+919365609948">+91 93656 09948</a></li>
+          <li><a href="tel:+919709884206">+91 97098 84206</a></li>
+          <li><a href="https://wa.me/919365609948" target="_blank" rel="noopener">WhatsApp Us</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2026 Assam Wild Safari. Kaziranga &amp; Manas jungle safari, North East India tours.</div>
+  </footer>
+
+  <script src="../js/lang.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/itineraries.js"></script>
+  <script src="../js/rate-chart.js"></script>
+  <script>
+    const $ = id => document.getElementById(id);
+    const esc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const money = n => '₹' + Number(n || 0).toLocaleString('en-IN');
+    const fmtDate = d => d ? new Date(d + 'T12:00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '—';
+    const icons = () => { if (typeof lucide !== 'undefined') lucide.createIcons(); };
+    const BUSINESS_WA = '919365609948';
+
+    let C = { routes: [], rates: [] }, vehicles = [], itineraries = [], selectedVehicle = null, mode = 'pickup', direction = 'both';
+    const currentItinerary = () => itineraries.find(x => String(x.id) === $('k-itinerary').value);
+    const currentRate = () => C.rates.find(r => String(r.id) === $('p-rate').value);
+    const currentRoute = () => C.routes.find(r => String(r.id) === $('p-route').value);
+
+    function setMode(m) {
+      mode = m;
+      ['pickup', 'itinerary', 'custom'].forEach(k => $('mode-' + k).classList.toggle('on', k === m));
+      $('block-pickup').style.display = m === 'pickup' ? '' : 'none';
+      $('block-cars').style.display = m === 'pickup' ? 'none' : '';
+      $('trip-preset').style.display = m === 'itinerary' ? '' : 'none';
+      $('trip-custom').style.display = m === 'custom' ? '' : 'none';
+      $('trip-title').textContent = m === 'custom' ? 'Your Route' : 'Your Itinerary';
+      update();
+    }
+    function setDir(d) {
+      direction = d;
+      document.querySelectorAll('#p-dir button').forEach(b => b.classList.toggle('on', b.dataset.d === d));
+      update();
+    }
+    function onRouteChange() {
+      const rates = C.rates.filter(r => String(r.route_id) === $('p-route').value);
+      $('p-rate').innerHTML = '<option value="">Choose a vehicle…</option>' + rates.map(r =>
+        `<option value="${r.id}">${esc(r.vehicle_name)}${r.seats ? ` (${r.seats} seater)` : ''} — ${money(r.price)} one way</option>`).join('');
+      update();
+    }
+    const fare = () => { const r = currentRate(); const n = Math.max(1, parseInt($('p-vehicles').value, 10) || 1), legs = direction === 'both' ? 2 : 1; return r ? { r, n, legs, amount: r.price * n * legs } : null; };
+
+    function update() {
+      const rows = [];
+      const row = (k, v) => rows.push(`<div class="summary-row"><span class="summary-label">${k}</span><span class="summary-val">${v}</span></div>`);
+      let note = 'Submit your details and we will contact you soon to talk about your trip.';
+      if (mode === 'pickup') {
+        $('p-return-group').style.display = direction === 'both' ? '' : 'none';
+        $('p-date-label').textContent = (direction === 'drop' ? 'Drop' : 'Pickup') + ' date *';
+        const f = fare(), route = currentRoute();
+        row('Service', 'Pickup & drop');
+        row('Route', route ? `${esc(route.city)} ⇄ ${esc(route.park_place)}` : '—');
+        row('Vehicle', f ? esc(f.r.vehicle_name) + (f.r.seats ? ` (${f.r.seats} seater)` : '') : '—');
+        row('Trip', { pickup: 'Pickup', drop: 'Drop', both: 'Pickup & drop' }[direction]);
+        row('Date', fmtDate($('p-date').value) + (direction === 'both' ? ' → ' + fmtDate($('p-return').value) : ''));
+        if (f) rows.push(`<hr class="summary-divider"><div class="summary-row"><span class="summary-label">${money(f.r.price)} × ${f.n} × ${f.legs}</span><span class="summary-val" style="font-size:1.4rem;color:var(--gold);">${money(f.amount)}</span></div>`);
+        note = 'Fixed one-way fare per vehicle. Submit your details and we will contact you soon to confirm your booking.';
+      } else if (mode === 'itinerary') {
+        const it = currentItinerary();
+        $('k-duration').textContent = it ? Itineraries.duration(it) : '—';
+        row('Car', selectedVehicle ? esc(selectedVehicle.name) : '—');
+        row('Itinerary', it ? esc(it.title) : '—');
+        row('Duration', it ? esc(Itineraries.duration(it)) : '—');
+      } else {
+        row('Car', selectedVehicle ? esc(selectedVehicle.name) : '—');
+        row('Trip', 'Customised route');
+        row('Days', esc($('k-days').value) || '—');
+      }
+      if (mode !== 'pickup' && $('k-address').value.trim()) row('Pickup', esc($('k-address').value.trim()));
+      $('summary-rows').innerHTML = rows.join('');
+      $('summary-note').textContent = note;
+    }
+
+    async function loadAll() {
+      try {
+        const [vres, cres] = await Promise.all([fetch('/.netlify/functions/public-data?type=vehicles'), fetch('/.netlify/functions/public-data?type=catalog')]);
+        const vb = await vres.json(), cb = await cres.json();
+        vehicles = vb.data || []; C = cb.data || C;
+        $('p-route').innerHTML = C.routes.map(r => `<option value="${r.id}">${esc(r.city)} ⇄ ${esc(r.park_place)}</option>`).join('');
+        onRouteChange();
+        $('vehicle-grid').innerHTML = vehicles.length ? vehicles.map(v => `
+          <div class="vehicle-option" id="v-${esc(v.id)}" onclick="selectVehicle('${esc(v.id)}')">
+            <div class="vehicle-name">${esc(v.name)}</div>
+            <div class="vehicle-cap"><i data-lucide="users" style="width:12px;height:12px;display:inline;vertical-align:middle;"></i> ${v.capacity} passengers</div>
+            ${v.description ? `<div class="vehicle-price-loading">${esc(v.description)}</div>` : ''}
+          </div>`).join('') : '<div class="no-vehicles-msg" style="grid-column:1/-1;">No cars are listed right now. Please call us to book.</div>';
+        icons();
+      } catch (e) {
+        $('vehicle-grid').innerHTML = '<div class="no-vehicles-msg" style="grid-column:1/-1;">Could not load the details. Please reload the page or call us.</div>';
+      }
+      itineraries = await Itineraries.load();
+      $('k-itinerary').innerHTML = '<option value="">-- Choose an itinerary --</option>' + itineraries.map(i => `<option value="${esc(i.id)}">${esc(i.title)}</option>`).join('');
+      update();
+    }
+    function selectVehicle(id) {
+      document.querySelectorAll('.vehicle-option').forEach(el => el.classList.remove('selected'));
+      $('v-' + id).classList.add('selected');
+      selectedVehicle = vehicles.find(v => v.id === id) || null;
+      update();
+    }
+
+    // A WhatsApp chat with the business with the request already written (the guest taps Send).
+    function whatsAppUrl(r, contact) {
+      const lines = ['Hello Assam Wild Safari, I just sent a car booking request.', '', `Booking: ${r.ref}`];
+      if (mode === 'pickup') {
+        const f = fare(), route = currentRoute();
+        lines.push('Service: Pickup & drop', `Route: ${route.city} ⇄ ${route.park_place}`, `Vehicle: ${f.r.vehicle_name}${f.r.seats ? ' (' + f.r.seats + ' seater)' : ''} × ${f.n}`,
+          `Trip: ${{ pickup: 'Pickup', drop: 'Drop', both: 'Pickup & drop' }[direction]}`, `Date: ${fmtDate($('p-date').value)}${direction === 'both' ? ' → ' + fmtDate($('p-return').value) : ''}`,
+          ...($('p-address').value.trim() ? [`Pickup location: ${$('p-address').value.trim()}`] : []), `Fare: ${money(f.amount)}`);
+      } else {
+        const it = mode === 'itinerary' ? currentItinerary() : null;
+        lines.push(`Car: ${selectedVehicle.name}`, mode === 'itinerary' ? `Itinerary: ${it ? it.title : ''}` : 'Trip: Customised route',
+          ...(mode === 'custom' ? [`Route / destination: ${$('k-route').value.trim()}`] : []), `Days: ${mode === 'itinerary' ? (it ? it.num_days : '') : $('k-days').value}`,
+          ...($('k-address').value.trim() ? [`Pickup: ${$('k-address').value.trim()}`] : []));
+      }
+      lines.push('', `Name: ${contact.name.trim()}`, `Phone: ${contact.phone.trim()}`);
+      if (contact.business.trim()) lines.push(`Business: ${contact.business.trim()}`);
+      if (contact.gst.trim()) lines.push(`GST: ${contact.gst.replace(/\s+/g, '').toUpperCase()}`);
+      return 'https://wa.me/' + BUSINESS_WA + '?text=' + encodeURIComponent(lines.join('\n'));
+    }
+
+    async function submitRental() {
+      const contact = { name: $('c-name').value, phone: $('c-phone').value, business: $('c-biz').value, gst: $('c-gst').value };
+      const today = new Date().toISOString().slice(0, 10);
+      if (mode === 'pickup') {
+        if (!currentRate()) return showToast('Please choose a route and a vehicle.', 'error');
+        if (!$('p-date').value || $('p-date').value <= today) return showToast('Please choose a date from tomorrow onwards.', 'error');
+        if (direction === 'both' && (!$('p-return').value || $('p-return').value < $('p-date').value)) return showToast('The drop date must be on or after the pickup date.', 'error');
+      } else {
+        if (!selectedVehicle) return showToast('Please choose a car.', 'error');
+        if (mode === 'itinerary' && !currentItinerary()) return showToast('Please choose an itinerary.', 'error');
+        if (mode === 'custom' && $('k-route').value.trim().length < 5) return showToast('Please explain your route or destination.', 'error');
+        if (mode === 'custom' && !(parseInt($('k-days').value, 10) >= 1)) return showToast('Please enter the number of days.', 'error');
+      }
+      if (!contact.name.trim()) return showToast('Please enter your name.', 'error');
+      if (contact.phone.replace(/\D/g, '').length < 10) return showToast('Please enter a valid contact number.', 'error');
+      const gst = contact.gst.replace(/\s+/g, '').toUpperCase();
+      if (gst && !/^\d{2}[A-Z]{5}\d{4}[A-Z][1-9A-Z]Z[0-9A-Z]$/.test(gst)) return showToast('Please enter a valid 15-character GST number, or leave it empty.', 'error');
+      if (gst && !contact.business.trim()) return showToast('Please enter the business name for the GST number.', 'error');
+
+      const btn = $('rental-submit-btn');
+      // Open the WhatsApp tab right now (a browser only allows this straight from the tap); it is filled in once the request is saved.
+      const wa = window.open('about:blank', '_blank');
+      btn.disabled = true; btn.textContent = 'PLEASE WAIT…';
+      try {
+        const body = mode === 'pickup'
+          ? { kind: 'pickup', contact, pickup: { rateId: $('p-rate').value, direction, vehicles: $('p-vehicles').value, date: $('p-date').value, returnDate: direction === 'both' ? $('p-return').value : undefined, pickupLocation: $('p-address').value } }
+          : { kind: mode === 'itinerary' ? 'preset' : 'custom', vehicleId: selectedVehicle.id, contact, pickupLocation: $('k-address').value,
+              ...(mode === 'itinerary' ? { itineraryId: $('k-itinerary').value } : { routeDescription: $('k-route').value, days: $('k-days').value }) };
+        const res = await fetch('/.netlify/functions/create-rental', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+        const r = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(r.error || 'Request failed');
+        const waUrl = whatsAppUrl(r, contact);
+        if (wa) wa.location.href = waUrl;
+        $('rental-main').innerHTML = `<div class="form-block" style="text-align:center;">
+          <i data-lucide="check-circle-2" style="width:56px;height:56px;color:var(--gold);"></i>
+          <h2 style="font-family:var(--font-display);margin:1rem 0 0.6rem;">BOOKING RECEIVED</h2>
+          <p style="color:#666;line-height:1.8;">Thank you! Your booking <strong>${esc(r.ref)}</strong> is received.<br>We will contact you soon on <strong>${esc(contact.phone)}</strong>.</p>
+          <p style="color:#666;line-height:1.7;margin-top:0.8rem;">To get your request to us right away, send these details on WhatsApp:</p>
+          <a href="${esc(waUrl)}" target="_blank" rel="noopener" class="btn-primary" style="margin-top:0.8rem;background:#25d366;color:#05340f;">Send details on WhatsApp</a><br>
+          <a href="../index.html" class="btn-primary" style="margin-top:1rem;">Return to Home</a></div>`;
+        document.querySelector('.rental-summary-wrap').style.display = 'none';
+        icons(); window.scrollTo({ top: 0, behavior: 'smooth' });
+      } catch (err) {
+        if (wa) wa.close();
+        btn.disabled = false; btn.textContent = 'Submit Booking';
+        showToast(err.message || 'Failed. Please try again or call us.', 'error');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      const min = new Date(Date.now() + 86400000).toISOString().slice(0, 10);
+      $('p-date').min = min; $('p-return').min = min;
+      icons(); await loadAll();
+      const m = new URLSearchParams(location.search).get('mode');
+      setMode(['pickup', 'itinerary', 'custom'].includes(m) ? m : 'pickup');
+    });
+  </script>
+</body>
+</html>

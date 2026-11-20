@@ -1,0 +1,11 @@
+{
+  "name": "assam-wild-safari",
+  "private": true,
+  "dependencies": {
+    "@netlify/blobs": "^8.1.0",
+    "@supabase/supabase-js": "^2.117.2"
+  },
+  "scripts": {
+    "seo": "node scripts/build-seo.js"
+  }
+}

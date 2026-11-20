@@ -1,0 +1,134 @@
+# Assam Wild Safari — search engines and AI assistants are welcome to read the public pages.
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /pages/admin.html
+Disallow: /.netlify/
+
+User-agent: Googlebot
+Allow: /
+Disallow: /admin
+Disallow: /pages/admin.html
+Disallow: /.netlify/
+
+User-agent: Bingbot
+Allow: /
+Disallow: /admin
+Disallow: /pages/admin.html
+Disallow: /.netlify/
+
+User-agent: GPTBot
+Allow: /
+Disallow: /admin
+Disallow: /pages/admin.html
+Disallow: /.netlify/
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /admin
+Disallow: /pages/admin.html
+Disallow: /.netlify/
+
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /admin
+Disallow: /pages/admin.html
+Disallow: /.netlify/
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /admin
+Disallow: /pages/admin.html
+Disallow: /.netlify/
+
+User-agent: Claude-User
+Allow: /
+Disallow: /admin
+Disallow: /pages/admin.html
+Disallow: /.netlify/
+
+User-agent: Claude-SearchBot
+Allow: /
+Disallow: /admin
+Disallow: /pages/admin.html
+Disallow: /.netlify/
+
+User-agent: anthropic-ai
+Allow: /
+Disallow: /admin
+Disallow: /pages/admin.html
+Disallow: /.netlify/
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /admin
+Disallow: /pages/admin.html
+Disallow: /.netlify/
+
+User-agent: Perplexity-User
+Allow: /
+Disallow: /admin
+Disallow: /pages/admin.html
+Disallow: /.netlify/
+
+User-agent: Google-Extended
+Allow: /
+Disallow: /admin
+Disallow: /pages/admin.html
+Disallow: /.netlify/
+
+User-agent: Applebot
+Allow: /
+Disallow: /admin
+Disallow: /pages/admin.html
+Disallow: /.netlify/
+
+User-agent: Applebot-Extended
+Allow: /
+Disallow: /admin
+Disallow: /pages/admin.html
+Disallow: /.netlify/
+
+User-agent: Amazonbot
+Allow: /
+Disallow: /admin
+Disallow: /pages/admin.html
+Disallow: /.netlify/
+
+User-agent: DuckDuckBot
+Allow: /
+Disallow: /admin
+Disallow: /pages/admin.html
+Disallow: /.netlify/
+
+User-agent: CCBot
+Allow: /
+Disallow: /admin
+Disallow: /pages/admin.html
+Disallow: /.netlify/
+
+User-agent: cohere-ai
+Allow: /
+Disallow: /admin
+Disallow: /pages/admin.html
+Disallow: /.netlify/
+
+User-agent: Meta-ExternalAgent
+Allow: /
+Disallow: /admin
+Disallow: /pages/admin.html
+Disallow: /.netlify/
+
+User-agent: YouBot
+Allow: /
+Disallow: /admin
+Disallow: /pages/admin.html
+Disallow: /.netlify/
+
+User-agent: MistralAI-User
+Allow: /
+Disallow: /admin
+Disallow: /pages/admin.html
+Disallow: /.netlify/
+
+Sitemap: https://assamkaziranganationalpark.com/sitemap.xml

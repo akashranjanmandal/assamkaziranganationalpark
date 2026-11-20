@@ -1,0 +1,1673 @@
+/* ──────────────────────────────────────────────
+   Assam Wild Safari — Language Selector & i18n
+   ────────────────────────────────────────────── */
+(function () {
+  'use strict';
+
+  const STORAGE_KEY = 'aws_lang';
+
+  const LANGUAGES = [
+    { code: 'en', native: 'English', name: 'English', primary: true },
+    { code: 'hi', native: 'हिन्दी', name: 'Hindi', primary: true },
+    { code: 'as', native: 'অসমীয়া', name: 'Assamese', primary: true },
+    { code: 'bn', native: 'বাংলা', name: 'Bengali', primary: true },
+    { code: 'ta', native: 'தமிழ்', name: 'Tamil', primary: false },
+    { code: 'te', native: 'తెలుగు', name: 'Telugu', primary: false },
+    { code: 'mr', native: 'मराठी', name: 'Marathi', primary: false },
+    { code: 'gu', native: 'ગુજરાતી', name: 'Gujarati', primary: false },
+    { code: 'or', native: 'ଓଡ଼ିଆ', name: 'Odia', primary: false },
+    { code: 'pa', native: 'ਪੰਜਾਬੀ', name: 'Punjabi', primary: false },
+    { code: 'kn', native: 'ಕನ್ನಡ', name: 'Kannada', primary: false },
+    { code: 'ml', native: 'മലയാളം', name: 'Malayalam', primary: false },
+  ];
+
+  /* ── Inline SVG icon helpers for park rules (rendered via innerHTML) ── */
+  const _chk = '<span style="display:inline-flex;align-items:center;gap:6px;"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#27ae60" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> ';
+  const _no  = '<span style="display:inline-flex;align-items:center;gap:6px;"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#e74c3c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> ';
+  const _end = '</span>';
+
+  /* ══════════════════════════════════════════════
+     TRANSLATIONS
+  ══════════════════════════════════════════════ */
+  const T = {
+
+    /* ─── ENGLISH (source) ─── */
+    en: {
+      /* splash */
+      lp_title: 'Choose Your Language', lp_subtitle: 'Select a language to continue',
+      lp_other: 'More Languages', lp_change: 'Language',
+
+      /* nav */
+      nav_home: 'Home', nav_itineraries: 'Itineraries', nav_booking: 'Booking',
+      nav_car_rental: 'Car Rental', nav_reviews: 'Reviews', nav_book_safari: 'Book Safari',
+      rec_text: 'Recognised by Department of Tourism Government Assam, and Bodoland Tourism',
+
+      /* ── HOME ── */
+      home_h1: 'FOR THE FIRST TIME IN ASSAM<br>SHARED JEEP BOOKING ONLINE',
+      home_sub: 'Kaziranga National Park Manas National Park',
+      home_cta1: 'Book Shared Jeep Safari',
+      home_cta2: 'Book Northeast Tour Package',
+      home_cta3: 'Car Rental Service',
+      home_h1_v2: 'CONFIRM YOUR SAFARIS IN ADVANCE<br>FOR MANAS &amp; KAZIRANGA NATIONAL PARK, ASSAM',
+      home_cta_private: 'Book Your Safari',
+      home_cta_shared: 'Book Your Shared Jeep Safari',
+      stat_explorers: 'Explorers Served', stat_sighting: 'Sighting Record',
+      stat_experts: 'Elite Experts', stat_success: 'Mission Success',
+      intro_label: 'Operational Intel',
+      intro_title: 'WE DON\'T JUST TOUR. WE DEPLOY.',
+      intro_body: 'While others take you on a casual drive, we execute a tactical mission. Our naturalists are tracking experts, trained to read the forest\'s every signal. In Kaziranga and Manas, we own the terrain.',
+      feat1_title: 'Elite Trackers', feat1_desc: '15+ years of pure tactical field expertise in Assam\'s national parks.',
+      feat2_title: 'Max Sightings', feat2_desc: 'Optimized deployment windows for maximum wildlife encounter probability.',
+      trend_label: 'Hot Right Now', trend_title: 'TRENDING ITINERARIES',
+      ne_label: 'Beyond the Horizon', ne_title: 'Our Itineraries',
+      ne_sub: 'Venture deep into the uncharted territories of the North-East. From the peaks of Tawang to the hidden valleys of Bhutan.',
+      safari_label: 'Sector Assignment', safari_title: 'Choose your National Park',
+      cta_label: 'Final Briefing',
+      cta_title: 'NO COMPROMISE.<br>ONLY ADVENTURE.',
+      cta_btn: 'Begin Your Mission',
+
+      /* ── ITINERARIES ── */
+      itin_eyebrow: 'Itineraries & tour packages',
+      itin_h1: 'NORTH EAST INDIA<br>TOUR PACKAGES',
+      itin_sub: 'Itineraries across Assam, Meghalaya, Arunachal Pradesh and Bhutan — with Kaziranga and Manas jungle safaris, pickup and drop and a vehicle arranged. Or customise your own route.',
+
+      /* ── BOOKING ── */
+      book_eyebrow: 'Deploy to Wild',
+      book_h1: 'SECURE YOUR<br>SEAT',
+      book_sub: 'Guaranteed entry. Expert naturalists. Your adventure starts here.',
+      step_destination: 'Destination', step_schedule: 'Schedule',
+      step_guest: 'Guest', step_payment: 'Payment',
+      bk_s1_label: 'Step 1 of 4', bk_s1_title: 'CHOOSE YOUR<br>DESTINATION',
+      bk_s2_label: 'Step 2 of 4', bk_s2_title: 'PICK YOUR MOMENT',
+      bk_s3_label: 'Step 3 of 4', bk_s3_title: 'GUEST DETAILS',
+      bk_s4_label: 'Step 4 of 4', bk_s4_title: 'COMPLETE PAYMENT',
+      bk_lbl_date: 'Safari Date', bk_lbl_guests: 'Number of Guests',
+      bk_lbl_slot: 'Time Slot', bk_lbl_name: 'Full Name *', bk_lbl_age: 'Age *',
+      bk_lbl_phone: 'Contact Number *', bk_lbl_aadhaar: 'Aadhaar Card *',
+      bk_lbl_payment: 'Payment Screenshot *', bk_lbl_utr: 'Transaction ID / UTR No. (Optional)',
+      bk_hint_payment: 'Please upload the screenshot of your successful transaction.',
+      bk_next1: 'Next: Pick a Date →', bk_next2: 'Next: Guest Details →',
+      bk_next3: 'Next: Payment →', bk_back: '← Back', bk_submit: 'Confirm Booking',
+      bk_kaz_tag: 'UNESCO Stronghold · Central Range',
+      bk_kaz_price: '₹1,000 / person · Morning 9–11 AM / Evening 2–4 PM',
+      bk_manas_tag: 'Biosphere Reserve · Bansbari Range',
+      bk_manas_price: '₹1,300 / person · Morning 8 AM–12 PM / Evening 2–4 PM',
+      bk_group_title: 'Group / Private Jeep Pricing',
+      bk_group_text: 'Above 3 persons — Kaziranga ₹3,500 / jeep | Manas ₹4,500 / jeep',
+      bk_group_sub: 'Private basis · Maximum 6 people per jeep',
+      bk_tuesday: '⚠ Manas Bansbari Range is closed every Tuesday. Please pick another date.',
+      bk_adults_label: 'Adults', bk_adults_note: '(above 5 yrs · chargeable)',
+      bk_children_label: 'Children', bk_children_note: '(5 yrs & under · free)',
+      bk_adults_unit: 'adult(s)', bk_children_unit: 'child(ren)',
+      bk_preview_title: 'Your Selected Safari',
+      bk_guest_note: 'The <strong>primary guest</strong> (Guest 1) must provide Aadhaar card and contact. Additional guests only need name and age.',
+      bk_pay_label: 'Total Amount Payable (No GST)',
+      bk_upi_badge: 'Scan & Pay via Any UPI App',
+      bk_upload_label: 'Tap to upload payment screenshot',
+      bk_submit_pay: 'Submit Booking & Verify Payment',
+      bk_refund_title: 'Refund Policy',
+      bk_refund_text: 'For any circumstances if the National Park authority does not allow entry, full payment will be refunded within 24 hours.',
+      bk_tnc_agree: 'I have read and agree to the Refund Policy above.',
+      bk_back_guest: '← Back to Guest Details',
+      bk_sum_title: 'Mission Brief',
+      bk_sum_dest: 'Destination', bk_sum_date: 'Date', bk_sum_time: 'Time Slot',
+      bk_sum_adults: 'Adults', bk_sum_children: 'Children', bk_sum_rate: 'Rate',
+      bk_sum_total: 'Total (No GST)',
+      bk_sum_note: 'Children 5 & under are free. Above 5 yrs chargeable at full rate.',
+      bk_need_help: 'Need help?',
+      bk_park_rules: 'Park Rules & Information',
+      bk_park_rules2: 'Important — Park Rules & Camera Charges',
+      /* dynamic booking JS strings */
+      park_kaz_label: 'Kaziranga Central Range',
+      park_manas_label: 'Manas Bansbari Range',
+      slot_morning: 'Morning Safari', slot_evening: 'Evening Safari',
+      rule_children_charge: 'Children above 5 years of age are chargeable at full rate.',
+      rule_no_plastic: 'Plastics are strictly not allowed inside the national park.',
+      rule_still_camera: 'Still camera: ₹100 entry charge.',
+      rule_video_kaz: 'Video camera: ₹1,000 entry charge.',
+      rule_video_manas: 'Video camera: ₹1,500 entry charge.',
+      rule_carry_id: 'Carry original Aadhaar / government ID on safari day.',
+      rule_pickup: 'Guests must share pick-up location and hotel name 24 hours before.',
+      rule_jeep_contact: 'Jeep contact numbers will be provided 24 hours before.',
+      rule_aadhaar_rest: 'For groups, only the primary guest needs Aadhaar. Others need name and age only.',
+      rule_manas_closed: _no + 'Manas jeep safari is <strong>CLOSED every Tuesday</strong>.' + _end,
+      rule_manas_foreign: 'Foreign nationals must book jeep safari offline — call +91 97098 84206 or +91 93656 09948.',
+      rules_title_suffix: '— Rules & Information',
+      gf_adults_hdr: 'Adults',
+      gf_children_hdr: 'Children (5 yrs & under — free)',
+      gf_primary: 'Primary Adult — Booking Lead',
+      gf_adult: 'Adult',
+      gf_child: 'Child',
+      gf_lbl_name: 'Full Name *',
+      gf_lbl_age: 'Age *',
+      gf_lbl_contact: 'Contact Number *',
+      gf_lbl_aadhaar: 'Aadhaar Card *',
+      gf_aadhaar_upload: 'Tap to upload Aadhaar (JPG / PNG / PDF)',
+      sum_adult: 'adult', sum_adults: 'adults',
+      sum_child: 'child', sum_children: 'children',
+      sum_per_adult: '/ adult', sum_free: 'free', sum_no_gst: 'No GST',
+
+      /* ── CAR RENTAL ── */
+      cr_eyebrow: 'Ground Transport', cr_h1: 'CAR<br>RENTAL',
+      cr_sub: 'Premium vehicles for every terrain across North-East India. Professional drivers with deep local knowledge.',
+      cr_block_vehicle: 'Select Vehicle', cr_block_trip: 'Trip Details',
+      cr_lbl_pax: 'Number of Passengers *', cr_lbl_itin: 'Select Itinerary / Route *',
+      cr_opt_choose: '-- Choose Itinerary --',
+      cr_sum_title: 'Your Selection', cr_veh_req: 'Vehicles Required',
+      cr_lbl_vehicle: 'Vehicle', cr_lbl_capacity: 'Capacity',
+      cr_lbl_pax2: 'Passengers', cr_lbl_veh_needed: 'Vehicles Needed',
+      cr_lbl_itinerary: 'Itinerary',
+      cr_note: 'Our team will contact you shortly to confirm availability and share pricing details.',
+      cr_submit: 'Send Enquiry',
+
+      /* ── REVIEWS ── */
+      rev_eyebrow: 'Intelligence Reports',
+      rev_h1: 'VOICES FROM<br>THE FIELD',
+      rev_sub: 'Verified field encounters. Direct from the frontlines of Assam\'s wilderness.',
+      rev_stat1: 'Operative Rating', rev_stat2: 'Successful Deploys', rev_stat3: 'Return Missions',
+      rev_sec_label: 'The Verdict', rev_sec_title: 'UNFILTERED INTELLIGENCE',
+      rev_sec_body: 'Direct reports from operatives who have engaged in the Kaziranga and Manas sectors.',
+      rev_form_label: 'Mission Debrief', rev_form_title: 'SUBMIT YOUR REPORT',
+      rev_form_sub: 'Archive your encounter to the intelligence bank. Field insights help future operatives plan their missions.',
+      rev_lbl_name: 'Operative Name', rev_lbl_sector: 'Mission Sector',
+      rev_lbl_rating: 'Mission Rating', rev_lbl_summary: 'Mission Summary',
+      rev_btn: 'Submit Review',
+
+      /* ── FOOTER (all pages) ── */
+      footer_desc: 'The elite vanguard of North-East wildlife exploration. No compromises. Pure adrenaline. Experience the unexperienced.',
+      footer_col1: 'Sectors', footer_col2: 'Base Ops', footer_col3: 'Contact',
+      footer_link_kaz: 'Kaziranga Range', footer_link_manas: 'Manas Range', footer_link_reports: 'Reviews',
+      footer_link_book: 'Book Safari', footer_link_intel: 'Itineraries', footer_link_reviews: 'Reviews',
+      footer_link_wa: 'WhatsApp Us', footer_link_car: 'Car Rental',
+      footer_bottom: '© 2026 Assam Wild Safari. Mission Status: Active. Sector 01 & 02 Synchronized.',
+
+      /* ── HOME extra ── */
+      svc1_title: 'Car Rental', svc1_desc: 'Premium SUV and 4x4 for all terrains across North-East India. Professional drivers with local knowledge.',
+      svc1_btn: 'Book Vehicle',
+      svc2_title: 'Hotel Booking', svc2_desc: 'Verified eco-resorts and comfortable stays near all core wildlife zones across the North-East.',
+      svc2_btn: 'Reserve Stay',
+      policy_title: 'Refund & Cancellation Policy',
+      policy_text: 'For any circumstances if the National Park authority does not allow entry, full payment will be refunded within 24 hours. No cancellation charges.',
+      kaz_desc: 'The ultimate stronghold of the One-Horned Rhinoceros. A vast, unforgiving landscape where nature rules with absolute authority — home to the world\'s largest rhino population.',
+      manas_desc: 'Hidden within the Himalayan foothills, a biosphere reserve of legendary status. The last refuge of the Golden Langur and Pygmy Hog. Only for the true wildlife operative.',
+      park_btn: 'Engage Sector',
+      cta_sub: 'Complete immersion in Assam\'s wilderness. Zero compromises on safety, expertise, or experience.',
+      cta_feat1: 'Verified Elite', cta_feat2: 'Immediate Deploy', cta_feat3: 'Precision Recon',
+      cta_btn2: 'Authorize Mission Now',
+      btn_enquire: 'Enquire Now',
+      btn_book_now: 'Book Now',
+    },
+
+    /* ─── HINDI ─── */
+    hi: {
+      lp_title: 'अपनी भाषा चुनें', lp_subtitle: 'जारी रखने के लिए एक भाषा चुनें',
+      lp_other: 'अन्य भाषाएँ', lp_change: 'भाषा',
+
+      nav_home: 'होम', nav_itineraries: 'यात्रा-कार्यक्रम', nav_booking: 'बुकिंग',
+      nav_car_rental: 'कार किराया', nav_reviews: 'समीक्षाएँ', nav_book_safari: 'सफारी बुक करें',
+      rec_text: 'असम सरकार पर्यटन विभाग और बोडोलैंड पर्यटन द्वारा मान्यता प्राप्त',
+
+      home_h1: 'असम में पहली बार<br>जीप सफारी ऑनलाइन बुकिंग',
+      home_sub: 'काजीरंगा नेशनल पार्क  मानस नेशनल पार्क',
+      home_cta1: 'शेयर्ड जीप सफारी बुक करें',
+      home_cta2: 'नॉर्थईस्ट टूर पैकेज बुक करें',
+      home_cta3: 'कार किराया',
+      stat_explorers: 'यात्री सेवित', stat_sighting: 'दर्शन रिकॉर्ड',
+      stat_experts: 'विशेषज्ञ दल', stat_success: 'अभियान सफलता',
+      intro_label: 'संचालन सूचना',
+      intro_title: 'हम केवल घूमते नहीं। हम मिशन पर जाते हैं।',
+      intro_body: 'जहाँ दूसरे आपको एक साधारण सफर पर ले जाते हैं, वहीं हम एक सामरिक अभियान निष्पादित करते हैं। हमारे प्रकृतिविद् विशेषज्ञ ट्रैकर हैं, जो जंगल के हर संकेत को पढ़ने में प्रशिक्षित हैं। काजीरंगा और मानस में, हम इस भूमि के स्वामी हैं।',
+      feat1_title: 'विशेषज्ञ ट्रैकर', feat1_desc: 'असम के राष्ट्रीय उद्यानों में 15+ वर्षों की शुद्ध सामरिक क्षेत्र विशेषज्ञता।',
+      feat2_title: 'अधिकतम दर्शन', feat2_desc: 'अधिकतम वन्यजीव दर्शन की संभावना के लिए अनुकूलित समय-सारणी।',
+      trend_label: 'अभी लोकप्रिय', trend_title: 'ट्रेंडिंग यात्रा-कार्यक्रम',
+      ne_label: 'क्षितिज से परे', ne_title: 'उत्तर-पूर्व टूर पैकेज',
+      ne_sub: 'उत्तर-पूर्व के अनजाने इलाकों में गहरे उतरें। तवांग की चोटियों से लेकर भूटान की छुपी घाटियों तक।',
+      safari_label: 'क्षेत्र चयन', safari_title: 'अपना राष्ट्रीय उद्यान चुनें',
+      cta_label: 'अंतिम निर्देश',
+      cta_title: 'कोई समझौता नहीं।<br>केवल साहसिक अनुभव।',
+      cta_btn: 'अपना मिशन शुरू करें',
+
+      itin_eyebrow: 'क्षेत्र रसद',
+      itin_h1: 'रणभूमि<br>सूचना',
+      itin_sub: 'उत्तर-पूर्व भारत के प्रमुख वन्यजीव क्षेत्रों का विस्तृत विवरण। अधिकतम दर्शन संभावना के लिए अनुकूलित।',
+
+      book_eyebrow: 'जंगल की ओर प्रस्थान',
+      book_h1: 'अपनी सीट<br>सुरक्षित करें',
+      book_sub: 'गारंटीड प्रवेश। विशेषज्ञ प्रकृतिविद्। आपका साहसिक सफर यहाँ से शुरू होता है।',
+      step_destination: 'गंतव्य', step_schedule: 'अनुसूची',
+      step_guest: 'अतिथि', step_payment: 'भुगतान',
+      bk_s1_label: 'चरण 1 / 4', bk_s1_title: 'अपना<br>गंतव्य चुनें',
+      bk_s2_label: 'चरण 2 / 4', bk_s2_title: 'अपना समय चुनें',
+      bk_s3_label: 'चरण 3 / 4', bk_s3_title: 'अतिथि विवरण',
+      bk_s4_label: 'चरण 4 / 4', bk_s4_title: 'भुगतान पूर्ण करें',
+      bk_lbl_date: 'सफारी तारीख', bk_lbl_guests: 'अतिथियों की संख्या',
+      bk_lbl_slot: 'समय स्लॉट', bk_lbl_name: 'पूरा नाम *', bk_lbl_age: 'आयु *',
+      bk_lbl_phone: 'संपर्क नंबर *', bk_lbl_aadhaar: 'आधार कार्ड *',
+      bk_lbl_payment: 'भुगतान स्क्रीनशॉट *', bk_lbl_utr: 'ट्रांजेक्शन ID / UTR नंबर (वैकल्पिक)',
+      bk_hint_payment: 'कृपया अपने सफल ट्रांजेक्शन का स्क्रीनशॉट अपलोड करें।',
+      bk_next1: 'अगला: तारीख चुनें →', bk_next2: 'अगला: अतिथि विवरण →',
+      bk_next3: 'अगला: भुगतान →', bk_back: '← वापस', bk_submit: 'बुकिंग की पुष्टि करें',
+      bk_kaz_tag: 'यूनेस्को गढ़ · केंद्रीय रेंज',
+      bk_kaz_price: '₹1,000 / व्यक्ति · सुबह 9–11 बजे / शाम 2–4 बजे',
+      bk_manas_tag: 'जैवमंडल आरक्षित · बांसबाड़ी रेंज',
+      bk_manas_price: '₹1,300 / व्यक्ति · सुबह 8 बजे–12 बजे / शाम 2–4 बजे',
+      bk_group_title: 'समूह / निजी जीप मूल्य',
+      bk_group_text: '3 से अधिक व्यक्ति — काजीरंगा ₹3,500 / जीप | मानस ₹4,500 / जीप',
+      bk_group_sub: 'निजी आधार · अधिकतम 6 लोग प्रति जीप',
+      bk_tuesday: '⚠ मानस बांसबाड़ी रेंज हर मंगलवार बंद रहती है। कृपया दूसरी तारीख चुनें।',
+      bk_adults_label: 'वयस्क', bk_adults_note: '(5 वर्ष से अधिक · शुल्क देय)',
+      bk_children_label: 'बच्चे', bk_children_note: '(5 वर्ष व उससे कम · निःशुल्क)',
+      bk_adults_unit: 'वयस्क', bk_children_unit: 'बच्चे',
+      bk_preview_title: 'आपका चयनित सफारी',
+      bk_guest_note: '<strong>प्राथमिक अतिथि</strong> (अतिथि 1) को आधार कार्ड और संपर्क देना होगा। अतिरिक्त अतिथियों को केवल नाम और आयु चाहिए।',
+      bk_pay_label: 'कुल देय राशि (बिना GST)',
+      bk_upi_badge: 'किसी भी UPI ऐप से स्कैन करें और भुगतान करें',
+      bk_upload_label: 'भुगतान स्क्रीनशॉट अपलोड करें',
+      bk_submit_pay: 'बुकिंग जमा करें और भुगतान सत्यापित करें',
+      bk_refund_title: 'धनवापसी नीति',
+      bk_refund_text: 'यदि किसी भी परिस्थिति में राष्ट्रीय उद्यान प्राधिकरण प्रवेश की अनुमति नहीं देता, तो पूरी राशि 24 घंटे के भीतर वापस की जाएगी।',
+      bk_tnc_agree: 'मैंने धनवापसी नीति पढ़ी है और सहमत हूँ।',
+      bk_back_guest: '← अतिथि विवरण पर वापस',
+      bk_sum_title: 'मिशन संक्षेप',
+      bk_sum_dest: 'गंतव्य', bk_sum_date: 'तारीख', bk_sum_time: 'समय स्लॉट',
+      bk_sum_adults: 'वयस्क', bk_sum_children: 'बच्चे', bk_sum_rate: 'दर',
+      bk_sum_total: 'कुल (बिना GST)',
+      bk_sum_note: '5 वर्ष व उससे कम के बच्चे निःशुल्क। 5 वर्ष से अधिक पर पूर्ण दर लागू।',
+      bk_need_help: 'सहायता चाहिए?',
+      bk_park_rules: 'पार्क नियम और जानकारी',
+      bk_park_rules2: 'महत्वपूर्ण — पार्क नियम और कैमरा शुल्क',
+      park_kaz_label: 'काजीरंगा केंद्रीय रेंज', park_manas_label: 'मानस बांसबाड़ी रेंज',
+      slot_morning: 'मॉर्निंग सफारी', slot_evening: 'ईवनिंग सफारी',
+      rule_children_charge: '5 वर्ष से अधिक बच्चों से पूर्ण दर पर शुल्क लिया जाएगा।',
+      rule_no_plastic: 'राष्ट्रीय उद्यान के अंदर प्लास्टिक सख्त मना है।',
+      rule_still_camera: 'स्टिल कैमरा: ₹100 प्रवेश शुल्क।',
+      rule_video_kaz: 'वीडियो कैमरा: ₹1,000 प्रवेश शुल्क।',
+      rule_video_manas: 'वीडियो कैमरा: ₹1,500 प्रवेश शुल्क।',
+      rule_carry_id: 'सफारी के दिन मूल आधार / सरकारी ID साथ लाएं।',
+      rule_pickup: 'अतिथियों को 24 घंटे पहले पिकअप स्थान और होटल का नाम बताना होगा।',
+      rule_jeep_contact: 'जीप संपर्क नंबर 24 घंटे पहले प्रदान किए जाएंगे।',
+      rule_aadhaar_rest: 'समूह के लिए केवल प्राथमिक अतिथि का आधार चाहिए। अन्य का नाम और आयु पर्याप्त है।',
+      rule_manas_closed: _no + 'मानस जीप सफारी हर <strong>मंगलवार बंद</strong> है।' + _end,
+      rule_manas_foreign: 'विदेशी नागरिकों को ऑफलाइन बुक करना होगा — +91 97098 84206 या +91 93656 09948।',
+      rules_title_suffix: '— नियम और जानकारी',
+      gf_adults_hdr: 'वयस्क', gf_children_hdr: 'बच्चे (5 वर्ष और उससे कम — निःशुल्क)',
+      gf_primary: 'प्राथमिक वयस्क — बुकिंग लीड', gf_adult: 'वयस्क', gf_child: 'बच्चा',
+      gf_lbl_name: 'पूरा नाम *', gf_lbl_age: 'आयु *', gf_lbl_contact: 'संपर्क नंबर *',
+      gf_lbl_aadhaar: 'आधार कार्ड *', gf_aadhaar_upload: 'आधार अपलोड करें (JPG / PNG / PDF)',
+      sum_adult: 'वयस्क', sum_adults: 'वयस्क', sum_child: 'बच्चा', sum_children: 'बच्चे',
+      sum_per_adult: '/ वयस्क', sum_free: 'निःशुल्क', sum_no_gst: 'GST नहीं',
+
+      cr_eyebrow: 'भूमि परिवहन', cr_h1: 'कार<br>किराया',
+      cr_sub: 'उत्तर-पूर्व भारत के हर इलाके के लिए प्रीमियम वाहन। अनुभवी स्थानीय चालक।',
+      cr_block_vehicle: 'वाहन चुनें', cr_block_trip: 'यात्रा विवरण',
+      cr_lbl_pax: 'यात्रियों की संख्या *', cr_lbl_itin: 'यात्रा मार्ग चुनें *',
+      cr_opt_choose: '-- यात्रा मार्ग चुनें --',
+      cr_sum_title: 'आपका चयन', cr_veh_req: 'आवश्यक वाहन',
+      cr_lbl_vehicle: 'वाहन', cr_lbl_capacity: 'क्षमता',
+      cr_lbl_pax2: 'यात्री', cr_lbl_veh_needed: 'आवश्यक वाहन',
+      cr_lbl_itinerary: 'यात्रा-कार्यक्रम',
+      cr_note: 'हमारी टीम शीघ्र आपसे संपर्क करेगी और उपलब्धता व कीमत की जानकारी देगी।',
+      cr_submit: 'जानकारी भेजें',
+
+      rev_eyebrow: 'अतिथि रिपोर्ट',
+      rev_h1: 'मैदान से<br>आवाजें',
+      rev_sub: 'सत्यापित अनुभव। असम के जंगलों की अग्रिम पंक्ति से सीधे।',
+      rev_stat1: 'अतिथि रेटिंग', rev_stat2: 'सफल यात्राएँ', rev_stat3: 'पुनः यात्राएँ',
+      rev_sec_label: 'निर्णय', rev_sec_title: 'अनफ़िल्टर्ड अनुभव',
+      rev_sec_body: 'काजीरंगा और मानस क्षेत्रों में यात्रा करने वाले अतिथियों की सीधी रिपोर्ट।',
+      rev_form_label: 'अनुभव साझा करें', rev_form_title: 'अपनी समीक्षा दें',
+      rev_form_sub: 'अपने जंगल अनुभव को दर्ज करें। आपकी जानकारी भविष्य के यात्रियों की मदद करेगी।',
+      rev_lbl_name: 'आपका नाम', rev_lbl_sector: 'भ्रमण क्षेत्र',
+      rev_lbl_rating: 'रेटिंग', rev_lbl_summary: 'अनुभव विवरण',
+      rev_btn: 'समीक्षा जमा करें',
+      footer_desc: 'उत्तर-पूर्व वन्यजीव अन्वेषण का अग्रदूत। कोई समझौता नहीं। शुद्ध रोमांच।',
+      footer_col1: 'क्षेत्र', footer_col2: 'बेस ऑप्स', footer_col3: 'संपर्क',
+      footer_link_kaz: 'काजीरंगा', footer_link_manas: 'मानस', footer_link_reports: 'रिपोर्ट',
+      footer_link_book: 'सफारी बुक करें', footer_link_intel: 'क्षेत्र जानकारी', footer_link_reviews: 'समीक्षाएँ',
+      footer_link_wa: 'व्हाट्सऐप', footer_link_car: 'कार किराया', footer_bottom: '© 2026 असम वाइल्ड सफारी।',
+      svc1_title: 'कार किराया', svc1_desc: 'उत्तर-पूर्व भारत के हर इलाके के लिए प्रीमियम SUV और 4x4। अनुभवी स्थानीय चालक।',
+      svc1_btn: 'वाहन बुक करें',
+      svc2_title: 'होटल बुकिंग', svc2_desc: 'उत्तर-पूर्व के सभी प्रमुख वन्यजीव क्षेत्रों के पास सत्यापित इको-रिसॉर्ट और आरामदायक ठहराव।',
+      svc2_btn: 'ठहराव बुक करें',
+      policy_title: 'धनवापसी और रद्दीकरण नीति',
+      policy_text: 'यदि किसी भी परिस्थिति में राष्ट्रीय उद्यान प्राधिकरण प्रवेश की अनुमति नहीं देता, तो पूरी राशि 24 घंटे के भीतर वापस की जाएगी। कोई रद्दीकरण शुल्क नहीं।',
+      kaz_desc: 'एक सींग वाले गैंडे का अंतिम गढ़। एक विशाल, अदम्य परिदृश्य जहाँ प्रकृति परम अधिकार से राज करती है — दुनिया की सबसे बड़ी गैंडे की आबादी का घर।',
+      manas_desc: 'हिमालय की तलहटी में छिपा, एक किंवदंती प्रतिष्ठा का जीवमंडल आरक्षित क्षेत्र। गोल्डन लंगूर और पिग्मी हॉग का अंतिम आश्रय।',
+      park_btn: 'क्षेत्र में प्रवेश करें',
+      cta_sub: 'असम के जंगल में पूर्ण विसर्जन। सुरक्षा, विशेषज्ञता या अनुभव पर शून्य समझौता।',
+      cta_feat1: 'सत्यापित विशेषज्ञ', cta_feat2: 'तत्काल प्रस्थान', cta_feat3: 'सटीक खोज',
+      cta_btn2: 'अभियान अधिकृत करें',
+      btn_enquire: 'अभी पूछताछ करें',
+    },
+
+    /* ─── ASSAMESE ─── */
+    as: {
+      lp_title: 'আপোনাৰ ভাষা বাছক', lp_subtitle: 'অব্যাহত ৰাখিবলৈ এটা ভাষা বাছক',
+      lp_other: 'অন্যান্য ভাষা', lp_change: 'ভাষা',
+
+      nav_home: 'মূল পৃষ্ঠা', nav_itineraries: 'ভ্ৰমণ কাৰ্যসূচী', nav_booking: 'বুকিং',
+      nav_car_rental: 'গাড়ী ভাড়া', nav_reviews: 'পৰ্যালোচনা', nav_book_safari: 'ছাফাৰি বুক কৰক',
+      rec_text: 'অসম চৰকাৰৰ পৰ্যটন বিভাগ আৰু বড়োলেণ্ড পৰ্যটনৰ দ্বাৰা স্বীকৃত',
+
+      home_h1: 'অসমত প্ৰথমবাৰৰ বাবে<br>জীপ ছাফাৰি অনলাইন বুকিং',
+      home_sub: 'কাজিৰঙা ৰাষ্ট্ৰীয় উদ্যান  মানস ৰাষ্ট্ৰীয় উদ্যান',
+      home_cta1: 'শ্বেয়াৰড জীপ ছাফাৰি বুক কৰক',
+      home_cta2: 'নৰ্থইষ্ট ট্যুৰ পেকেজ বুক কৰক',
+      home_cta3: 'কাৰ ভাড়া',
+      stat_explorers: 'অন্বেষকক সেৱা', stat_sighting: 'দৰ্শনৰ ৰেকৰ্ড',
+      stat_experts: 'বিশেষজ্ঞ দল', stat_success: 'অভিযান সাফল্য',
+      intro_label: 'অপাৰেচনেল তথ্য',
+      intro_title: 'আমি কেৱল ভ্ৰমণ নকৰো। আমি মিচনত যাওঁ।',
+      intro_body: 'আনে আপোনাক এটা সাধাৰণ ড্ৰাইভত নিয়া যায়, আমি এটা কৌশলগত অভিযান পৰিচালনা কৰো। আমাৰ প্ৰকৃতিবিদসকল বিশেষজ্ঞ ট্ৰেকাৰ, যি বনৰ প্ৰতিটো সংকেত পঢ়িবলৈ প্ৰশিক্ষিত। কাজিৰঙা আৰু মানসত আমি এই ভূখণ্ডৰ মালিক।',
+      feat1_title: 'বিশেষজ্ঞ ট্ৰেকাৰ', feat1_desc: 'অসমৰ ৰাষ্ট্ৰীয় উদ্যানত ১৫+ বছৰৰ বিশুদ্ধ কৌশলগত ক্ষেত্ৰৰ বিশেষজ্ঞতা।',
+      feat2_title: 'সৰ্বাধিক দৰ্শন', feat2_desc: 'সৰ্বাধিক বন্যপ্ৰাণী দৰ্শনৰ সম্ভাৱনাৰ বাবে অনুকূলিত সময়সূচী।',
+      trend_label: 'এতিয়া জনপ্ৰিয়', trend_title: 'ট্ৰেণ্ডিং ভ্ৰমণ কাৰ্যসূচী',
+      ne_label: 'দিগন্তৰ ওপৰলৈ', ne_title: 'উত্তৰ-পূব টুৰ পেকেজ',
+      ne_sub: 'উত্তৰ-পূবৰ অজানা এলেকাত গভীৰে প্ৰৱেশ কৰক। তাৱাঙৰ শিখৰৰ পৰা ভূটানৰ লুকাই থকা উপত্যকালৈ।',
+      safari_label: 'ক্ষেত্ৰ নিৰ্বাচন', safari_title: 'আপোনাৰ ৰাষ্ট্ৰীয় উদ্যান বাছক',
+      cta_label: 'চূড়ান্ত নিৰ্দেশনা',
+      cta_title: 'কোনো আপোচ নহয়।<br>কেৱল দুঃসাহসিক অভিযান।',
+      cta_btn: 'আপোনাৰ অভিযান আৰম্ভ কৰক',
+
+      itin_eyebrow: 'ক্ষেত্ৰ লজিষ্টিক্স',
+      itin_h1: 'যুদ্ধক্ষেত্ৰ<br>তথ্য',
+      itin_sub: 'উত্তৰ-পূব ভাৰতৰ প্ৰাথমিক বন্যপ্ৰাণী ক্ষেত্ৰৰ বিস্তাৰিত তথ্য। সৰ্বাধিক দৰ্শন সম্ভাৱনাৰ বাবে অনুকূলিত।',
+
+      book_eyebrow: 'বনলৈ প্ৰস্থান',
+      book_h1: 'আপোনাৰ আসন<br>সুৰক্ষিত কৰক',
+      book_sub: 'গেৰাণ্টিড প্ৰৱেশ। বিশেষজ্ঞ প্ৰকৃতিবিদ। আপোনাৰ অভিযান ইয়াৰ পৰাই আৰম্ভ।',
+      step_destination: 'গন্তব্য', step_schedule: 'সময়সূচী',
+      step_guest: 'অতিথি', step_payment: 'পেমেণ্ট',
+      bk_s1_label: 'পদক্ষেপ ১ / ৪', bk_s1_title: 'আপোনাৰ<br>গন্তব্য বাছক',
+      bk_s2_label: 'পদক্ষেপ ২ / ৪', bk_s2_title: 'আপোনাৰ সময় বাছক',
+      bk_s3_label: 'পদক্ষেপ ৩ / ৪', bk_s3_title: 'অতিথিৰ তথ্য',
+      bk_s4_label: 'পদক্ষেপ ৪ / ৪', bk_s4_title: 'পেমেণ্ট সম্পূৰ্ণ কৰক',
+      bk_lbl_date: 'ছাফাৰি তাৰিখ', bk_lbl_guests: 'অতিথিৰ সংখ্যা',
+      bk_lbl_slot: 'সময় স্ল\'ট', bk_lbl_name: 'সম্পূৰ্ণ নাম *', bk_lbl_age: 'বয়স *',
+      bk_lbl_phone: 'যোগাযোগ নম্বৰ *', bk_lbl_aadhaar: 'আধাৰ কাৰ্ড *',
+      bk_lbl_payment: 'পেমেণ্ট স্ক্ৰীনশ্বট *', bk_lbl_utr: 'ট্ৰেঞ্জেকচন ID / UTR নম্বৰ (ঐচ্ছিক)',
+      bk_hint_payment: 'অনুগ্ৰহ কৰি আপোনাৰ সফল ট্ৰেঞ্জেকচনৰ স্ক্ৰীনশ্বট আপলোড কৰক।',
+      bk_next1: 'পৰৱৰ্তী: তাৰিখ বাছক →', bk_next2: 'পৰৱৰ্তী: অতিথিৰ তথ্য →',
+      bk_next3: 'পৰৱৰ্তী: পেমেণ্ট →', bk_back: '← পিছলৈ', bk_submit: 'বুকিং নিশ্চিত কৰক',
+      bk_kaz_tag: 'ইউনেস্কো ঘাঁটি · কেন্দ্ৰীয় পৰিসৰ',
+      bk_kaz_price: '₹1,000 / জন · পুৱা 9–11 বজা / আবেলি 2–4 বজা',
+      bk_manas_tag: 'জৈৱমণ্ডল সংৰক্ষিত · বাঁহবাড়ী পৰিসৰ',
+      bk_manas_price: '₹1,300 / জন · পুৱা 8–12 বজা / আবেলি 2–4 বজা',
+      bk_group_title: 'দল / ব্যক্তিগত জীপ মূল্য',
+      bk_group_text: '3 জনতকৈ বেছি — কাজিৰঙা ₹3,500 / জীপ | মানস ₹4,500 / জীপ',
+      bk_group_sub: 'ব্যক্তিগত ভিত্তিত · সৰ্বাধিক 6 জন প্ৰতি জীপ',
+      bk_tuesday: '⚠ মানস বাঁহবাড়ী পৰিসৰ প্ৰতি মঙলবাৰে বন্ধ থাকে। অনুগ্ৰহ কৰি আন তাৰিখ বাছক।',
+      bk_adults_label: 'প্ৰাপ্তবয়স্ক', bk_adults_note: '(5 বছৰৰ ওপৰত · মাচুলযোগ্য)',
+      bk_children_label: 'শিশু', bk_children_note: '(5 বছৰ ও তলত · বিনামূলীয়া)',
+      bk_adults_unit: 'জন', bk_children_unit: 'শিশু',
+      bk_preview_title: 'আপোনাৰ নিৰ্বাচিত ছাফাৰি',
+      bk_guest_note: '<strong>মুখ্য অতিথি</strong> (অতিথি 1)য়ে আধাৰ কাৰ্ড আৰু যোগাযোগ দিব লাগিব। অতিৰিক্ত অতিথিৰ কেৱল নাম আৰু বয়স লাগিব।',
+      bk_pay_label: 'মুঠ পৰিশোধযোগ্য (GST অবিহনে)',
+      bk_upi_badge: 'যিকোনো UPI এপৰ জৰিয়তে স্কেন কৰক আৰু পেমেণ্ট কৰক',
+      bk_upload_label: 'পেমেণ্ট স্ক্ৰীনশ্বট আপলোড কৰক',
+      bk_submit_pay: 'বুকিং দাখিল কৰক আৰু পেমেণ্ট সত্যাপন কৰক',
+      bk_refund_title: 'ধন ঘূৰাই দিয়া নীতি',
+      bk_refund_text: 'যিকোনো পৰিস্থিতিত ৰাষ্ট্ৰীয় উদ্যান কৰ্তৃপক্ষই প্ৰৱেশৰ অনুমতি নিদিলে, ২৪ ঘণ্টাৰ ভিতৰত সম্পূৰ্ণ পেমেণ্ট ঘূৰাই দিয়া হ\'ব।',
+      bk_tnc_agree: 'মই ধন ঘূৰাই দিয়া নীতি পঢ়িছো আৰু সম্মত।',
+      bk_back_guest: '← অতিথিৰ তথ্যলৈ উভতক',
+      bk_sum_title: 'মিচন সাৰাংশ',
+      bk_sum_dest: 'গন্তব্য', bk_sum_date: 'তাৰিখ', bk_sum_time: 'সময় স্লট',
+      bk_sum_adults: 'প্ৰাপ্তবয়স্ক', bk_sum_children: 'শিশু', bk_sum_rate: 'হাৰ',
+      bk_sum_total: 'মুঠ (GST অবিহনে)',
+      bk_sum_note: '5 বছৰ ও তলৰ শিশু বিনামূলীয়া। 5 বছৰৰ ওপৰত সম্পূৰ্ণ হাৰত।',
+      bk_need_help: 'সহায় লাগে?',
+      bk_park_rules: 'পাৰ্ক নিয়ম আৰু তথ্য',
+      bk_park_rules2: 'গুৰুত্বপূৰ্ণ — পাৰ্ক নিয়ম আৰু কেমেৰা মাচুল',
+
+      cr_eyebrow: 'স্থল পৰিবহন', cr_h1: 'গাড়ী<br>ভাড়া',
+      cr_sub: 'উত্তৰ-পূব ভাৰতৰ প্ৰতিটো ভূখণ্ডৰ বাবে প্ৰিমিয়াম যান। অভিজ্ঞ স্থানীয় চালক।',
+      cr_block_vehicle: 'যান বাছক', cr_block_trip: 'ভ্ৰমণ বিৱৰণ',
+      cr_lbl_pax: 'যাত্ৰীৰ সংখ্যা *', cr_lbl_itin: 'ভ্ৰমণ পথ বাছক *',
+      cr_opt_choose: '-- ভ্ৰমণ পথ বাছক --',
+      cr_sum_title: 'আপোনাৰ নিৰ্বাচন', cr_veh_req: 'প্ৰয়োজনীয় যান',
+      cr_lbl_vehicle: 'যান', cr_lbl_capacity: 'ক্ষমতা',
+      cr_lbl_pax2: 'যাত্ৰী', cr_lbl_veh_needed: 'প্ৰয়োজনীয় যান',
+      cr_lbl_itinerary: 'ভ্ৰমণ কাৰ্যসূচী',
+      cr_note: 'আমাৰ দলটো শীঘ্ৰেই আপোনাৰ সৈতে যোগাযোগ কৰি উপলব্ধতা আৰু মূল্য নিশ্চিত কৰিব।',
+      cr_submit: 'অনুসন্ধান পঠাওক',
+
+      rev_eyebrow: 'অতিথিৰ প্ৰতিবেদন',
+      rev_h1: 'মাঠৰ পৰা<br>কণ্ঠস্বৰ',
+      rev_sub: 'যাচাই কৰা মাঠৰ অভিজ্ঞতা। অসমৰ বনৰ প্ৰথম শাৰীৰ পৰা সৰাসৰি।',
+      rev_stat1: 'অতিথিৰ ৰেটিং', rev_stat2: 'সফল ভ্ৰমণ', rev_stat3: 'পুনৰ ভ্ৰমণ',
+      rev_sec_label: 'ৰায়', rev_sec_title: 'নিৰ্মল অভিজ্ঞতা',
+      rev_sec_body: 'কাজিৰঙা আৰু মানস ক্ষেত্ৰত ভ্ৰমণ কৰা অতিথিৰ সৰাসৰি প্ৰতিবেদন।',
+      rev_form_label: 'অভিজ্ঞতা ভাগ কৰক', rev_form_title: 'আপোনাৰ পৰ্যালোচনা দিয়ক',
+      rev_form_sub: 'আপোনাৰ বনৰ অভিজ্ঞতা দাখিল কৰক। আপোনাৰ তথ্যে ভৱিষ্যতৰ যাত্ৰীসকলক সহায় কৰিব।',
+      rev_lbl_name: 'আপোনাৰ নাম', rev_lbl_sector: 'ভ্ৰমণ ক্ষেত্ৰ',
+      rev_lbl_rating: 'ৰেটিং', rev_lbl_summary: 'অভিজ্ঞতাৰ বিৱৰণ',
+      rev_btn: 'পৰ্যালোচনা জমা দিয়ক',
+      footer_desc: 'উত্তৰ-পূব বন্যপ্ৰাণী অন্বেষণৰ আগশাৰীৰ প্ৰতিনিধি। কোনো আপোচ নাই। বিশুদ্ধ রোমাঞ্চ।',
+      footer_col1: 'ক্ষেত্ৰ', footer_col2: 'বেছ অপছ', footer_col3: 'যোগাযোগ',
+      footer_link_kaz: 'কাজিৰঙা', footer_link_manas: 'মানস', footer_link_reports: 'প্ৰতিবেদন',
+      footer_link_book: 'ছাফাৰি বুক কৰক', footer_link_intel: 'ক্ষেত্ৰ তথ্য', footer_link_reviews: 'পৰ্যালোচনা',
+      footer_link_wa: 'হোৱাটছএপ', footer_link_car: 'কাৰ ভাড়া', footer_bottom: '© 2026 অসম ৱাইল্ড ছাফাৰি।',
+      svc1_title: 'গাড়ী ভাড়া', svc1_desc: 'উত্তৰ-পূব ভাৰতৰ সকলো ভূখণ্ডৰ বাবে প্ৰিমিয়াম SUV আৰু 4x4। স্থানীয় জ্ঞানসম্পন্ন পেচাদাৰ চালক।',
+      svc1_btn: 'যান বুক কৰক',
+      svc2_title: 'হোটেল বুকিং', svc2_desc: 'উত্তৰ-পূবৰ সকলো বন্যপ্ৰাণী অঞ্চলৰ ওচৰত সত্যাপিত ইকো-ৰিজৰ্ট আৰু আৰামদায়ক আৱাস।',
+      svc2_btn: 'থকাৰ ব্যৱস্থা বুক কৰক',
+      policy_title: 'ধন ঘূৰাই দিয়া আৰু বাতিলকৰণ নীতি',
+      policy_text: 'যিকোনো পৰিস্থিতিত ৰাষ্ট্ৰীয় উদ্যান কৰ্তৃপক্ষই প্ৰৱেশৰ অনুমতি নিদিলে, সম্পূৰ্ণ পেমেণ্ট ২৪ ঘণ্টাৰ ভিতৰত ঘূৰাই দিয়া হ\'ব। কোনো বাতিলকৰণ মাচুল নাই।',
+      kaz_desc: 'এক সিঙীয়া গঁড়ৰ চূড়ান্ত ঘাঁটি। এক বিশাল, অদম্য ভূদৃশ্য য\'ত প্ৰকৃতিয়ে সম্পূৰ্ণ কৰ্তৃত্বৰে ৰাজত্ব কৰে — বিশ্বৰ সৰ্ববৃহৎ গঁড়ৰ বাসস্থান।',
+      manas_desc: 'হিমালয়ৰ পদতলত লুকাই থকা, এক কিংবদন্তিতুল্য জৈৱমণ্ডল সংৰক্ষিত এলেকা। গোল্ডেন লেংগুৰ আৰু পিগমি হগৰ শেষ আশ্ৰয়।',
+      park_btn: 'ক্ষেত্ৰ অন্বেষণ কৰক',
+      cta_sub: 'অসমৰ বনত সম্পূৰ্ণ নিমজ্জন। সুৰক্ষা, বিশেষজ্ঞতা বা অভিজ্ঞতাত শূন্য আপোচ।',
+      cta_feat1: 'সত্যাপিত বিশেষজ্ঞ', cta_feat2: 'তাৎক্ষণিক প্ৰস্থান', cta_feat3: 'সঠিক অনুসন্ধান',
+      cta_btn2: 'অভিযান অনুমোদন কৰক',
+      btn_enquire: 'এতিয়াই সোধক',
+      park_kaz_label: 'কাজিৰঙা কেন্দ্ৰীয় পৰিসৰ', park_manas_label: 'মানস বাঁহবাড়ী পৰিসৰ',
+      slot_morning: 'পুৱাৰ ছাফাৰি', slot_evening: 'আবেলিৰ ছাফাৰি',
+      rule_children_charge: '৫ বছৰৰ ওপৰৰ শিশুৰ পৰা সম্পূৰ্ণ হাৰত মাচুল লোৱা হ\'ব।',
+      rule_no_plastic: 'ৰাষ্ট্ৰীয় উদ্যানৰ ভিতৰত প্লাষ্টিক সম্পূৰ্ণ নিষিদ্ধ।',
+      rule_still_camera: 'ষ্টিল কেমেৰা: ₹100 প্ৰৱেশ মাচুল।',
+      rule_video_kaz: 'ভিডিঅ\' কেমেৰা: ₹1,000 প্ৰৱেশ মাচুল।',
+      rule_video_manas: 'ভিডিঅ\' কেমেৰা: ₹1,500 প্ৰৱেশ মাচুল।',
+      rule_carry_id: 'ছাফাৰিৰ দিনা মূল আধাৰ / চৰকাৰী পৰিচয়পত্ৰ সঙ্গে ৰাখক।',
+      rule_pickup: 'অতিথিসকলে ২৪ ঘণ্টা আগেয়ে পিকআপ স্থান আৰু হোটেলৰ নাম দিব লাগিব।',
+      rule_jeep_contact: 'জীপ যোগাযোগ নম্বৰ ২৪ ঘণ্টা আগেয়ে প্ৰদান কৰা হ\'ব।',
+      rule_aadhaar_rest: 'দলৰ বাবে কেৱল মুখ্য অতিথিৰ আধাৰ লাগে। অন্যৰ নাম আৰু বয়স পৰ্যাপ্ত।',
+      rule_manas_closed: _no + 'মানস জীপ ছাফাৰি প্ৰতি <strong>মঙলবাৰে বন্ধ</strong>।' + _end,
+      rule_manas_foreign: 'বিদেশী নাগৰিকে অফলাইনত বুক কৰিব লাগিব — +91 97098 84206 বা +91 93656 09948।',
+      rules_title_suffix: '— নিয়ম আৰু তথ্য',
+      gf_adults_hdr: 'প্ৰাপ্তবয়স্ক', gf_children_hdr: 'শিশু (৫ বছৰ আৰু তলত — বিনামূলীয়া)',
+      gf_primary: 'মুখ্য প্ৰাপ্তবয়স্ক — বুকিং লিড', gf_adult: 'প্ৰাপ্তবয়স্ক', gf_child: 'শিশু',
+      gf_lbl_name: 'সম্পূৰ্ণ নাম *', gf_lbl_age: 'বয়স *', gf_lbl_contact: 'যোগাযোগ নম্বৰ *',
+      gf_lbl_aadhaar: 'আধাৰ কাৰ্ড *', gf_aadhaar_upload: 'আধাৰ আপলোড কৰক (JPG / PNG / PDF)',
+      sum_adult: 'জন', sum_adults: 'জন', sum_child: 'শিশু', sum_children: 'শিশু',
+      sum_per_adult: '/ জন', sum_free: 'বিনামূলীয়া', sum_no_gst: 'GST নাই',
+    },
+
+    /* ─── BENGALI ─── */
+    bn: {
+      lp_title: 'আপনার ভাষা বেছে নিন', lp_subtitle: 'চালিয়ে যেতে একটি ভাষা বেছে নিন',
+      lp_other: 'আরও ভাষা', lp_change: 'ভাষা',
+
+      nav_home: 'হোম', nav_itineraries: 'ভ্রমণসূচি', nav_booking: 'বুকিং',
+      nav_car_rental: 'গাড়ি ভাড়া', nav_reviews: 'পর্যালোচনা', nav_book_safari: 'সাফারি বুক করুন',
+      rec_text: 'অসম সরকার পর্যটন বিভাগ এবং বোডোল্যান্ড পর্যটন কর্তৃক স্বীকৃত',
+
+      home_h1: 'আসামে প্রথমবার<br>জিপ সাফারি অনলাইন বুকিং',
+      home_sub: 'কাজিরাঙ্গা জাতীয় উদ্যান  মানস জাতীয় উদ্যান',
+      home_cta1: 'শেয়ার্ড জিপ সাফারি বুক করুন',
+      home_cta2: 'নর্থইস্ট ট্যুর প্যাকেজ বুক করুন',
+      home_cta3: 'কার ভাড়া',
+      stat_explorers: 'অন্বেষকদের সেবা', stat_sighting: 'দর্শনের রেকর্ড',
+      stat_experts: 'বিশেষজ্ঞ দল', stat_success: 'অভিযান সাফল্য',
+      intro_label: 'অপারেশনাল তথ্য',
+      intro_title: 'আমরা শুধু ভ্রমণ করি না। আমরা মিশনে যাই।',
+      intro_body: 'অন্যরা আপনাকে একটি সাধারণ ড্রাইভে নিয়ে যায়, আমরা একটি কৌশলগত মিশন পরিচালনা করি। আমাদের প্রকৃতিবিদরা দক্ষ ট্র্যাকার, যারা জঙ্গলের প্রতিটি সংকেত পড়তে প্রশিক্ষিত। কাজিরাঙ্গা ও মানসে আমরা এই ভূখণ্ডের মালিক।',
+      feat1_title: 'বিশেষজ্ঞ ট্র্যাকার', feat1_desc: 'আসামের জাতীয় উদ্যানে ১৫+ বছরের বিশুদ্ধ কৌশলগত মাঠ বিশেষজ্ঞতা।',
+      feat2_title: 'সর্বাধিক দর্শন', feat2_desc: 'সর্বাধিক বন্যপ্রাণী দর্শনের সম্ভাবনার জন্য অপ্টিমাইজড সময়সূচি।',
+      trend_label: 'এখন জনপ্রিয়', trend_title: 'ট্রেন্ডিং ভ্রমণসূচি',
+      ne_label: 'দিগন্তের পার', ne_title: 'উত্তর-পূর্ব ট্যুর প্যাকেজ',
+      ne_sub: 'উত্তর-পূর্বের অজানা অঞ্চলে গভীরে প্রবেশ করুন। তাওয়াংয়ের চূড়া থেকে ভুটানের লুকানো উপত্যকা পর্যন্ত।',
+      safari_label: 'ক্ষেত্র নির্বাচন', safari_title: 'আপনার জাতীয় উদ্যান বেছে নিন',
+      cta_label: 'চূড়ান্ত নির্দেশনা',
+      cta_title: 'কোনো আপোষ নেই।<br>শুধুই অ্যাডভেঞ্চার।',
+      cta_btn: 'আপনার মিশন শুরু করুন',
+
+      itin_eyebrow: 'ক্ষেত্র লজিস্টিক্স',
+      itin_h1: 'যুদ্ধক্ষেত্র<br>তথ্য',
+      itin_sub: 'উত্তর-পূর্ব ভারতের প্রাথমিক বন্যপ্রাণী ক্ষেত্রের বিস্তারিত তথ্য। সর্বাধিক দর্শন সম্ভাবনার জন্য অপ্টিমাইজড।',
+
+      book_eyebrow: 'বনের দিকে যাত্রা',
+      book_h1: 'আপনার আসন<br>সুরক্ষিত করুন',
+      book_sub: 'গ্যারান্টিড প্রবেশ। বিশেষজ্ঞ প্রকৃতিবিদ। আপনার অ্যাডভেঞ্চার এখান থেকেই শুরু।',
+      step_destination: 'গন্তব্য', step_schedule: 'সময়সূচি',
+      step_guest: 'অতিথি', step_payment: 'পেমেন্ট',
+      bk_s1_label: 'ধাপ ১ / ৪', bk_s1_title: 'আপনার<br>গন্তব্য বেছে নিন',
+      bk_s2_label: 'ধাপ ২ / ৪', bk_s2_title: 'আপনার সময় বেছে নিন',
+      bk_s3_label: 'ধাপ ৩ / ৪', bk_s3_title: 'অতিথির বিবরণ',
+      bk_s4_label: 'ধাপ ৪ / ৪', bk_s4_title: 'পেমেন্ট সম্পন্ন করুন',
+      bk_lbl_date: 'সাফারি তারিখ', bk_lbl_guests: 'অতিথির সংখ্যা',
+      bk_lbl_slot: 'সময় স্লট', bk_lbl_name: 'পুরো নাম *', bk_lbl_age: 'বয়স *',
+      bk_lbl_phone: 'যোগাযোগ নম্বর *', bk_lbl_aadhaar: 'আধার কার্ড *',
+      bk_lbl_payment: 'পেমেন্ট স্ক্রিনশট *', bk_lbl_utr: 'ট্রানজেকশন ID / UTR নম্বর (ঐচ্ছিক)',
+      bk_hint_payment: 'অনুগ্রহ করে আপনার সফল ট্রানজেকশনের স্ক্রিনশট আপলোড করুন।',
+      bk_next1: 'পরবর্তী: তারিখ বেছে নিন →', bk_next2: 'পরবর্তী: অতিথির বিবরণ →',
+      bk_next3: 'পরবর্তী: পেমেন্ট →', bk_back: '← পেছনে', bk_submit: 'বুকিং নিশ্চিত করুন',
+      bk_kaz_tag: 'ইউনেস্কো ঘাঁটি · কেন্দ্রীয় রেঞ্জ',
+      bk_kaz_price: '₹1,000 / জন · সকাল 9–11টা / বিকেল 2–4টা',
+      bk_manas_tag: 'জীবমণ্ডল সংরক্ষিত · বাঁশবাড়ি রেঞ্জ',
+      bk_manas_price: '₹1,300 / জন · সকাল 8–12টা / বিকেল 2–4টা',
+      bk_group_title: 'দল / প্রাইভেট জিপ মূল্য',
+      bk_group_text: '3 জনের বেশি — কাজিরাঙ্গা ₹3,500 / জিপ | মানস ₹4,500 / জিপ',
+      bk_group_sub: 'প্রাইভেট ভিত্তিতে · সর্বোচ্চ 6 জন প্রতি জিপ',
+      bk_tuesday: '⚠ মানস বাঁশবাড়ি রেঞ্জ প্রতি মঙলবার বন্ধ। অনুগ্রহ করে অন্য তারিখ বেছুন।',
+      bk_adults_label: 'প্রাপ্তবয়স্ক', bk_adults_note: '(5 বছরের বেশি · শুল্কযোগ্য)',
+      bk_children_label: 'শিশু', bk_children_note: '(5 বছর ও নিচে · বিনামূল্যে)',
+      bk_adults_unit: 'জন', bk_children_unit: 'শিশু',
+      bk_preview_title: 'আপনার নির্বাচিত সাফারি',
+      bk_guest_note: '<strong>প্রাথমিক অতিথি</strong> (অতিথি 1) কে আধার কার্ড ও যোগাযোগ দিতে হবে। অতিরিক্ত অতিথিদের শুধু নাম ও বয়স দরকার।',
+      bk_pay_label: 'মোট পরিশোধযোগ্য (GST ছাড়া)',
+      bk_upi_badge: 'যেকোনো UPI অ্যাপ দিয়ে স্ক্যান করুন ও পেমেন্ট করুন',
+      bk_upload_label: 'পেমেন্ট স্ক্রিনশট আপলোড করুন',
+      bk_submit_pay: 'বুকিং জমা করুন ও পেমেন্ট যাচাই করুন',
+      bk_refund_title: 'অর্থ ফেরত নীতি',
+      bk_refund_text: 'যেকোনো পরিস্থিতিতে জাতীয় উদ্যান কর্তৃপক্ষ প্রবেশের অনুমতি না দিলে ২৪ ঘণ্টার মধ্যে সম্পূর্ণ অর্থ ফেরত দেওয়া হবে।',
+      bk_tnc_agree: 'আমি অর্থ ফেরত নীতি পড়েছি এবং সম্মত।',
+      bk_back_guest: '← অতিথির বিবরণে ফিরুন',
+      bk_sum_title: 'মিশন সারসংক্ষেপ',
+      bk_sum_dest: 'গন্তব্য', bk_sum_date: 'তারিখ', bk_sum_time: 'সময় স্লট',
+      bk_sum_adults: 'প্রাপ্তবয়স্ক', bk_sum_children: 'শিশু', bk_sum_rate: 'হার',
+      bk_sum_total: 'মোট (GST ছাড়া)',
+      bk_sum_note: '5 বছর ও নিচের শিশু বিনামূল্যে। 5 বছরের বেশি পূর্ণ হারে।',
+      bk_need_help: 'সাহায্য দরকার?',
+      bk_park_rules: 'পার্ক নিয়ম ও তথ্য',
+      bk_park_rules2: 'গুরুত্বপূর্ণ — পার্ক নিয়ম ও ক্যামেরা চার্জ',
+
+      cr_eyebrow: 'স্থল পরিবহন', cr_h1: 'গাড়ি<br>ভাড়া',
+      cr_sub: 'উত্তর-পূর্ব ভারতের প্রতিটি ভূখণ্ডের জন্য প্রিমিয়াম গাড়ি। অভিজ্ঞ স্থানীয় চালক।',
+      cr_block_vehicle: 'গাড়ি বেছে নিন', cr_block_trip: 'ভ্রমণ বিবরণ',
+      cr_lbl_pax: 'যাত্রীর সংখ্যা *', cr_lbl_itin: 'ভ্রমণ পথ বেছে নিন *',
+      cr_opt_choose: '-- ভ্রমণ পথ বেছে নিন --',
+      cr_sum_title: 'আপনার নির্বাচন', cr_veh_req: 'প্রয়োজনীয় গাড়ি',
+      cr_lbl_vehicle: 'গাড়ি', cr_lbl_capacity: 'ধারণক্ষমতা',
+      cr_lbl_pax2: 'যাত্রী', cr_lbl_veh_needed: 'প্রয়োজনীয় গাড়ি',
+      cr_lbl_itinerary: 'ভ্রমণসূচি',
+      cr_note: 'আমাদের দল শীঘ্রই আপনার সাথে যোগাযোগ করে উপলব্ধতা ও মূল্য নিশ্চিত করবে।',
+      cr_submit: 'অনুসন্ধান পাঠান',
+
+      rev_eyebrow: 'অতিথি প্রতিবেদন',
+      rev_h1: 'মাঠ থেকে<br>কণ্ঠস্বর',
+      rev_sub: 'যাচাইকৃত মাঠের অভিজ্ঞতা। আসামের বনের অগ্রভাগ থেকে সরাসরি।',
+      rev_stat1: 'অতিথি রেটিং', rev_stat2: 'সফল ভ্রমণ', rev_stat3: 'পুনরায় ভ্রমণ',
+      rev_sec_label: 'রায়', rev_sec_title: 'অকৃত্রিম অভিজ্ঞতা',
+      rev_sec_body: 'কাজিরাঙ্গা ও মানস ক্ষেত্রে ভ্রমণকারী অতিথিদের সরাসরি প্রতিবেদন।',
+      rev_form_label: 'অভিজ্ঞতা ভাগ করুন', rev_form_title: 'আপনার পর্যালোচনা দিন',
+      rev_form_sub: 'আপনার বনের অভিজ্ঞতা দাখিল করুন। আপনার তথ্য ভবিষ্যতের যাত্রীদের সাহায্য করবে।',
+      rev_lbl_name: 'আপনার নাম', rev_lbl_sector: 'ভ্রমণ ক্ষেত্র',
+      rev_lbl_rating: 'রেটিং', rev_lbl_summary: 'অভিজ্ঞতার বিবরণ',
+      rev_btn: 'পর্যালোচনা জমা দিন',
+      footer_desc: 'উত্তর-পূর্ব বন্যপ্রাণী অন্বেষণের অগ্রদূত। কোনো আপোষ নেই। বিশুদ্ধ রোমাঞ্চ।',
+      footer_col1: 'সেক্টর', footer_col2: 'বেস অপস', footer_col3: 'যোগাযোগ',
+      footer_link_kaz: 'কাজিরাঙ্গা', footer_link_manas: 'মানস', footer_link_reports: 'ফিল্ড রিপোর্ট',
+      footer_link_book: 'সাফারি বুক করুন', footer_link_intel: 'সেক্টর তথ্য', footer_link_reviews: 'পর্যালোচনা',
+      footer_link_wa: 'হোয়াটসঅ্যাপ', footer_link_car: 'কার ভাড়া', footer_bottom: '© 2026 আসাম ওয়াইল্ড সাফারি।',
+      svc1_title: 'গাড়ি ভাড়া', svc1_desc: 'উত্তর-পূর্ব ভারতের সব ভূখণ্ডের জন্য প্রিমিয়াম SUV ও 4x4। স্থানীয় জ্ঞানসম্পন্ন পেশাদার চালক।',
+      svc1_btn: 'গাড়ি বুক করুন',
+      svc2_title: 'হোটেল বুকিং', svc2_desc: 'উত্তর-পূর্বের সব প্রধান বন্যপ্রাণী অঞ্চলের কাছে যাচাইকৃত ইকো-রিসোর্ট ও আরামদায়ক থাকার ব্যবস্থা।',
+      svc2_btn: 'থাকার ব্যবস্থা বুক করুন',
+      policy_title: 'অর্থ ফেরত ও বাতিলকরণ নীতি',
+      policy_text: 'যেকোনো পরিস্থিতিতে জাতীয় উদ্যান কর্তৃপক্ষ প্রবেশের অনুমতি না দিলে ২৪ ঘণ্টার মধ্যে সম্পূর্ণ অর্থ ফেরত দেওয়া হবে। কোনো বাতিলকরণ চার্জ নেই।',
+      kaz_desc: 'একশৃঙ্গী গণ্ডারের চূড়ান্ত দুর্গ। একটি বিশাল, অদম্য ভূদৃশ্য যেখানে প্রকৃতি পূর্ণ কর্তৃত্বে রাজত্ব করে — বিশ্বের সবচেয়ে বড় গণ্ডারের জনসংখ্যার আবাস।',
+      manas_desc: 'হিমালয়ের পাদদেশে লুকিয়ে থাকা, কিংবদন্তি মর্যাদার একটি জীবমণ্ডল রিজার্ভ। গোল্ডেন লাঙ্গুর ও পিগমি হগের শেষ আশ্রয়।',
+      park_btn: 'সেক্টরে প্রবেশ করুন',
+      cta_sub: 'অসমের বনে সম্পূর্ণ নিমজ্জন। নিরাপত্তা, দক্ষতা বা অভিজ্ঞতায় শূন্য আপোষ।',
+      cta_feat1: 'যাচাইকৃত বিশেষজ্ঞ', cta_feat2: 'তাৎক্ষণিক যাত্রা', cta_feat3: 'নির্ভুল অনুসন্ধান',
+      cta_btn2: 'অভিযান অনুমোদন করুন',
+      btn_enquire: 'এখনই জিজ্ঞেস করুন',
+      park_kaz_label: 'কাজিরাঙ্গা কেন্দ্রীয় রেঞ্জ', park_manas_label: 'মানস বাঁশবাড়ি রেঞ্জ',
+      slot_morning: 'সকালের সাফারি', slot_evening: 'বিকেলের সাফারি',
+      rule_children_charge: '৫ বছরের বেশি শিশুদের থেকে পূর্ণ হারে চার্জ নেওয়া হবে।',
+      rule_no_plastic: 'জাতীয় উদ্যানের ভেতরে প্লাস্টিক সম্পূর্ণ নিষিদ্ধ।',
+      rule_still_camera: 'স্টিল ক্যামেরা: ₹100 প্রবেশ চার্জ।',
+      rule_video_kaz: 'ভিডিও ক্যামেরা: ₹1,000 প্রবেশ চার্জ।',
+      rule_video_manas: 'ভিডিও ক্যামেরা: ₹1,500 প্রবেশ চার্জ।',
+      rule_carry_id: 'সাফারির দিনে মূল আধার / সরকারি পরিচয়পত্র সঙ্গে রাখুন।',
+      rule_pickup: 'অতিথিদের ২৪ ঘণ্টা আগে পিকআপ লোকেশন ও হোটেলের নাম জানাতে হবে।',
+      rule_jeep_contact: 'জিপ যোগাযোগ নম্বর ২৪ ঘণ্টা আগে দেওয়া হবে।',
+      rule_aadhaar_rest: 'দলের জন্য শুধু প্রধান অতিথির আধার দরকার। অন্যদের শুধু নাম ও বয়স।',
+      rule_manas_closed: _no + 'মানস জিপ সাফারি প্রতি <strong>মঙলবার বন্ধ</strong>।' + _end,
+      rule_manas_foreign: 'বিদেশি নাগরিকদের অফলাইনে বুক করতে হবে — +91 97098 84206 বা +91 93656 09948।',
+      rules_title_suffix: '— নিয়ম ও তথ্য',
+      gf_adults_hdr: 'প্রাপ্তবয়স্ক', gf_children_hdr: 'শিশু (৫ বছর ও নিচে — বিনামূল্যে)',
+      gf_primary: 'প্রাথমিক প্রাপ্তবয়স্ক — বুকিং লিড', gf_adult: 'প্রাপ্তবয়স্ক', gf_child: 'শিশু',
+      gf_lbl_name: 'পুরো নাম *', gf_lbl_age: 'বয়স *', gf_lbl_contact: 'যোগাযোগ নম্বর *',
+      gf_lbl_aadhaar: 'আধার কার্ড *', gf_aadhaar_upload: 'আধার আপলোড করুন (JPG / PNG / PDF)',
+      sum_adult: 'জন', sum_adults: 'জন', sum_child: 'শিশু', sum_children: 'শিশু',
+      sum_per_adult: '/ জন', sum_free: 'বিনামূল্যে', sum_no_gst: 'GST নেই',
+    },
+  };
+
+  /* ─── TAMIL ─── */
+  T.ta = {
+    lp_title: 'உங்கள் மொழியை தேர்ந்தெடுங்கள்', lp_subtitle: 'தொடர ஒரு மொழியை தேர்ந்தெடுங்கள்', lp_other: 'மேலும் மொழிகள்', lp_change: 'மொழி',
+    nav_home: 'முகப்பு', nav_itineraries: 'பயண திட்டங்கள்', nav_booking: 'முன்பதிவு', nav_car_rental: 'கார் வாடகை', nav_reviews: 'மதிப்புரைகள்', nav_book_safari: 'சஃபாரி பதிவு',
+    rec_text: 'அசாம் அரசு சுற்றுலாத்துறை மற்றும் போடோலாண்ட் சுற்றுலாவால் அங்கீகரிக்கப்பட்டது',
+    home_h1: 'அசாமில் முதல்முறையாக<br>ஜீப் சஃபாரி ஆன்லைன் புக்கிங்', home_sub: 'காசிரங்கா நேஷனல் பார்க்  மானஸ் நேஷனல் பார்க்',
+    home_cta1: 'பகிர்வு ஜீப் சஃபாரி புக் செய்யுங்கள்', home_cta2: 'நார்த்ஈஸ்ட் டூர் பேக்கேஜ் புக் செய்யுங்கள்', home_cta3: 'கார் வாடகை',
+    stat_explorers: 'பயணிகளுக்கு சேவை', stat_sighting: 'காணல் சாதனை', stat_experts: 'வல்லுனர் குழு', stat_success: 'வெற்றிகரமான பயணங்கள்',
+    intro_label: 'நடவடிக்கை தகவல்', intro_title: 'நாங்கள் சுற்றுலா மட்டுமல்ல. நாங்கள் இயற்கையை கண்டறிகிறோம்.',
+    intro_body: 'மற்றவர்கள் உங்களை சாதாரண சுற்றுலாவிற்கு அழைத்துச் செல்கிறார்கள், நாங்கள் ஒரு திறமையான பயணத்தை நிறைவேற்றுகிறோம். எங்கள் இயற்கை நிபுணர்கள் வனத்தின் ஒவ்வொரு அறிகுறியையும் படிக்க பயிற்சி பெற்றவர்கள். காசிரங்கா மற்றும் மானஸில் நாங்கள் இந்த நிலத்தின் வல்லுனர்கள்.',
+    feat1_title: 'வல்லுனர் வழிகாட்டிகள்', feat1_desc: 'அசாமின் தேசிய பூங்காக்களில் 15+ ஆண்டுகள் களப்பணி அனுபவம்.',
+    feat2_title: 'அதிகபட்ச காணல்', feat2_desc: 'அதிகபட்ச வனவிலங்கு காணல் வாய்ப்புக்காக உகந்த நேர திட்டமிடல்.',
+    trend_label: 'இப்போது பிரபலம்', trend_title: 'பிரபலமான பயண திட்டங்கள்',
+    ne_label: 'அடிவானத்திற்கு அப்பால்', ne_title: 'வடகிழக்கு சுற்றுலா தொகுப்புகள்', ne_sub: 'வடகிழக்கின் ஆராயப்படாத பகுதிகளில் ஆழமாக பயணியுங்கள். தவாங்கின் உச்சிகளிலிருந்து பூட்டானின் மறைந்த பள்ளத்தாக்குகள் வரை.',
+    safari_label: 'பூங்கா தேர்வு', safari_title: 'உங்கள் தேசிய பூங்காவை தேர்ந்தெடுங்கள்',
+    cta_label: 'இறுதி அறிவிப்பு', cta_title: 'சமரசமில்லை.<br>சாகசமே வாழ்க்கை.', cta_btn: 'உங்கள் பயணத்தை தொடங்குங்கள்',
+    itin_eyebrow: 'பயண தகவல்கள்', itin_h1: 'காட்டு<br>தகவல்கள்', itin_sub: 'வடகிழக்கு இந்தியாவின் முதன்மை வனவிலங்கு பகுதிகளின் விரிவான தகவல்கள்.',
+    book_eyebrow: 'காட்டிற்கு புறப்படுங்கள்', book_h1: 'உங்கள் இடத்தை<br>உறுதிசெய்யுங்கள்', book_sub: 'உத்தரவாதமான நுழைவு. வல்லுனர் இயற்கை நிபுணர்கள். உங்கள் சாகசம் இங்கே தொடங்குகிறது.',
+    step_destination: 'சேருமிடம்', step_schedule: 'அட்டவணை', step_guest: 'விருந்தினர்', step_payment: 'கட்டணம்',
+    bk_s1_label: 'படி 1 / 4', bk_s1_title: 'உங்கள்<br>சேருமிடம் தேர்வு', bk_s2_label: 'படி 2 / 4', bk_s2_title: 'உங்கள் நேரம் தேர்வு', bk_s3_label: 'படி 3 / 4', bk_s3_title: 'விருந்தினர் விவரங்கள்', bk_s4_label: 'படி 4 / 4', bk_s4_title: 'கட்டணம் செலுத்துங்கள்',
+    bk_lbl_date: 'சஃபாரி தேதி', bk_lbl_guests: 'விருந்தினர் எண்ணிக்கை', bk_lbl_slot: 'நேர இடம்', bk_lbl_name: 'முழு பெயர் *', bk_lbl_age: 'வயது *', bk_lbl_phone: 'தொலைபேசி எண் *', bk_lbl_aadhaar: 'ஆதார் அட்டை *', bk_lbl_payment: 'கட்டண ஸ்கிரீன்ஷாட் *', bk_lbl_utr: 'பரிவர்த்தனை ID / UTR எண் (விருப்பமானது)',
+    bk_hint_payment: 'உங்கள் வெற்றிகரமான பரிவர்த்தனையின் ஸ்கிரீன்ஷாட்டை பதிவேற்றவும்.',
+    bk_next1: 'அடுத்து: தேதி தேர்வு →', bk_next2: 'அடுத்து: விருந்தினர் விவரங்கள் →', bk_next3: 'அடுத்து: கட்டணம் →', bk_back: '← திரும்பு', bk_submit: 'முன்பதிவை உறுதிசெய்யுங்கள்',
+    bk_kaz_tag: 'யுனெஸ்கோ கோட்டை · மைய வரம்பு', bk_kaz_price: '₹1,000 / நபர் · காலை 9–11 / மாலை 2–4',
+    bk_manas_tag: 'உயிர்மண்டல சேமிப்பு · பான்ஸ்பாரி வரம்பு', bk_manas_price: '₹1,300 / நபர் · காலை 8–12 / மாலை 2–4',
+    bk_group_title: 'குழு / தனியார் ஜீப் கட்டணம்',
+    bk_group_text: '3க்கு மேல் — காசிரங்கா ₹3,500 / ஜீப் | மானஸ் ₹4,500 / ஜீப்',
+    bk_group_sub: 'தனியார் அடிப்படை · அதிகபட்சம் 6 பேர் ஒரு ஜீப்பில்',
+    bk_tuesday: '⚠ மானஸ் பான்ஸ்பாரி வரம்பு ஒவ்வொரு செவ்வாயும் மூடப்பட்டிருக்கும். வேறு தேதி தேர்வு செய்யுங்கள்.',
+    bk_adults_label: 'பெரியவர்கள்', bk_adults_note: '(5 வயதுக்கு மேல் · கட்டணம் உண்டு)',
+    bk_children_label: 'குழந்தைகள்', bk_children_note: '(5 வயது & கீழ் · இலவசம்)',
+    bk_adults_unit: 'பேர்', bk_children_unit: 'குழந்தை',
+    bk_preview_title: 'தேர்ந்தெடுத்த சஃபாரி',
+    bk_guest_note: '<strong>முதல் விருந்தினர்</strong> (விருந்தினர் 1) ஆதார் அட்டை மற்றும் தொடர்பு வழங்க வேண்டும். மற்றவர்களுக்கு பெயர் மற்றும் வயது மட்டும் தேவை.',
+    bk_pay_label: 'செலுத்த வேண்டிய மொத்தம் (GST இல்லை)',
+    bk_upi_badge: 'எந்த UPI ஆப்பிலும் ஸ்கேன் செய்து செலுத்துங்கள்',
+    bk_upload_label: 'கட்டண ஸ்கிரீன்ஷாட் பதிவேற்றுங்கள்',
+    bk_submit_pay: 'முன்பதிவு சமர்ப்பிக்க & கட்டணம் சரிபார்க்க',
+    bk_refund_title: 'திரும்பப் பெறும் கொள்கை',
+    bk_refund_text: 'தேசிய பூங்கா நுழைவை அனுமதிக்காத எந்த சூழ்நிலையிலும், 24 மணி நேரத்திற்குள் முழுத் தொகையும் திரும்பப் பெறப்படும்.',
+    bk_tnc_agree: 'மேலே உள்ள திரும்பப் பெறும் கொள்கையை படித்து ஒப்புக்கொள்கிறேன்.',
+    bk_back_guest: '← விருந்தினர் விவரங்களுக்கு திரும்பு',
+    bk_sum_title: 'பயண சுருக்கம்',
+    bk_sum_dest: 'இலக்கு', bk_sum_date: 'தேதி', bk_sum_time: 'நேர இடம்',
+    bk_sum_adults: 'பெரியவர்கள்', bk_sum_children: 'குழந்தைகள்', bk_sum_rate: 'கட்டணம்',
+    bk_sum_total: 'மொத்தம் (GST இல்லை)',
+    bk_sum_note: '5 வயது & கீழ் இலவசம். 5 வயதுக்கு மேல் முழு கட்டணம்.',
+    bk_need_help: 'உதவி தேவையா?',
+    bk_park_rules: 'பூங்கா விதிகள் & தகவல்',
+    bk_park_rules2: 'முக்கியம் — பூங்கா விதிகள் & கேமரா கட்டணம்',
+    cr_eyebrow: 'தரை போக்குவரத்து', cr_h1: 'கார்<br>வாடகை', cr_sub: 'வடகிழக்கு இந்தியா முழுவதும் ஒவ்வொரு நிலப்பரப்பிற்கும் சிறந்த வாகனங்கள்.',
+    cr_block_vehicle: 'வாகனம் தேர்வு', cr_block_trip: 'பயண விவரங்கள்', cr_lbl_pax: 'பயணிகள் எண்ணிக்கை *', cr_lbl_itin: 'பயண பாதை தேர்வு *', cr_opt_choose: '-- பயண பாதையை தேர்வு செய்யுங்கள் --',
+    cr_sum_title: 'உங்கள் தேர்வு', cr_veh_req: 'தேவையான வாகனங்கள்', cr_lbl_vehicle: 'வாகனம்', cr_lbl_capacity: 'திறன்', cr_lbl_pax2: 'பயணிகள்', cr_lbl_veh_needed: 'தேவையான வாகனங்கள்', cr_lbl_itinerary: 'பயண திட்டம்',
+    cr_note: 'எங்கள் குழு விரைவில் உங்களை தொடர்பு கொண்டு கிடைக்கும் தன்மை மற்றும் கட்டணங்களை உறுதிசெய்யும்.',
+    cr_submit: 'விசாரணை அனுப்புங்கள்',
+    rev_eyebrow: 'பயணி அறிக்கைகள்', rev_h1: 'காட்டிலிருந்து<br>குரல்கள்', rev_sub: 'சரிபார்க்கப்பட்ட அனுபவங்கள். அசாமின் வனங்களிலிருந்து நேரடியாக.',
+    rev_stat1: 'பயணி மதிப்பீடு', rev_stat2: 'வெற்றிகரமான பயணங்கள்', rev_stat3: 'மீண்டும் வந்த பயணிகள்',
+    rev_sec_label: 'தீர்ப்பு', rev_sec_title: 'உண்மையான அனுபவங்கள்', rev_sec_body: 'காசிரங்கா மற்றும் மானஸில் பயணித்த பயணிகளின் நேரடி அறிக்கைகள்.',
+    rev_form_label: 'அனுபவம் பகிருங்கள்', rev_form_title: 'உங்கள் மதிப்புரையை சமர்ப்பியுங்கள்', rev_form_sub: 'உங்கள் வன அனுபவத்தை பதிவு செய்யுங்கள். உங்கள் தகவல் எதிர்கால பயணிகளுக்கு உதவும்.',
+    rev_lbl_name: 'உங்கள் பெயர்', rev_lbl_sector: 'பயண பகுதி', rev_lbl_rating: 'மதிப்பீடு', rev_lbl_summary: 'அனுபவ விவரம்', rev_btn: 'மதிப்புரை சமர்ப்பி',
+    footer_desc: 'வடகிழக்கு வனவிலங்கு ஆய்வின் முன்னணி படை. சமரசம் இல்லை. தூய துணிச்சல்.',
+    footer_col1: 'பகுதிகள்', footer_col2: 'தளம்', footer_col3: 'தொடர்பு',
+    footer_link_kaz: 'காசிரங்கா', footer_link_manas: 'மானஸ்', footer_link_reports: 'புலக் கோப்புகள்',
+    footer_link_book: 'சஃபாரி பதிவு', footer_link_intel: 'பகுதி தகவல்', footer_link_reviews: 'மதிப்புரைகள்',
+    footer_link_wa: 'வாட்ஸாப்', footer_link_car: 'கார் வாடகை', footer_bottom: '© 2026 அசாம் வைல்ட் சஃபாரி.',
+    svc1_title: 'கார் வாடகை', svc1_desc: 'வடகிழக்கு இந்தியா முழுவதும் அனைத்து நிலங்களுக்கும் பிரீமியம் SUV மற்றும் 4x4. உள்ளூர் அறிவுடன் தொழில்முறை ஓட்டுனர்கள்.',
+    svc1_btn: 'வாகனம் பதிவு செய்யுங்கள்',
+    svc2_title: 'ஹோட்டல் முன்பதிவு', svc2_desc: 'வடகிழக்கு முழுவதும் அனைத்து முக்கிய வனவிலங்கு மண்டலங்களுக்கு அருகில் சரிபார்க்கப்பட்ட ஈகோ-ரிசார்ட்கள் மற்றும் வசதியான தங்குமிடங்கள்.',
+    svc2_btn: 'தங்குமிடம் பதிவு செய்யுங்கள்',
+    policy_title: 'பணம் திரும்ப மற்றும் ரத்து கொள்கை',
+    policy_text: 'எந்த சூழ்நிலையிலும் தேசிய பூங்கா அதிகாரிகள் நுழைவை அனுமதிக்காவிட்டால், 24 மணி நேரத்திற்குள் முழு தொகையும் திரும்ப வழங்கப்படும். ரத்து கட்டணம் இல்லை.',
+    kaz_desc: 'ஒரு கொம்பு கண்டாமிருகத்தின் இறுதி கோட்டை. இயற்கை முழுமையான அதிகாரத்துடன் ஆட்சி செய்யும் ஒரு விரிவான, கடுமையான நிலப்பரப்பு — உலகின் மிகப்பெரிய கண்டாமிருக மக்கள்தொகையின் இல்லம்.',
+    manas_desc: 'இமயமலை அடிவாரத்தில் மறைந்திருக்கும், புகழ்பெற்ற அந்தஸ்தின் உயிர்மண்டல சேமிப்பு. கோல்டன் லாங்கூர் மற்றும் பிக்மி ஹாக்கின் கடைசி புகலிடம்.',
+    park_btn: 'பகுதியில் நுழையுங்கள்',
+    cta_sub: 'அசாமின் வனத்தில் முழுமையான மூழ்கல். பாதுகாப்பு, நிபுணத்துவம் அல்லது அனுபவத்தில் சுழி சமரசம்.',
+    cta_feat1: 'சரிபார்க்கப்பட்ட வல்லுனர்கள்', cta_feat2: 'உடனடி புறப்பாடு', cta_feat3: 'துல்லியமான ஆய்வு',
+    cta_btn2: 'பயணத்தை அங்கீகரிக்கவும்',
+    btn_enquire: 'இப்போது விசாரிக்கவும்',
+    park_kaz_label: 'காசிரங்கா மத்திய வரம்பு', park_manas_label: 'மானஸ் பான்ஸ்பாரி வரம்பு',
+    slot_morning: 'காலை சஃபாரி', slot_evening: 'மாலை சஃபாரி',
+    rule_children_charge: '5 வயதுக்கு மேல் குழந்தைகளுக்கு முழு கட்டணம் வசூலிக்கப்படும்.',
+    rule_no_plastic: 'தேசிய பூங்காவிற்குள் பிளாஸ்டிக் கண்டிப்பாக தடைசெய்யப்பட்டுள்ளது.',
+    rule_still_camera: 'ஸ்டில் கேமரா: ₹100 நுழைவு கட்டணம்.',
+    rule_video_kaz: 'வீடியோ கேமரா: ₹1,000 நுழைவு கட்டணம்.',
+    rule_video_manas: 'வீடியோ கேமரா: ₹1,500 நுழைவு கட்டணம்.',
+    rule_carry_id: 'சஃபாரி நாளில் அசல் ஆதார் / அரசு அடையாள அட்டை கொண்டு வாருங்கள்.',
+    rule_pickup: 'விருந்தினர்கள் 24 மணி நேரத்திற்கு முன்பு பிக்-அப் இடம் மற்றும் ஹோட்டல் பெயரை தெரிவிக்க வேண்டும்.',
+    rule_jeep_contact: 'ஜீப் தொலைபேசி எண்கள் 24 மணி நேரத்திற்கு முன்பு வழங்கப்படும்.',
+    rule_aadhaar_rest: 'குழுக்களுக்கு முதன்மை விருந்தினருக்கு மட்டுமே ஆதார் தேவை. மற்றவர்களுக்கு பெயரும் வயதும் மட்டும்.',
+    rule_manas_closed: _no + 'மானஸ் ஜீப் சஃபாரி ஒவ்வொரு <strong>செவ்வாயும் மூடப்படும்</strong>.' + _end,
+    rule_manas_foreign: 'வெளிநாட்டினர் ஆஃப்லைனில் முன்பதிவு செய்ய வேண்டும் — +91 97098 84206 அல்லது +91 93656 09948.',
+    rules_title_suffix: '— விதிகள் & தகவல்',
+    gf_adults_hdr: 'பெரியவர்கள்', gf_children_hdr: 'குழந்தைகள் (5 வயது & கீழ் — இலவசம்)',
+    gf_primary: 'முதன்மை பெரியவர் — முன்பதிவு தலைவர்', gf_adult: 'பெரியவர்', gf_child: 'குழந்தை',
+    gf_lbl_name: 'முழு பெயர் *', gf_lbl_age: 'வயது *', gf_lbl_contact: 'தொலைபேசி எண் *',
+    gf_lbl_aadhaar: 'ஆதார் அட்டை *', gf_aadhaar_upload: 'ஆதார் பதிவேற்றுங்கள் (JPG / PNG / PDF)',
+    sum_adult: 'பேர்', sum_adults: 'பேர்', sum_child: 'குழந்தை', sum_children: 'குழந்தைகள்',
+    sum_per_adult: '/ நபர்', sum_free: 'இலவசம்', sum_no_gst: 'GST இல்லை',
+  };
+
+  /* ─── TELUGU ─── */
+  T.te = {
+    lp_title: 'మీ భాషను ఎంచుకోండి', lp_subtitle: 'కొనసాగించడానికి భాషను ఎంచుకోండి', lp_other: 'మరిన్ని భాషలు', lp_change: 'భాష',
+    nav_home: 'హోమ్', nav_itineraries: 'ప్రయాణ వివరాలు', nav_booking: 'బుకింగ్', nav_car_rental: 'కార్ అద్దె', nav_reviews: 'సమీక్షలు', nav_book_safari: 'సఫారీ బుక్ చేయండి',
+    rec_text: 'అస్సాం ప్రభుత్వ పర్యాటక శాఖ మరియు బోడోలాండ్ టూరిజం చేత గుర్తించబడింది',
+    home_h1: 'అస్సామ్‌లో మొదటిసారి<br>జీప్ సఫారీ ఆన్‌లైన్ బుకింగ్', home_sub: 'కాజిరంగా నేషనల్ పార్క్  మానస్ నేషనల్ పార్క్',
+    home_cta1: 'షేర్డ్ జీప్ సఫారీ బుక్ చేయండి', home_cta2: 'నార్త్‌ఈస్ట్ టూర్ ప్యాకేజ్ బుక్ చేయండి', home_cta3: 'కార్ అద్దె',
+    stat_explorers: 'సేవించిన యాత్రికులు', stat_sighting: 'దర్శన రికార్డు', stat_experts: 'నిపుణుల బృందం', stat_success: 'విజయవంతమైన యాత్రలు',
+    intro_label: 'కార్యాచరణ సమాచారం', intro_title: 'మేము కేవలం పర్యటన చేయం. మేము అన్వేషిస్తాం.',
+    intro_body: 'ఇతరులు మిమ్మల్ని సాధారణ యాత్రకు తీసుకెళ్తారు, మేము వ్యూహాత్మక పర్యాటనను అమలు చేస్తాం. మా ప్రకృతి నిపుణులు అడవి యొక్క ప్రతి సంకేతాన్ని చదవడానికి శిక్షణ పొందారు. కాజిరంగా మరియు మానస్‌లో మేము ఈ భూమికి అధిపతులం.',
+    feat1_title: 'నిపుణు ట్రాకర్లు', feat1_desc: 'అస్సాం జాతీయ వనాలలో 15+ సంవత్సరాల క్షేత్ర నైపుణ్యం.',
+    feat2_title: 'గరిష్ట దర్శనం', feat2_desc: 'గరిష్ట వన్యప్రాణి దర్శన అవకాశాల కోసం అనుకూలీకరించిన సమయపాలన.',
+    trend_label: 'ఇప్పుడు ట్రెండింగ్', trend_title: 'ట్రెండింగ్ ప్రయాణ వివరాలు',
+    ne_label: 'క్షితిజానికి అతీతంగా', ne_title: 'ఈశాన్య టూర్ ప్యాకేజీలు', ne_sub: 'ఈశాన్యంలోని అన్వేషించని ప్రదేశాలలో లోతుగా వెళ్ళండి. తవాంగ్ శిఖరాల నుండి భూటాన్ లోయల వరకు.',
+    safari_label: 'పార్కు ఎంపిక', safari_title: 'మీ జాతీయ వనాన్ని ఎంచుకోండి',
+    cta_label: 'చివరి సూచనలు', cta_title: 'రాజీ లేదు.<br>సాహసమే జీవితం.', cta_btn: 'మీ యాత్ర ప్రారంభించండి',
+    itin_eyebrow: 'ప్రయాణ వివరాలు', itin_h1: 'అడవి<br>సమాచారం', itin_sub: 'ఈశాన్య భారతదేశం యొక్క ప్రధాన వన్యప్రాణి ప్రాంతాల వివరణాత్మక సమాచారం.',
+    book_eyebrow: 'అడవికి బయలుదేరండి', book_h1: 'మీ సీటు<br>నిర్ధారించుకోండి', book_sub: 'హామీగా ప్రవేశం. నిపుణు ప్రకృతి వేత్తలు. మీ సాహసం ఇక్కడ ప్రారంభమవుతుంది.',
+    step_destination: 'గమ్యస్థానం', step_schedule: 'సమయపట్టిక', step_guest: 'అతిథి', step_payment: 'చెల్లింపు',
+    bk_s1_label: 'దశ 1 / 4', bk_s1_title: 'మీ<br>గమ్యస్థానం ఎంచుకోండి', bk_s2_label: 'దశ 2 / 4', bk_s2_title: 'మీ సమయం ఎంచుకోండి', bk_s3_label: 'దశ 3 / 4', bk_s3_title: 'అతిథి వివరాలు', bk_s4_label: 'దశ 4 / 4', bk_s4_title: 'చెల్లింపు పూర్తి చేయండి',
+    bk_lbl_date: 'సఫారీ తేదీ', bk_lbl_guests: 'అతిథుల సంఖ్య', bk_lbl_slot: 'సమయ స్లాట్', bk_lbl_name: 'పూర్తి పేరు *', bk_lbl_age: 'వయసు *', bk_lbl_phone: 'సంప్రదింపు నంబర్ *', bk_lbl_aadhaar: 'ఆధార్ కార్డ్ *', bk_lbl_payment: 'చెల్లింపు స్క్రీన్‌షాట్ *', bk_lbl_utr: 'లావాదేవీ ID / UTR నంబర్ (ఐచ్ఛికం)',
+    bk_hint_payment: 'దయచేసి మీ విజయవంతమైన లావాదేవీ స్క్రీన్‌షాట్ అప్‌లోడ్ చేయండి.',
+    bk_next1: 'తదుపరి: తేదీ ఎంచుకోండి →', bk_next2: 'తదుపరి: అతిథి వివరాలు →', bk_next3: 'తదుపరి: చెల్లింపు →', bk_back: '← వెనుకకు', bk_submit: 'బుకింగ్ నిర్ధారించండి',
+    bk_kaz_tag: 'యునెస్కో కోట · కేంద్ర రేంజి', bk_kaz_price: '₹1,000 / వ్యక్తి · ఉదయం 9–11 / సాయంత్రం 2–4',
+    bk_manas_tag: 'జీవగోళ నిల్వ · బాన్స్‌బారీ రేంజి', bk_manas_price: '₹1,300 / వ్యక్తి · ఉదయం 8–12 / సాయంత్రం 2–4',
+    bk_group_title: 'గ్రూప్ / ప్రైవేట్ జీప్ ధర',
+    bk_group_text: '3 కంటే ఎక్కువ — కాజిరంగా ₹3,500 / జీప్ | మానస్ ₹4,500 / జీప్',
+    bk_group_sub: 'ప్రైవేట్ ఆధారంగా · జీప్‌కు గరిష్టంగా 6 మంది',
+    bk_tuesday: '⚠ మానస్ బాన్స్‌బారీ రేంజి ప్రతి మంగళవారం మూసివుంటుంది. దయచేసి వేరే తేదీ ఎంచుకోండి.',
+    bk_adults_label: 'పెద్దలు', bk_adults_note: '(5 సం.పైన · చార్జీ వర్తిస్తుంది)',
+    bk_children_label: 'పిల్లలు', bk_children_note: '(5 సం. & అంతకంటే తక్కువ · ఉచితం)',
+    bk_adults_unit: 'మంది', bk_children_unit: 'పిల్లలు',
+    bk_preview_title: 'మీరు ఎంచుకున్న సఫారీ',
+    bk_guest_note: '<strong>ప్రధాన అతిథి</strong> (అతిథి 1) ఆధార్ కార్డు మరియు సంప్రదింపు అందించాలి. అదనపు అతిథులకు పేరు మరియు వయస్సు మాత్రమే అవసరం.',
+    bk_pay_label: 'చెల్లించాల్సిన మొత్తం (GST లేదు)',
+    bk_upi_badge: 'ఏదైనా UPI యాప్ ద్వారా స్కాన్ చేసి చెల్లించండి',
+    bk_upload_label: 'చెల్లింపు స్క్రీన్‌షాట్ అప్‌లోడ్ చేయండి',
+    bk_submit_pay: 'బుకింగ్ సమర్పించి చెల్లింపు ధృవీకరించండి',
+    bk_refund_title: 'వాపసు విధానం',
+    bk_refund_text: 'ఏ పరిస్థితులలోనైనా జాతీయ ఉద్యానం ప్రవేశాన్ని అనుమతించకపోతే, 24 గంటల్లో పూర్తి మొత్తం వాపసు ఇవ్వబడుతుంది.',
+    bk_tnc_agree: 'వాపసు విధానాన్ని చదివి అంగీకరిస్తున్నాను.',
+    bk_back_guest: '← అతిథి వివరాలకు తిరిగి',
+    bk_sum_title: 'మిషన్ సారాంశం',
+    bk_sum_dest: 'గమ్యస్థానం', bk_sum_date: 'తేదీ', bk_sum_time: 'సమయ స్లాట్',
+    bk_sum_adults: 'పెద్దలు', bk_sum_children: 'పిల్లలు', bk_sum_rate: 'రేటు',
+    bk_sum_total: 'మొత్తం (GST లేదు)',
+    bk_sum_note: '5 సం. & అంతకంటే తక్కువ పిల్లలు ఉచితం. 5 సం. పైన పూర్తి రేటు.',
+    bk_need_help: 'సహాయం కావాలా?',
+    bk_park_rules: 'పార్క్ నిబంధనలు & సమాచారం',
+    bk_park_rules2: 'ముఖ్యమైనది — పార్క్ నిబంధనలు & కెమెరా చార్జీలు',
+    cr_eyebrow: 'భూమి రవాణా', cr_h1: 'కార్<br>అద్దె', cr_sub: 'ఈశాన్య భారతదేశంలో ప్రతి భూభాగానికి ప్రీమియం వాహనాలు.',
+    cr_block_vehicle: 'వాహనం ఎంచుకోండి', cr_block_trip: 'ప్రయాణ వివరాలు', cr_lbl_pax: 'ప్రయాణికుల సంఖ్య *', cr_lbl_itin: 'ప్రయాణ మార్గం ఎంచుకోండి *', cr_opt_choose: '-- ప్రయాణ మార్గం ఎంచుకోండి --',
+    cr_sum_title: 'మీ ఎంపిక', cr_veh_req: 'అవసరమైన వాహనాలు', cr_lbl_vehicle: 'వాహనం', cr_lbl_capacity: 'సామర్థ్యం', cr_lbl_pax2: 'ప్రయాణికులు', cr_lbl_veh_needed: 'అవసరమైన వాహనాలు', cr_lbl_itinerary: 'ప్రయాణ వివరణ',
+    cr_note: 'మా బృందం త్వరలో మీను సంప్రదించి లభ్యత మరియు ధరలను నిర్ధారిస్తుంది.',
+    cr_submit: 'విచారణ పంపండి',
+    rev_eyebrow: 'అతిథి నివేదికలు', rev_h1: 'అడవి నుండి<br>గొంతులు', rev_sub: 'ధృవీకరించిన అనుభవాలు. అస్సాం అడవుల నుండి నేరుగా.',
+    rev_stat1: 'అతిథి రేటింగ్', rev_stat2: 'విజయవంతమైన యాత్రలు', rev_stat3: 'మళ్లీ వచ్చిన యాత్రికులు',
+    rev_sec_label: 'తీర్పు', rev_sec_title: 'నిజమైన అనుభవాలు', rev_sec_body: 'కాజిరంగా మరియు మానస్‌లో పర్యటించిన అతిథుల నేరడి నివేదికలు.',
+    rev_form_label: 'అనుభవం పంచుకోండి', rev_form_title: 'మీ సమీక్ష సమర్పించండి', rev_form_sub: 'మీ అడవి అనుభవాన్ని నమోదు చేయండి. మీ సమాచారం భావి యాత్రికులకు సహాయపడుతుంది.',
+    rev_lbl_name: 'మీ పేరు', rev_lbl_sector: 'పర్యటన ప్రాంతం', rev_lbl_rating: 'రేటింగ్', rev_lbl_summary: 'అనుభవ వివరణ', rev_btn: 'సమీక్ష సమర్పించు',
+    footer_desc: 'ఈశాన్య వన్యప్రాణి అన్వేషణలో ముందంజలో ఉన్న బలగం. రాజీ లేదు. స్వచ్ఛమైన సాహసం.',
+    footer_col1: 'సెక్టర్లు', footer_col2: 'బేస్ ఆప్స్', footer_col3: 'సంప్రదింపు',
+    footer_link_kaz: 'కాజిరంగా', footer_link_manas: 'మానస్', footer_link_reports: 'ఫీల్డ్ నివేదికలు',
+    footer_link_book: 'సఫారీ బుక్', footer_link_intel: 'సెక్టర్ సమాచారం', footer_link_reviews: 'సమీక్షలు',
+    footer_link_wa: 'వాట్సాప్', footer_link_car: 'కార్ అద్దె', footer_bottom: '© 2026 అస్సాం వైల్డ్ సఫారీ.',
+    svc1_title: 'కార్ అద్దె', svc1_desc: 'ఈశాన్య భారతం అంతటా అన్ని భూభాగాలకు ప్రీమియం SUV మరియు 4x4. స్థానిక జ్ఞానంతో వృత్తిపరమైన డ్రైవర్లు.',
+    svc1_btn: 'వాహనం బుక్ చేయండి',
+    svc2_title: 'హోటల్ బుకింగ్', svc2_desc: 'ఈశాన్యంలో అన్ని ప్రధాన వన్యప్రాణి మండలాల దగ్గర ధృవీకరించిన ఎకో-రిసార్ట్లు మరియు సౌకర్యవంతమైన బస.',
+    svc2_btn: 'బస బుక్ చేయండి',
+    policy_title: 'రీఫండ్ & రద్దు విధానం',
+    policy_text: 'ఏ పరిస్థితులలోనైనా నేషనల్ పార్క్ అధికారులు ప్రవేశాన్ని అనుమతించకపోతే, 24 గంటల్లో పూర్తి చెల్లింపు తిరిగి ఇవ్వబడుతుంది. రద్దు చార్జీలు లేవు.',
+    kaz_desc: 'ఒంటి కొమ్ము ఖడ్గమృగం యొక్క అంతిమ కోట. ప్రకృతి సంపూర్ణ అధికారంతో పాలించే ఒక విస్తారమైన, కఠినమైన భూభాగం — ప్రపంచంలోనే అతిపెద్ద ఖడ్గమృగ జనాభా నివాసం.',
+    manas_desc: 'హిమాలయ పాదాల వద్ద దాగి ఉన్న, పురాణ హోదా గల జీవగోళ నిల్వ. గోల్డన్ లంగూర్ మరియు పిగ్మీ హాగ్ యొక్క చివరి ఆశ్రయం.',
+    park_btn: 'సెక్టర్లో ప్రవేశించండి',
+    cta_sub: 'అస్సాం అడవిలో పూర్తి మునకలో. భద్రత, నైపుణ్యం లేదా అనుభవంలో సున్నా రాజీ.',
+    cta_feat1: 'ధృవీకరించిన నిపుణులు', cta_feat2: 'తక్షణ ప్రయాణం', cta_feat3: 'ఖచ్చితమైన అన్వేషణ',
+    cta_btn2: 'యాత్రను అనుమతించండి',
+    btn_enquire: 'ఇప్పుడే విచారించండి',
+    park_kaz_label: 'కాజిరంగా కేంద్ర రేంజి', park_manas_label: 'మానస్ బాన్స్‌బారీ రేంజి',
+    slot_morning: 'ఉదయపు సఫారీ', slot_evening: 'సాయంకాలపు సఫారీ',
+    rule_children_charge: '5 సంవత్సరాలు పైన పిల్లలకు పూర్తి రేటు చార్జ్ చేయబడుతుంది.',
+    rule_no_plastic: 'జాతీయ ఉద్యానంలో ప్లాస్టిక్ కచ్చితంగా నిషేధించబడింది.',
+    rule_still_camera: 'స్టిల్ కెమెరా: ₹100 ప్రవేశ చార్జ్.',
+    rule_video_kaz: 'వీడియో కెమెరా: ₹1,000 ప్రవేశ చార్జ్.',
+    rule_video_manas: 'వీడియో కెమెరా: ₹1,500 ప్రవేశ చార్జ్.',
+    rule_carry_id: 'సఫారీ రోజున అసలు ఆధార్ / ప్రభుత్వ ID తీసుకెళ్ళండి.',
+    rule_pickup: 'అతిథులు 24 గంటల ముందు పిక్-అప్ స్థానం మరియు హోటల్ పేరు తెలియజేయాలి.',
+    rule_jeep_contact: 'జీప్ సంప్రదింపు నంబర్లు 24 గంటల ముందు ఇవ్వబడతాయి.',
+    rule_aadhaar_rest: 'సమూహాలకు ప్రధాన అతిథికి మాత్రమే ఆధార్ అవసరం. ఇతరులకు పేరు మరియు వయస్సు మాత్రమే.',
+    rule_manas_closed: _no + 'మానస్ జీప్ సఫారీ ప్రతి <strong>మంగళవారం మూసివుంటుంది</strong>.' + _end,
+    rule_manas_foreign: 'విదేశీయులు ఆఫ్‌లైన్‌లో బుక్ చేయాలి — +91 97098 84206 లేదా +91 93656 09948.',
+    rules_title_suffix: '— నిబంధనలు & సమాచారం',
+    gf_adults_hdr: 'పెద్దలు', gf_children_hdr: 'పిల్లలు (5 సం. & అంతకంటే తక్కువ — ఉచితం)',
+    gf_primary: 'ప్రధాన పెద్దమనిషి — బుకింగ్ లీడ్', gf_adult: 'పెద్దమనిషి', gf_child: 'పిల్లవాడు',
+    gf_lbl_name: 'పూర్తి పేరు *', gf_lbl_age: 'వయసు *', gf_lbl_contact: 'సంప్రదింపు నంబర్ *',
+    gf_lbl_aadhaar: 'ఆధార్ కార్డ్ *', gf_aadhaar_upload: 'ఆధార్ అప్‌లోడ్ చేయండి (JPG / PNG / PDF)',
+    sum_adult: 'మంది', sum_adults: 'మంది', sum_child: 'పిల్లవాడు', sum_children: 'పిల్లలు',
+    sum_per_adult: '/ వ్యక్తి', sum_free: 'ఉచితం', sum_no_gst: 'GST లేదు',
+  };
+
+  /* ─── MARATHI ─── */
+  T.mr = {
+    lp_title: 'तुमची भाषा निवडा', lp_subtitle: 'पुढे जाण्यासाठी भाषा निवडा', lp_other: 'अधिक भाषा', lp_change: 'भाषा',
+    nav_home: 'मुखपृष्ठ', nav_itineraries: 'प्रवास कार्यक्रम', nav_booking: 'बुकिंग', nav_car_rental: 'कार भाडे', nav_reviews: 'समीक्षा', nav_book_safari: 'सफारी बुक करा',
+    rec_text: 'आसाम सरकार पर्यटन विभाग आणि बोडोलँड पर्यटनाने मान्यता दिलेले',
+    home_h1: 'आसाममध्ये प्रथमच<br>जीप सफारी ऑनलाइन बुकिंग', home_sub: 'काझिरंगा नॅशनल पार्क  मानस नॅशनल पार्क',
+    home_cta1: 'शेअर्ड जीप सफारी बुक करा', home_cta2: 'नॉर्थईस्ट टूर पॅकेज बुक करा', home_cta3: 'कार भाडे',
+    stat_explorers: 'सेवा दिलेले प्रवासी', stat_sighting: 'दर्शन विक्रम', stat_experts: 'तज्ञ संघ', stat_success: 'यशस्वी मोहिमा',
+    intro_label: 'कार्यात्मक माहिती', intro_title: 'आम्ही फक्त पर्यटन करत नाही. आम्ही शोध घेतो.',
+    intro_body: 'इतर लोक तुम्हाला साध्या सहलीवर नेतात, आम्ही एक धोरणात्मक मोहीम राबवतो. आमचे निसर्गतज्ञ वनाचे प्रत्येक संकेत वाचण्यासाठी प्रशिक्षित आहेत. काझिरंगा आणि मानसमध्ये आम्ही या भूमीचे मालक आहोत.',
+    feat1_title: 'तज्ञ ट्रॅकर्स', feat1_desc: 'आसामच्या राष्ट्रीय उद्यानांमध्ये 15+ वर्षांचे क्षेत्र कौशल्य.',
+    feat2_title: 'जास्तीत जास्त दर्शन', feat2_desc: 'जास्तीत जास्त वन्यजीव दर्शनाच्या संधीसाठी अनुकूलित वेळापत्रक.',
+    trend_label: 'आता ट्रेंडिंग', trend_title: 'लोकप्रिय प्रवास कार्यक्रम',
+    ne_label: 'क्षितिजाच्या पलीकडे', ne_title: 'ईशान्य टूर पॅकेजेस', ne_sub: 'ईशान्येच्या अनाकलनीय प्रदेशांमध्ये खोलवर जा. तवांगच्या शिखरांपासून भूटानच्या लपलेल्या दऱ्यांपर्यंत.',
+    safari_label: 'उद्यान निवड', safari_title: 'तुमचे राष्ट्रीय उद्यान निवडा',
+    cta_label: 'अंतिम सूचना', cta_title: 'कोणतीही तडजोड नाही.<br>फक्त साहस.', cta_btn: 'तुमची मोहीम सुरू करा',
+    itin_eyebrow: 'प्रवास माहिती', itin_h1: 'रानातील<br>माहिती', itin_sub: 'ईशान्य भारतातील प्रमुख वन्यजीव क्षेत्रांची सविस्तर माहिती.',
+    book_eyebrow: 'रानाकडे प्रस्थान', book_h1: 'तुमची जागा<br>सुरक्षित करा', book_sub: 'हमी प्रवेश. तज्ञ निसर्गतज्ञ. तुमचे साहस इथूनच सुरू होते.',
+    step_destination: 'गंतव्यस्थान', step_schedule: 'वेळापत्रक', step_guest: 'पाहुणे', step_payment: 'पेमेंट',
+    bk_s1_label: 'पायरी 1 / 4', bk_s1_title: 'तुमचे<br>गंतव्यस्थान निवडा', bk_s2_label: 'पायरी 2 / 4', bk_s2_title: 'तुमचा वेळ निवडा', bk_s3_label: 'पायरी 3 / 4', bk_s3_title: 'पाहुणे तपशील', bk_s4_label: 'पायरी 4 / 4', bk_s4_title: 'पेमेंट पूर्ण करा',
+    bk_lbl_date: 'सफारी तारीख', bk_lbl_guests: 'पाहुण्यांची संख्या', bk_lbl_slot: 'वेळ स्लॉट', bk_lbl_name: 'पूर्ण नाव *', bk_lbl_age: 'वय *', bk_lbl_phone: 'संपर्क क्रमांक *', bk_lbl_aadhaar: 'आधार कार्ड *', bk_lbl_payment: 'पेमेंट स्क्रीनशॉट *', bk_lbl_utr: 'व्यवहार ID / UTR क्रमांक (पर्यायी)',
+    bk_hint_payment: 'कृपया तुमच्या यशस्वी व्यवहाराचा स्क्रीनशॉट अपलोड करा.',
+    bk_next1: 'पुढे: तारीख निवडा →', bk_next2: 'पुढे: पाहुणे तपशील →', bk_next3: 'पुढे: पेमेंट →', bk_back: '← मागे', bk_submit: 'बुकिंग निश्चित करा',
+    bk_kaz_tag: 'युनेस्को गड · मध्य श्रेणी', bk_kaz_price: '₹1,000 / व्यक्ती · सकाळ 9–11 / संध्याकाळ 2–4',
+    bk_manas_tag: 'जैवमंडल राखीव · बांसबाडी श्रेणी', bk_manas_price: '₹1,300 / व्यक्ती · सकाळ 8–12 / संध्याकाळ 2–4',
+    bk_group_title: 'गट / खाजगी जीप किंमत',
+    bk_group_text: '3 पेक्षा जास्त — काजिरंगा ₹3,500 / जीप | मानस ₹4,500 / जीप',
+    bk_group_sub: 'खाजगी आधारावर · प्रति जीप जास्तीत जास्त 6 लोक',
+    bk_tuesday: '⚠ मानस बांसबाडी श्रेणी प्रत्येक मंगळवारी बंद असते. कृपया दुसरी तारीख निवडा.',
+    bk_adults_label: 'प्रौढ', bk_adults_note: '(5 वर्षांवर · शुल्क लागू)',
+    bk_children_label: 'मुले', bk_children_note: '(5 वर्षे व खाली · मोफत)',
+    bk_adults_unit: 'प्रौढ', bk_children_unit: 'मुले',
+    bk_preview_title: 'तुमची निवडलेली सफारी',
+    bk_guest_note: '<strong>प्राथमिक पाहुणे</strong> (पाहुणे 1) ने आधार कार्ड आणि संपर्क द्यावे. इतर पाहुण्यांना फक्त नाव आणि वय लागते.',
+    bk_pay_label: 'एकूण देय रक्कम (GST शिवाय)',
+    bk_upi_badge: 'कोणत्याही UPI अॅपद्वारे स्कॅन करा आणि पेमेंट करा',
+    bk_upload_label: 'पेमेंट स्क्रीनशॉट अपलोड करा',
+    bk_submit_pay: 'बुकिंग सादर करा आणि पेमेंट पडताळा',
+    bk_refund_title: 'परतावा धोरण',
+    bk_refund_text: 'राष्ट्रीय उद्यान प्राधिकरणाने प्रवेश नाकारल्यास कोणत्याही परिस्थितीत, 24 तासांत संपूर्ण रक्कम परत केली जाईल.',
+    bk_tnc_agree: 'मी परतावा धोरण वाचले आहे आणि सहमत आहे.',
+    bk_back_guest: '← पाहुणे तपशिलावर परत',
+    bk_sum_title: 'मिशन थोडक्यात',
+    bk_sum_dest: 'गंतव्य', bk_sum_date: 'तारीख', bk_sum_time: 'वेळ स्लॉट',
+    bk_sum_adults: 'प्रौढ', bk_sum_children: 'मुले', bk_sum_rate: 'दर',
+    bk_sum_total: 'एकूण (GST शिवाय)',
+    bk_sum_note: '5 वर्षे व खालील मुले मोफत. 5 वर्षांवर पूर्ण दर लागू.',
+    bk_need_help: 'मदत हवी आहे का?',
+    bk_park_rules: 'पार्क नियम व माहिती',
+    bk_park_rules2: 'महत्त्वाचे — पार्क नियम व कॅमेरा शुल्क',
+    cr_eyebrow: 'जमीन वाहतूक', cr_h1: 'कार<br>भाडे', cr_sub: 'ईशान्य भारतातील प्रत्येक भूप्रदेशासाठी प्रीमियम वाहने.',
+    cr_block_vehicle: 'वाहन निवडा', cr_block_trip: 'प्रवास तपशील', cr_lbl_pax: 'प्रवाशांची संख्या *', cr_lbl_itin: 'प्रवास मार्ग निवडा *', cr_opt_choose: '-- प्रवास मार्ग निवडा --',
+    cr_sum_title: 'तुमची निवड', cr_veh_req: 'आवश्यक वाहने', cr_lbl_vehicle: 'वाहन', cr_lbl_capacity: 'क्षमता', cr_lbl_pax2: 'प्रवासी', cr_lbl_veh_needed: 'आवश्यक वाहने', cr_lbl_itinerary: 'प्रवास कार्यक्रम',
+    cr_note: 'आमची टीम लवकरच तुमच्याशी संपर्क साधून उपलब्धता आणि किंमत निश्चित करेल.',
+    cr_submit: 'चौकशी पाठवा',
+    rev_eyebrow: 'पाहुण्यांचे अहवाल', rev_h1: 'रानातून<br>आवाज', rev_sub: 'सत्यापित अनुभव. आसामच्या जंगलांमधून थेट.',
+    rev_stat1: 'पाहुणे रेटिंग', rev_stat2: 'यशस्वी प्रवास', rev_stat3: 'पुन्हा आलेले पाहुणे',
+    rev_sec_label: 'निकाल', rev_sec_title: 'निखळ अनुभव', rev_sec_body: 'काझिरंगा आणि मानसमध्ये प्रवास केलेल्या पाहुण्यांचे थेट अहवाल.',
+    rev_form_label: 'अनुभव सांगा', rev_form_title: 'तुमची समीक्षा सादर करा', rev_form_sub: 'तुमचा वन अनुभव नोंदवा. तुमची माहिती भविष्यातील प्रवाशांना मदत करेल.',
+    rev_lbl_name: 'तुमचे नाव', rev_lbl_sector: 'प्रवास क्षेत्र', rev_lbl_rating: 'रेटिंग', rev_lbl_summary: 'अनुभव तपशील', rev_btn: 'समीक्षा सादर करा',
+    footer_desc: 'ईशान्य वन्यजीव अन्वेषणाचा अग्रदूत. कोणतीही तडजोड नाही. शुद्ध साहस.',
+    footer_col1: 'क्षेत्रे', footer_col2: 'बेस ऑप्स', footer_col3: 'संपर्क',
+    footer_link_kaz: 'काजिरंगा', footer_link_manas: 'मानस', footer_link_reports: 'फील्ड रिपोर्ट',
+    footer_link_book: 'सफारी बुक करा', footer_link_intel: 'क्षेत्र माहिती', footer_link_reviews: 'समीक्षा',
+    footer_link_wa: 'व्हॉट्सअॅप', footer_link_car: 'कार भाडे', footer_bottom: '© 2026 आसाम वाइल्ड सफारी.',
+    svc1_title: 'कार भाडे', svc1_desc: 'ईशान्य भारतातील सर्व भूप्रदेशांसाठी प्रीमियम SUV आणि 4x4. स्थानिक ज्ञान असलेले व्यावसायिक चालक.',
+    svc1_btn: 'वाहन बुक करा',
+    svc2_title: 'हॉटेल बुकिंग', svc2_desc: 'ईशान्येकडील सर्व प्रमुख वन्यजीव क्षेत्रांजवळ प्रमाणित इको-रिसॉर्ट्स आणि आरामदायी मुक्काम.',
+    svc2_btn: 'मुक्काम बुक करा',
+    policy_title: 'परतावा आणि रद्दीकरण धोरण',
+    policy_text: 'कोणत्याही परिस्थितीत राष्ट्रीय उद्यान प्राधिकरणाने प्रवेश नाकारल्यास, 24 तासांत संपूर्ण रक्कम परत केली जाईल. रद्दीकरण शुल्क नाही.',
+    kaz_desc: 'एकशिंगी गेंड्याचा अंतिम बालेकिल्ला. एक विशाल, कठोर भूदृश्य जेथे निसर्ग संपूर्ण अधिकाराने राज्य करतो — जगातील सर्वात मोठ्या गेंड्याच्या लोकसंख्येचे घर.',
+    manas_desc: 'हिमालयाच्या पायथ्याशी दडलेले, दंतकथेप्रमाणे प्रसिद्ध जीवमंडल राखीव क्षेत्र. गोल्डन लंगूर आणि पिग्मी हॉगचे अंतिम आश्रयस्थान.',
+    park_btn: 'क्षेत्रात प्रवेश करा',
+    cta_sub: 'आसामच्या जंगलात संपूर्ण बुडी. सुरक्षितता, तज्ञता किंवा अनुभवात शून्य तडजोड.',
+    cta_feat1: 'प्रमाणित तज्ञ', cta_feat2: 'तात्काळ निघणे', cta_feat3: 'अचूक शोध',
+    cta_btn2: 'मोहीम अधिकृत करा',
+    btn_enquire: 'आत्ता चौकशी करा',
+    park_kaz_label: 'काझिरंगा केंद्रीय श्रेणी', park_manas_label: 'मानस बांसबाडी श्रेणी',
+    slot_morning: 'सकाळची सफारी', slot_evening: 'संध्याकाळची सफारी',
+    rule_children_charge: '5 वर्षांवरील मुलांसाठी पूर्ण दराने शुल्क आकारले जाईल.',
+    rule_no_plastic: 'राष्ट्रीय उद्यानात प्लास्टिक पूर्णपणे प्रतिबंधित आहे.',
+    rule_still_camera: 'स्टिल कॅमेरा: ₹100 प्रवेश शुल्क.',
+    rule_video_kaz: 'व्हिडिओ कॅमेरा: ₹1,000 प्रवेश शुल्क.',
+    rule_video_manas: 'व्हिडिओ कॅमेरा: ₹1,500 प्रवेश शुल्क.',
+    rule_carry_id: 'सफारीच्या दिवशी मूळ आधार / सरकारी ID सोबत ठेवा.',
+    rule_pickup: 'पाहुण्यांनी 24 तास आधी पिकअप स्थान आणि हॉटेलचे नाव सांगावे.',
+    rule_jeep_contact: 'जीप संपर्क क्रमांक 24 तास आधी दिले जातील.',
+    rule_aadhaar_rest: 'गटासाठी फक्त प्राथमिक पाहुण्याचे आधार हवे. इतरांना फक्त नाव व वय.',
+    rule_manas_closed: _no + 'मानस जीप सफारी प्रत्येक <strong>मंगळवारी बंद</strong>.' + _end,
+    rule_manas_foreign: 'परदेशी नागरिकांनी ऑफलाइन बुक करावे — +91 97098 84206 किंवा +91 93656 09948.',
+    rules_title_suffix: '— नियम आणि माहिती',
+    gf_adults_hdr: 'प्रौढ', gf_children_hdr: 'मुले (5 वर्षे व खाली — मोफत)',
+    gf_primary: 'प्राथमिक प्रौढ — बुकिंग लीड', gf_adult: 'प्रौढ', gf_child: 'मूल',
+    gf_lbl_name: 'पूर्ण नाव *', gf_lbl_age: 'वय *', gf_lbl_contact: 'संपर्क क्रमांक *',
+    gf_lbl_aadhaar: 'आधार कार्ड *', gf_aadhaar_upload: 'आधार अपलोड करा (JPG / PNG / PDF)',
+    sum_adult: 'प्रौढ', sum_adults: 'प्रौढ', sum_child: 'मूल', sum_children: 'मुले',
+    sum_per_adult: '/ प्रौढ', sum_free: 'मोफत', sum_no_gst: 'GST नाही',
+  };
+
+  /* ─── GUJARATI ─── */
+  T.gu = {
+    lp_title: 'તમારી ભાષા પસંદ કરો', lp_subtitle: 'ચાલુ રાખવા ભાષા પસંદ કરો', lp_other: 'વધુ ભાષાઓ', lp_change: 'ભાષા',
+    nav_home: 'હોમ', nav_itineraries: 'પ્રવાસ કાર્યક્રમ', nav_booking: 'બુકિંગ', nav_car_rental: 'કાર ભાડું', nav_reviews: 'સમીક્ષાઓ', nav_book_safari: 'સફારી બુક કરો',
+    rec_text: 'આસામ સરકાર પ્રવાસન વિભાગ અને બોડોલેન્ડ ટૂરિઝમ દ્વારા માન્ય',
+    home_h1: 'આસામમાં પ્રથમ વખત<br>જીપ સફારી ઓનલાઇન બુકિંગ', home_sub: 'કાઝિરંગા નેશનલ પાર્ક  માનસ નેશનલ પાર્ક',
+    home_cta1: 'શેર્ડ જીપ સફારી બુક કરો', home_cta2: 'નૉર્થઈસ્ટ ટૂર પૅકેજ બુક કરો', home_cta3: 'કાર ભાડું',
+    stat_explorers: 'સેવા આપેલ પ્રવાસીઓ', stat_sighting: 'દર્શન રેકોર્ડ', stat_experts: 'નિષ્ણાત ટીમ', stat_success: 'સફળ સફરો',
+    intro_label: 'કાર્યાત્મક માહિતી', intro_title: 'અમે માત્ર પ્રવાસ કરતા નથી. અમે અન્વેષણ કરીએ છીએ.',
+    intro_body: 'બીજા લોકો તમને સામાન્ય સફરે લઈ જાય છે, અમે એક વ્યૂહાત્મક અભિયાન ચલાવીએ છીએ. અમારા પ્રકૃતિ નિષ્ણાતો જંગલના દરેક સંકેતને વાંચવા તૈયાર છે. કાઝિરંગા અને માનસમાં, અમે આ ભૂમિના સ્વામી છીએ.',
+    feat1_title: 'નિષ્ણાત ટ્રેકર્સ', feat1_desc: 'આસામના રાષ્ટ્રીય ઉદ્યાનોમાં 15+ વર્ષનો ક્ષેત્ર અનુભવ.',
+    feat2_title: 'મહત્તમ દર્શન', feat2_desc: 'મહત્તમ વન્યજીવ દર્શન માટે અનુકૂળ સમય-નિર્ધારણ.',
+    trend_label: 'હમણાં ટ્રેન્ડિંગ', trend_title: 'લોકપ્રિય પ્રવાસ કાર્યક્રમ',
+    ne_label: 'ક્ષિતિજ ઓળંગીને', ne_title: 'ઉત્તર-પૂર્વ ટૂર પેકેજ', ne_sub: 'ઉત્તર-પૂર્વના અજાણ્યા પ્રદેશોમાં ઊંડે જાઓ. તવાંગની ટોચ્ચ્ચીઓ થી ભૂટાનની ખીણ સુધી.',
+    safari_label: 'ઉદ્યાન પસંદ', safari_title: 'તમારો રાષ્ટ્રીય ઉદ્યાન પસંદ કરો',
+    cta_label: 'અંતિમ સૂચના', cta_title: 'કોઈ સમાધાન નહીં.<br>માત્ર સાહસ.', cta_btn: 'તમારું અભિયાન શરૂ કરો',
+    itin_eyebrow: 'પ્રવાસ માહિતી', itin_h1: 'જંગલ<br>માહિતી', itin_sub: 'ઉત્તર-પૂર્વ ભારતના પ્રાથમિક વન્યજીવ ક્ષેત્રોની વિગતવાર માહિતી.',
+    book_eyebrow: 'જંગલ તરફ પ્રસ્થાન', book_h1: 'તમારી સીટ<br>સુરક્ષિત કરો', book_sub: 'ગેરન્ટીડ પ્રવેશ. નિષ્ણાત પ્રકૃતિ વૈજ્ઞાનિકો. તમારું સાહસ અહીંથી શરૂ થાય છે.',
+    step_destination: 'ગંતવ્ય', step_schedule: 'સમય-કોષ્ટક', step_guest: 'મહેમાન', step_payment: 'ચૂકવણી',
+    bk_s1_label: 'પગલું 1 / 4', bk_s1_title: 'તમારું<br>ગંતવ્ય પસંદ કરો', bk_s2_label: 'પગલું 2 / 4', bk_s2_title: 'તમારો સમય પસંદ કરો', bk_s3_label: 'પગલું 3 / 4', bk_s3_title: 'મહેમાન વિગત', bk_s4_label: 'પગલું 4 / 4', bk_s4_title: 'ચૂકવણી પૂર્ણ કરો',
+    bk_lbl_date: 'સફારી તારીખ', bk_lbl_guests: 'મહેમાનોની સંખ્યા', bk_lbl_slot: 'સમય સ્લોટ', bk_lbl_name: 'પૂરું નામ *', bk_lbl_age: 'ઉંમર *', bk_lbl_phone: 'સંપર્ક નંબર *', bk_lbl_aadhaar: 'આધાર કાર્ડ *', bk_lbl_payment: 'ચૂકવણી સ્ક્રીનશૉટ *', bk_lbl_utr: 'ટ્રાન્ઝૅક્શન ID / UTR નંબર (વૈકલ્પિક)',
+    bk_hint_payment: 'કૃपया તમારા સફળ ટ્રાન્ઝૅક્શનનો સ્ક્રીનશૉટ અપલોડ કરો.',
+    bk_next1: 'આગળ: તારીખ પસંદ કરો →', bk_next2: 'આગળ: મહેમાન વિગત →', bk_next3: 'આગળ: ચૂકવણી →', bk_back: '← પાછળ', bk_submit: 'બુકિંગ નિશ્ચિત કરો',
+    bk_kaz_tag: 'યુનેસ્કો ગઢ · કેન્દ્રીય શ્રેણી', bk_kaz_price: '₹1,000 / વ્યક્તિ · સવારે 9–11 / સાંજ 2–4',
+    bk_manas_tag: 'જૈવ-ક્ષેત્ર આરક્ષિત · બાંસબારી શ્રેણી', bk_manas_price: '₹1,300 / વ્યક્તિ · સવારે 8–12 / સાંજ 2–4',
+    bk_group_title: 'ગ્રૂપ / ખાનગી જીપ ભાવ',
+    bk_group_text: '3 થી વધુ — કાઝીરંગા ₹3,500 / જીપ | માનસ ₹4,500 / જીપ',
+    bk_group_sub: 'ખાનગી ધોરણ · જીપ દીઠ મહત્તમ 6 લોકો',
+    bk_tuesday: '⚠ માનસ બાંસબારી શ્રેણી દર મંગળવારે બંધ રહે છે. કૃપા કરીને બીજી તારીખ પસંદ કરો.',
+    bk_adults_label: 'પ્રૌઢ', bk_adults_note: '(5 વર્ષ ઉપર · શુલ્ક લાગે)',
+    bk_children_label: 'બાળકો', bk_children_note: '(5 વર્ષ અને નીચે · મફત)',
+    bk_adults_unit: 'જણ', bk_children_unit: 'બાળકો',
+    bk_preview_title: 'તમારી પસંદ કરેલ સફારી',
+    bk_guest_note: '<strong>પ્રાથમિક મહેમાન</strong> (મહેમાન 1) આધાર કાર્ડ અને સંપર્ક આપવા પડશે. બીજા મહેમાનોને ફક્ત નામ અને ઉંમર જોઈએ.',
+    bk_pay_label: 'ચૂકવવાની કુલ રકમ (GST સિવાય)',
+    bk_upi_badge: 'કોઈ પણ UPI એપ દ્વારા સ્કૅન કરો અને ચૂકવો',
+    bk_upload_label: 'પેમેન્ટ સ્ક્રીનશૉટ અપલોડ કરો',
+    bk_submit_pay: 'બુકિંગ સબમિટ કરો અને ચૂકવણી ચકાસો',
+    bk_refund_title: 'ચૂકવણી વાપસ નીતિ',
+    bk_refund_text: 'કોઈ પણ સંજોગોમાં રાષ્ટ્રીય ઉદ્યાન અધિકારી પ્રવેશ ન આપે, તો 24 કલાકમાં સંપૂર્ણ રકમ પરત કરાશે.',
+    bk_tnc_agree: 'મેં ચૂકવણી વાપસ નીતિ વાંચી છે અને સહમત છું.',
+    bk_back_guest: '← મહેમાન વિગત પર પાછા',
+    bk_sum_title: 'મિશન સારાંશ',
+    bk_sum_dest: 'ગંતવ્ય', bk_sum_date: 'તારીખ', bk_sum_time: 'સમય',
+    bk_sum_adults: 'પ્રૌઢ', bk_sum_children: 'બાળકો', bk_sum_rate: 'દર',
+    bk_sum_total: 'કુલ (GST સિવાય)',
+    bk_sum_note: '5 વર્ષ અને નીચેના બાળકો મફત. 5 વર્ષ ઉપર પૂર્ણ દર.',
+    bk_need_help: 'મદદ જોઈએ?',
+    bk_park_rules: 'પાર્ક નિયમો અને માહિતી',
+    bk_park_rules2: 'મહત્ત્વપૂર્ણ — પાર્ક નિયમો અને કૅમેરા શુલ્ક',
+    cr_eyebrow: 'જમીન પરિવહન', cr_h1: 'કાર<br>ભાડું', cr_sub: 'ઉત્તર-પૂર્વ ભારતના દરેક ભૂ-ભાગ માટે પ્રીમિયમ વાહનો.',
+    cr_block_vehicle: 'વાહન પસંદ કરો', cr_block_trip: 'પ્રવાસ વિગત', cr_lbl_pax: 'મુસાફરોની સંખ્યા *', cr_lbl_itin: 'પ્રવાસ માર્ગ પસંદ કરો *', cr_opt_choose: '-- પ્રવાસ માર્ગ પસંદ કરો --',
+    cr_sum_title: 'તમારી પસંદ', cr_veh_req: 'જરૂરી વાહનો', cr_lbl_vehicle: 'વાહન', cr_lbl_capacity: 'ક્ષમતા', cr_lbl_pax2: 'મુસાફરો', cr_lbl_veh_needed: 'જરૂરી વાહનો', cr_lbl_itinerary: 'પ્રવાસ કાર્યક્રમ',
+    cr_note: 'અમારી ટીમ ટૂંક સમયમાં ઉપલબ્ધતા અને ભાવ નિશ્ચિત કરવા સંપર્ક કરશે.',
+    cr_submit: 'પૂછપ્રશ્ન મોકલો',
+    rev_eyebrow: 'મહેમાન અહેવાલ', rev_h1: 'જંગલમાંથી<br>અવાજો', rev_sub: 'ચકાસાયેલ અનુભવો. આસામના જંગલોમાંથી સીધા.',
+    rev_stat1: 'મહેમાન રેટિંગ', rev_stat2: 'સફળ સફરો', rev_stat3: 'ફરી આવેલ મહેમાન',
+    rev_sec_label: 'ચુકાદો', rev_sec_title: 'નિખાલસ અનુભવ', rev_sec_body: 'કાઝિરંગા અને માનસની મુલાકાત લીધેલ મહેમાનોના સીધા અહેવાલ.',
+    rev_form_label: 'અનુભવ વ્હેંચો', rev_form_title: 'તમારી સમીક્ષા સમર્પિત કરો', rev_form_sub: 'તમારો વન અનુભવ નોંધો. તમારી માહિતી ભવિષ્યના પ્રવાસીઓને મદદ કરશે.',
+    rev_lbl_name: 'તમારું નામ', rev_lbl_sector: 'પ્રવાસ ક્ષેત્ર', rev_lbl_rating: 'રેટિંગ', rev_lbl_summary: 'અનુભવ વિગત', rev_btn: 'સમીક્ષા સમર્પિત કરો',
+    footer_desc: 'ઉત્તર-પૂર્વ વન્યજીવ સંશોધનની અગ્રણી ટુકડી. કોઈ સમાધાન નહીં. શુદ્ધ સાહસ.',
+    footer_col1: 'ક્ષેત્રો', footer_col2: 'બેઝ ઓપ્સ', footer_col3: 'સંપર્ક',
+    footer_link_kaz: 'કાઝીરંગા', footer_link_manas: 'માનસ', footer_link_reports: 'ફીલ્ડ રિપોર્ટ',
+    footer_link_book: 'સફારી બૂક', footer_link_intel: 'ક્ષેત્ર માહિતી', footer_link_reviews: 'સમીક્ષા',
+    footer_link_wa: 'વ્હોટ્સએપ', footer_link_car: 'કાર ભાડું', footer_bottom: '© 2026 આસામ વાઇલ્ડ સફારી.',
+    svc1_title: 'કાર ભાડા', svc1_desc: 'ઉત્તર-પૂર્વ ભારતના તમામ ભૂ-પ્રદેશ માટે પ્રીમિયમ SUV અને 4x4. સ્થાનિક જ્ઞાન સાથે વ્યાવસાયિક ડ્રાઇવર.',
+    svc1_btn: 'વાહન બૂક કરો',
+    svc2_title: 'હોટેલ બૂકિંગ', svc2_desc: 'ઉત્તર-પૂર્વના તમામ મુખ્ય વન્યજીવ ઝોન નજીક ચકાસાયેલ ઇકો-રિસોર્ટ અને આરામદાયક રોકાણ.',
+    svc2_btn: 'રોકાણ બૂક કરો',
+    policy_title: 'રિફંડ અને રદ્દ નીતિ',
+    policy_text: 'કોઈ પણ સંજોગોમાં રાષ્ટ્રીય ઉદ્યાન અધિકારી પ્રવેશ ન આપે, તો 24 કલાકમાં સંપૂર્ણ ચૂકવણી પરત કરવામાં આવશે. રદ્ અર્ઝ ચાર્જ નહીં.',
+    kaz_desc: 'એક શિંગડા ગેંડાનો અંતિમ ગઢ. એ વિશાળ, ગૂઢ ભૂ-દ્રશ્ય જ્યાં પ્રકૃતિ સંપૂર્ણ સત્તાથી શાસન કરે છે — વિશ્વની સૌથી મોટી ગેંડા વસ્તીનું ઘર.',
+    manas_desc: 'હિમાલયની તળેટીમાં છૂપાયેલ, દંતકથાની ખ્યાતિ ધરાવતી જૈવ-ક્ષેત્ર આરક્ષિત. ગોલ્ડન લંગૂર અને પિગ્મી હૉગનો અંતિમ આশ્રય.',
+    park_btn: 'ક્ષેત્રમાં પ્રવેશ કરો',
+    cta_sub: 'આસામના જંગલમાં સંપૂર્ણ ડૂબ. સુરક્ષા, નિષ્ણાત અથવા અનુભવ પર શૂન્ય સમજૂતી.',
+    cta_feat1: 'ચકાસાયેલ નિષ્ણાત', cta_feat2: 'તાત્કાલિક પ્રયાણ', cta_feat3: 'ચોક્કસ ખોળ',
+    cta_btn2: 'અભિયાન અધિકૃત કરો',
+    btn_enquire: 'હમણાં પૂછો',
+    park_kaz_label: 'કાઝિરંગા કેન્દ્રીય શ્રેણી', park_manas_label: 'માનસ બાંસબારી શ્રેણી',
+    slot_morning: 'સવારની સફારી', slot_evening: 'સાંજની સફારી',
+    rule_children_charge: '5 વર્ષ ઉપરના બાળકો પાસેથી પૂર્ણ દરે શુલ્ક લેવામાં આવશે.',
+    rule_no_plastic: 'રાષ્ટ્રીય ઉદ્યાનની અંદર પ્લાસ્ટિક સખ્ત પ્રતિબંધ છે.',
+    rule_still_camera: 'સ્ટિલ કૅમેરા: ₹100 પ્રવેશ શુલ્ક.',
+    rule_video_kaz: 'વીડિઓ કૅમેરા: ₹1,000 પ્રવેશ શુલ્ક.',
+    rule_video_manas: 'વીડિઓ કૅમેરા: ₹1,500 પ્રવેશ શુલ્ક.',
+    rule_carry_id: 'સફારીના દિવસે મૂળ આધાર / સરકારી ID સાથે રાખો.',
+    rule_pickup: 'મહેમાનોએ 24 કલાક અગાઉ પિકઅપ સ્થળ અને હોટેલનું નામ જણાવવું.',
+    rule_jeep_contact: 'જીપ સંપર્ક નંબર 24 કલાક અગાઉ આપવામાં આવશે.',
+    rule_aadhaar_rest: 'ગ્રૂપ માટે ફક્ત પ્રાથમિક મહેમાનનો આધાર જોઈએ. બાકીઓ માટે ફક્ત નામ અને ઉંમર.',
+    rule_manas_closed: _no + 'માનસ જીપ સફારી દર <strong>મંગળવારે બંધ</strong>.' + _end,
+    rule_manas_foreign: 'વિદેશી નાગરિકોએ ઑફ્‌લાઇન બુક કરવું — +91 97098 84206 અથવા +91 93656 09948.',
+    rules_title_suffix: '— નિયમો & માહિતી',
+    gf_adults_hdr: 'પ્રૌઢ', gf_children_hdr: 'બાળકો (5 વર્ષ & નીચે — મફત)',
+    gf_primary: 'પ્રાથમિક પ્રૌઢ — બુકિંગ લીડ', gf_adult: 'પ્રૌઢ', gf_child: 'બાળક',
+    gf_lbl_name: 'પૂરું નામ *', gf_lbl_age: 'ઉંમર *', gf_lbl_contact: 'સંપર્ક નંબર *',
+    gf_lbl_aadhaar: 'આધાર કાર્ડ *', gf_aadhaar_upload: 'આધાર અપલોડ કરો (JPG / PNG / PDF)',
+    sum_adult: 'જણ', sum_adults: 'જણ', sum_child: 'બાળક', sum_children: 'બાળકો',
+    sum_per_adult: '/ વ્યક્તિ', sum_free: 'મફત', sum_no_gst: 'GST નહીં',
+  };
+
+  /* ─── ODIA ─── */
+  T.or = {
+    lp_title: 'ଆପଣଙ୍କ ଭାଷା ବାଛନ୍ତୁ', lp_subtitle: 'ଜାରି ରଖିବାକୁ ଏକ ଭାଷା ବାଛନ୍ତୁ', lp_other: 'ଅଧିକ ଭାଷା', lp_change: 'ଭାଷା',
+    nav_home: 'ମୁଖ୍ୟ ପୃଷ୍ଠ', nav_itineraries: 'ଭ୍ରମଣ ସୂଚୀ', nav_booking: 'ବୁକିଂ', nav_car_rental: 'କାର ଭଡ଼ା', nav_reviews: 'ସମୀକ୍ଷା', nav_book_safari: 'ସଫାରି ବୁକ୍ କରନ୍ତୁ',
+    rec_text: 'ଆସାମ ସରକାର ପର୍ଯ୍ୟଟନ ବିଭାଗ ଏବଂ ବୋଡୋଲ୍ୟାଣ୍ଡ ଟୁରିଜିମ ଦ୍ୱାରା ସ୍ୱୀକୃତ',
+    home_h1: 'ଆସାମରେ ପ୍ରଥମ ଥର<br>ଜିପ ସଫାରି ଅନଲାଇନ ବୁକିଂ', home_sub: 'କାଜିରଙ୍ଗା ନ୍ୟାସ୍‌ନ୍‌ ପାର୍କ  ମାନସ ନ୍ୟାସ୍‌ନ୍‌ ପାର୍କ',
+    home_cta1: 'ଶେୟାର୍ଡ ଜିପ ସଫାରି ବୁକ୍ କରନ୍ତୁ', home_cta2: 'ନର୍ଥଇଷ୍ଟ ଟୁର ପ୍ୟାକେଜ ବୁକ୍ କରନ୍ତୁ', home_cta3: 'କାର ଭଡ଼ା',
+    stat_explorers: 'ସେବା ପ୍ରଦାନ', stat_sighting: 'ଦର୍ଶନ ରେକର୍ଡ', stat_experts: 'ବିଶେଷଜ୍ଞ ଦଳ', stat_success: 'ସଫଳ ଅଭିଯାନ',
+    intro_label: 'କାର୍ଯ୍ୟ ସୂଚନା', intro_title: 'ଆମେ ଶୁଧୁ ଭ୍ରମଣ ନୁହେଁ। ଆମେ ଅନ୍ୱେଷଣ କରୁ।',
+    intro_body: 'ଅନ୍ୟମାନେ ଆପଣଙ୍କୁ ସାଧାରଣ ଭ୍ରମଣ ପାଇଁ ନିଅନ୍ତି, ଆମେ ଏକ ନିରୀକ୍ଷଣ ଅଭିଯାନ ପରିଚାଳନା କରୁ। ଆମର ପ୍ରକୃତି ବିଶେଷଜ୍ଞ ଜଙ୍ଗଲର ପ୍ରତ୍ୟେକ ସଙ୍କେତ ପଢ଼ିବାରେ ତାଲିମ ପ୍ରାପ୍ତ।',
+    feat1_title: 'ବିଶେଷଜ୍ଞ ଟ୍ରାକର', feat1_desc: 'ଆସାମ ଜାତୀୟ ଉଦ୍ୟାନରେ 15+ ବର୍ଷ ଅଭିଜ୍ଞତା।',
+    feat2_title: 'ସର୍ବାଧିକ ଦର୍ଶନ', feat2_desc: 'ସର୍ବାଧିକ ବନ୍ୟଜୀବ ଦର୍ଶନ ପାଇଁ ଉପଯୁକ୍ତ ସମୟ ସୂଚୀ।',
+    trend_label: 'ଏବେ ଲୋକପ୍ରିୟ', trend_title: 'ଲୋକପ୍ରିୟ ଭ୍ରମଣ ସୂଚୀ',
+    ne_label: 'ଦିଗନ୍ତ ଅତିକ୍ରମ', ne_title: 'ଉତ୍ତର-ପୂର୍ବ ଟୁର ପ୍ୟାକେଜ', ne_sub: 'ଉତ୍ତର-ପୂର୍ବର ଅଜଣା ଅଞ୍ଚଳରେ ଗଭୀର ଭ୍ରମଣ କରନ୍ତୁ।',
+    safari_label: 'ଉଦ୍ୟାନ ଚୟନ', safari_title: 'ଆପଣଙ୍କ ଜାତୀୟ ଉଦ୍ୟାନ ବାଛନ୍ତୁ',
+    cta_label: 'ଅନ୍ତିମ ନିର୍ଦ୍ଦେଶ', cta_title: 'କୌଣସି ଆପୋଷ ନୁହେଁ।<br>କେବଳ ସାହସ।', cta_btn: 'ଆପଣଙ୍କ ଅଭିଯାନ ଆରମ୍ଭ କରନ୍ତୁ',
+    itin_eyebrow: 'ଭ୍ରମଣ ସୂଚନା', itin_h1: 'ଜଙ୍ଗଲ<br>ସୂଚନା', itin_sub: 'ଉତ୍ତର-ପୂର୍ବ ଭାରତର ପ୍ରମୁଖ ବନ୍ୟଜୀବ ଅଞ୍ଚଳର ବିସ୍ତୃତ ସୂଚନା।',
+    book_eyebrow: 'ଜଙ୍ଗଲ ଅଭିମୁଖେ', book_h1: 'ଆପଣଙ୍କ ଆସନ<br>ସୁରକ୍ଷିତ କରନ୍ତୁ', book_sub: 'ନିଶ୍ଚିତ ପ୍ରବେଶ। ବିଶେଷଜ୍ଞ ପ୍ରକୃତି ବିଜ୍ଞାନୀ। ଆପଣଙ୍କ ସାହସ ଏଠୁ ଆରମ୍ଭ।',
+    step_destination: 'ଗନ୍ତବ୍ୟ', step_schedule: 'ସମୟ ସୂଚୀ', step_guest: 'ଅତିଥି', step_payment: 'ଦେୟ',
+    bk_s1_label: 'ପଦକ୍ଷେପ 1 / 4', bk_s1_title: 'ଆପଣଙ୍କ<br>ଗନ୍ତବ୍ୟ ବାଛନ୍ତୁ', bk_s2_label: 'ପଦକ୍ଷେପ 2 / 4', bk_s2_title: 'ସମୟ ବାଛନ୍ତୁ', bk_s3_label: 'ପଦକ୍ଷେପ 3 / 4', bk_s3_title: 'ଅତିଥି ବିବରଣ', bk_s4_label: 'ପଦକ୍ଷେପ 4 / 4', bk_s4_title: 'ଦେୟ ସମ୍ପୂର୍ଣ କରନ୍ତୁ',
+    bk_lbl_date: 'ସଫାରି ତାରିଖ', bk_lbl_guests: 'ଅତିଥି ସଂଖ୍ୟା', bk_lbl_slot: 'ସମୟ ସ୍ଲଟ', bk_lbl_name: 'ପୂର୍ଣ ନାମ *', bk_lbl_age: 'ବୟସ *', bk_lbl_phone: 'ଯୋଗାଯୋଗ ନମ୍ବର *', bk_lbl_aadhaar: 'ଆଧାର କାର୍ଡ *', bk_lbl_payment: 'ଦେୟ ସ୍କ୍ରିନଶଟ *', bk_lbl_utr: 'ଟ୍ରାଞ୍ଜେକ୍ସନ ID / UTR ନମ୍ବର (ଐଚ୍ଛିକ)',
+    bk_hint_payment: 'ଦୟାକରି ଆପଣଙ୍କ ସଫଳ ଲେଣଦେଣ ସ୍କ୍ରିନଶଟ ଅପଲୋଡ କରନ୍ତୁ।',
+    bk_next1: 'ପର: ତାରିଖ ବାଛନ୍ତୁ →', bk_next2: 'ପର: ଅତିଥି ବିବରଣ →', bk_next3: 'ପର: ଦେୟ →', bk_back: '← ପଛକୁ', bk_submit: 'ବୁକିଂ ନିଶ୍ଚିତ କରନ୍ତୁ',
+    bk_kaz_tag: 'ୟୁନେସ୍କୋ ଗଡ · କେନ୍ଦ୍ରୀୟ ଅଞ୍ଚଳ', bk_kaz_price: '₹1,000 / ଜଣ · ସକାଳ 9–11 / ସନ୍ଧ୍ୟା 2–4',
+    bk_manas_tag: 'ଜୀବ-ମଣ୍ଡଳ ସଂରକ୍ଷଣ · ବାଁଶ ବଡ଼ି ଅଞ୍ଚଳ', bk_manas_price: '₹1,300 / ଜଣ · ସକାଳ 8–12 / ସନ୍ଧ୍ୟା 2–4',
+    bk_group_title: 'ଦଳ / ବ୍ୟକ୍ତିଗତ ଜୀପ ମୂଲ୍ୟ',
+    bk_group_text: '3 ଜଣଠୁ ଅଧିକ — କାଜିରଙ୍ଗ ₹3,500 / ଜୀପ | ମାନସ ₹4,500 / ଜୀପ',
+    bk_group_sub: 'ବ୍ୟକ୍ତିଗତ ଆଧାରରେ · ଜୀପ ପ୍ରତି ସର୍ବାଧିକ 6 ଜଣ',
+    bk_tuesday: '⚠ ମାନସ ବାଁଶ ବଡ଼ି ଅଞ୍ଚଳ ପ୍ରତ୍ୟେକ ମଙ୍ଗଳବାର ବନ୍ଦ। ଦୟାକରି ଅନ୍ୟ ତାରିଖ ବାଛନ୍ତୁ।',
+    bk_adults_label: 'ବୟସ୍କ', bk_adults_note: '(5 ବର୍ଷ ଉପରେ · ଶୁଳ୍କ ଲାଗୁ)',
+    bk_children_label: 'ଶିଶୁ', bk_children_note: '(5 ବର୍ଷ ଓ ତଳ · ମୁଫ୍ତ)',
+    bk_adults_unit: 'ଜଣ', bk_children_unit: 'ଶିଶୁ',
+    bk_preview_title: 'ଆପଣଙ୍କ ଚୟନ ହୋଇଥିବା ସଫାରି',
+    bk_guest_note: '<strong>ମୁଖ୍ୟ ଅତିଥି</strong> (ଅତିଥି 1) ଆଧାର ଓ ଯୋଗାଯୋଗ ଦେବେ। ଅତିରିକ୍ତ ଅତିଥିଙ୍କ ପାଇଁ ନାମ ଓ ବୟସ ଦରକାର।',
+    bk_pay_label: 'ମୋଟ ପ୍ରଦେୟ ଟଙ୍କା (GST ବିନା)',
+    bk_upi_badge: 'ଯେ କୌଣସି UPI ଆପ ଦ୍ୱାରା ସ୍କ୍ୟାନ କରନ୍ତୁ ଓ ଦେୟ ଦିଅନ୍ତୁ',
+    bk_upload_label: 'ଦେୟ ସ୍କ୍ରିନଶଟ ଅପ୍ଲୋଡ କରନ୍ତୁ',
+    bk_submit_pay: 'ବୁକିଂ ଦାଖଲ କରନ୍ତୁ ଓ ଦେୟ ଯାଞ୍ଚ କରନ୍ତୁ',
+    bk_refund_title: 'ଫେରସ୍ତ ନୀତି',
+    bk_refund_text: 'ଜାତୀୟ ଉଦ୍ୟାନ ଅଧିକୃତ ପ୍ରବେଶ ଅନୁମତି ନ ଦେଲେ, 24 ଘଣ୍ଟା ମଧ୍ୟରେ ସମ୍ପୂୂର୍ଣ ଟଙ୍କା ଫेरସ୍ତ ହେବ।',
+    bk_tnc_agree: 'ମୁଁ ଫେରସ୍ତ ନୀତି ପଢ଼ି ସମ୍ମତ ହୋଇଛି।',
+    bk_back_guest: '← ଅତିଥି ବିବରଣ ପ୍ରତି ଫେରନ୍ତୁ',
+    bk_sum_title: 'ମିଶନ ସଂଖ୍ୟିପ୍ତ',
+    bk_sum_dest: 'ଗନ୍ତବ୍ୟ', bk_sum_date: 'ତାରିଖ', bk_sum_time: 'ସମୟ',
+    bk_sum_adults: 'ବୟସ୍କ', bk_sum_children: 'ଶିଶୁ', bk_sum_rate: 'ହାର',
+    bk_sum_total: 'ମୋଟ (GST ବିନା)',
+    bk_sum_note: '5 ବର୍ଷ ଓ ତଳ ଶିଶୁ ମୁଫ୍ତ। 5 ବର୍ଷ ଉପରେ ପୂର୍ଣ ହାର।',
+    bk_need_help: 'ସାହାଯ୍ୟ ଦରକାର?',
+    bk_park_rules: 'ପାର୍କ ନିୟମ ଓ ତଥ୍ୟ',
+    bk_park_rules2: 'ଗୁରୁତ୍ୱପୂର୍ଣ — ପାର୍କ ନିୟମ ଓ କ୍ୟାମେରା ଶୁଳ୍କ',
+    cr_eyebrow: 'ଭୂ ପରିବହନ', cr_h1: 'କାର<br>ଭଡ଼ା', cr_sub: 'ଉତ୍ତର-ପୂର୍ବ ଭାରତର ପ୍ରତ୍ୟେକ ଭୂ-ଭାଗ ପାଇଁ ପ୍ରିମିୟମ ଯାନ।',
+    cr_block_vehicle: 'ଯାନ ବାଛନ୍ତୁ', cr_block_trip: 'ଭ୍ରମଣ ବିବରଣ', cr_lbl_pax: 'ଯାତ୍ରୀ ସଂଖ୍ୟା *', cr_lbl_itin: 'ଭ୍ରମଣ ପଥ ବାଛନ୍ତୁ *', cr_opt_choose: '-- ଭ୍ରମଣ ପଥ ବାଛନ୍ତୁ --',
+    cr_sum_title: 'ଆପଣଙ୍କ ଚୟନ', cr_veh_req: 'ଆବଶ୍ୟକ ଯାନ', cr_lbl_vehicle: 'ଯାନ', cr_lbl_capacity: 'କ୍ଷମତା', cr_lbl_pax2: 'ଯାତ୍ରୀ', cr_lbl_veh_needed: 'ଆବଶ୍ୟକ ଯାନ', cr_lbl_itinerary: 'ଭ୍ରମଣ ସୂଚୀ',
+    cr_note: 'ଆମ ଦଳ ଶୀଘ୍ର ଆପଣଙ୍କ ସହ ଯୋଗାଯୋଗ କରି ଉପଲବ୍ଧତା ଓ ମୂଲ୍ୟ ନିଶ୍ଚିତ କରିବ।',
+    cr_submit: 'ଅନୁସନ୍ଧାନ ପଠାନ୍ତୁ',
+    rev_eyebrow: 'ଅତିଥି ରିପୋର୍ଟ', rev_h1: 'ଜଙ୍ଗଲରୁ<br>କଣ୍ଠସ୍ୱର', rev_sub: 'ଯାଞ୍ଚ ଅଭିଜ୍ଞତା। ଆସାମ ଜଙ୍ଗଲ ଅଗ୍ରଭାଗରୁ ସରାସରି।',
+    rev_stat1: 'ଅତିଥି ରେଟିଂ', rev_stat2: 'ସଫଳ ଭ୍ରମଣ', rev_stat3: 'ପୁଣି ଆସିଥିବା ଅତିଥି',
+    rev_sec_label: 'ରାୟ', rev_sec_title: 'ନିଖୁଣ ଅଭିଜ୍ଞତା', rev_sec_body: 'କାଜିରଙ୍ଗା ଓ ମାନସ ଭ୍ରମଣ କରିଥିବା ଅତିଥିଙ୍କ ସରାସରି ରିପୋର୍ଟ।',
+    rev_form_label: 'ଅଭିଜ୍ଞତା ଭାଗ କରନ୍ତୁ', rev_form_title: 'ଆପଣଙ୍କ ସମୀକ୍ଷା ଦିଅନ୍ତୁ', rev_form_sub: 'ଆପଣଙ୍କ ଜଙ୍ଗଲ ଅଭିଜ୍ଞତା ଦାଖଲ କରନ୍ତୁ।',
+    rev_lbl_name: 'ଆପଣଙ୍କ ନାମ', rev_lbl_sector: 'ଭ୍ରମଣ ଅଞ୍ଚଳ', rev_lbl_rating: 'ରେଟିଂ', rev_lbl_summary: 'ଅଭିଜ୍ଞତା ବିବରଣ', rev_btn: 'ସମୀକ୍ଷା ଦାଖଲ କରନ୍ତୁ',
+    footer_desc: 'ଉତ୍ତର-ପୂର୍ବ ବନ୍ୟଜୀବ ଅନ୍ୱେଷଣର ଆଗଧାଡ଼ି। ସମ୍ବଳ ନ ହେବ। ଶୁଦ୍ଧ ସାହସ।',
+    footer_col1: 'ସ୍ଥଳ', footer_col2: 'ବେସ ଅପ୍ସ', footer_col3: 'ଯୋଗାଯୋଗ',
+    footer_link_kaz: 'କାଜିରଙ୍ଗ', footer_link_manas: 'ମାନସ', footer_link_reports: 'ଫୀଲ୍ଡ ରିପୋର୍ଟ',
+    footer_link_book: 'ସଫାରି ବୁକ', footer_link_intel: 'ସ୍ଥଳ ସୂଚନା', footer_link_reviews: 'ସମୀକ୍ଷା',
+    footer_link_wa: 'ହ୍ୱାଟ୍ସଆପ', footer_link_car: 'କାର ଭଡ଼ା', footer_bottom: '© 2026 ଆସାମ ୱାଇଲ୍ଡ ସଫାରି.',
+    svc1_title: 'କାର ଭଡ଼ା', svc1_desc: 'ଉତ୍ତର-ପୂର୍ବ ଭାରତ ସମଗ୍ରରେ ସବୁ ଭୂ-ଭାଗ ପାଇଁ ପ୍ରିମିୟମ SUV ଓ 4x4. ସ୍ଥାନୀୟ ଜ୍ଞାନ ସହ ବୃତ୍ତିଗତ ଡ୍ରାଇଭର।',
+    svc1_btn: 'ଯାନ ବୁକ କରନ୍ତୁ',
+    svc2_title: 'ହୋଟେଲ ବୁକିଂ', svc2_desc: 'ଉତ୍ତର-ପୂର୍ବ ସମଗ୍ରରେ ସମସ୍ତ ପ୍ରମୁଖ ବନ୍ୟ ଜୀବ ମଣ୍ଡଳ ନିକଟରେ ଯାଞ୍ଚ ହୋଇଥିବା ଇକୋ-ରିଜର୍ଟ ଓ ଆରାମଦାୟକ ଆବାସ।',
+    svc2_btn: 'ଆବାସ ବୁକ କରନ୍ତୁ',
+    policy_title: 'ଅର୍ଥ ଫেରସ୍ତ ଓ ବାତିଲ ନୀତି',
+    policy_text: 'ଯେ କୌଣସି ପରିସ୍ଥିତିରେ ଜାତୀୟ ଉଦ୍ୟାନ ଅଧିକୃତ ପ୍ରବେଶ ଅନୁମତି ନ ଦେଲେ, ୨୪ ଘଣ୍ଟା ମଧ୍ୟରେ ସମ୍ପୂର୍ଣ ଟଙ୍କା ଫェরସ୍ତ ହେବ। ବାତିଲ ଚାର୍ଜ ନାହିଁ।',
+    kaz_desc: 'ଏକ ଶୃଙ୍ଗ ଗଣ୍ଡାର ଚୂଡ଼ାନ୍ତ ଘାଟି। ଏକ ବିଶାଳ, ନିଷ୍ଠୁର ଭୂ-ଦ୍ୟ ଯେଉଁଠି ପ୍ରକୃତି ସম୍ପୂର୍ଣ ଅଧିକାରରେ ଶାସନ କରେ — ବିଶ୍ୱର ସବୁଠୁ ବଡ଼ ଗଣ୍ଡା ଜନସଂଖ୍ୟାର ଘର।',
+    manas_desc: 'ହିମାଳୟ ପାଦଦେଶରେ ଲୁକ୍କାୟିତ, ଐତିହ୍ୟ ପ୍ରସିଦ୍ଧ ଜୀବ-ମଣ୍ଡଳ ସଂରକ୍ଷଣ। ଗୋଲ୍ଡେନ ଲ୍ୟାଙ୍ଗୁର ଓ ପିଗ୍ମି ହଗ୍‌ ର ଶେଷ ଆଶ୍ରୟ।',
+    park_btn: 'ସ୍ଥଳରେ ପ୍ରବେଶ କରନ୍ତୁ',
+    cta_sub: 'ଆସାମ ଅରଣ୍ୟରେ ସମ୍ପୂର୍ଣ ଡୁବ। ସୁରକ୍ଷା, ଦକ୍ଷତା ବା ଅଭିଜ୍ଞତାରେ ଶୂନ ଆପୋଷ।',
+    cta_feat1: 'ଯାଞ୍ଚ ହୋଇଥିବା ବିଶେଷଜ୍ଞ', cta_feat2: 'ତୁରନ୍ତ ଯାତ୍ରା', cta_feat3: 'ସଠିକ ଅନ୍ୱେଷଣ',
+    cta_btn2: 'ଅଭିଯାନ ଅନୁମୋଦନ',
+    btn_enquire: 'ଏବେ ପଚାରନ୍ତୁ',
+    park_kaz_label: 'କାଜିରଙ୍ଗ କେନ୍ଦ୍ରୀୟ ଅଞ୍ଚଳ', park_manas_label: 'ମାନସ ବାଁଶ ବଡ଼ି ଅଞ୍ଚଳ',
+    slot_morning: 'ସକାଳ ସଫାରି', slot_evening: 'ସନ୍ଧ୍ୟା ସଫାରି',
+    rule_children_charge: '5 ବର୍ଷ ଉପରେ ଶିଶୁଙ୍କ ପାଇଁ ପୂର୍ଣ ହାରରେ ଶୁଳ୍କ ଲଗାଯିବ।',
+    rule_no_plastic: 'ଜାତୀୟ ଉଦ୍ୟାନ ଭିତରେ ପ୍ଲାଷ୍ଟିକ ସଂପୂର୍ଣ ନିଷିଦ୍ଧ।',
+    rule_still_camera: 'ଷ୍ଟିଲ ଫଟୋ: ₹100 ପ୍ରବେଶ ଶୁଳ୍କ।',
+    rule_video_kaz: 'ଭିଡିଓ କ୍ୟାମେରା: ₹1,000 ପ୍ରବେଶ ଶୁଳ୍କ।',
+    rule_video_manas: 'ଭିଡିଓ କ୍ୟାମେରା: ₹1,500 ପ୍ରବେଶ ଶୁଳ୍କ।',
+    rule_carry_id: 'ସଫାରି ଦିନ ମୂଳ ଆଧାର / ସରକାରୀ ID ସଙ୍ଗ ରାଖନ୍ତୁ।',
+    rule_pickup: 'ଅତିଥିମାନଙ୍କୁ 24 ଘଣ୍ଟା ଆଗରୁ ପିକ-ଅପ ସ୍ଥାନ ଓ ହୋଟେଲ ନାମ ଜଣାଇବାକୁ ହ\'ବ।',
+    rule_jeep_contact: 'ଜୀପ ଯୋଗାଯୋଗ ନମ୍ବର 24 ଘଣ୍ଟା ଆଗରୁ ଦିଆଯିବ।',
+    rule_aadhaar_rest: 'ଦଳ ପାଇଁ କେବଳ ମୁଖ୍ୟ ଅତିଥିର ଆଧାର ଦରକାର। ଅନ୍ୟଙ୍କ ପାଇଁ ନାମ ଓ ବୟସ।',
+    rule_manas_closed: _no + 'ମାନସ ଜୀପ ସଫାରି ପ୍ରତ୍ୟେକ <strong>ମଙ୍ଗଳବାର ବନ୍ଦ</strong>।' + _end,
+    rule_manas_foreign: 'ବିଦେଶୀ ନାଗରିକ ଅଫଲାଇନ ବୁକ କରନ୍ତୁ — +91 97098 84206 ବା +91 93656 09948।',
+    rules_title_suffix: '— ନିୟମ ଓ ତଥ୍ୟ',
+    gf_adults_hdr: 'ବୟସ୍କ', gf_children_hdr: 'ଶିଶୁ (5 ବର୍ଷ ଓ ତଳ — ମୁଫ୍ତ)',
+    gf_primary: 'ମୁଖ୍ୟ ବୟସ୍କ — ବୁକିଂ ଲିଡ', gf_adult: 'ବୟସ୍କ', gf_child: 'ଶିଶୁ',
+    gf_lbl_name: 'ପୂର୍ଣ ନାମ *', gf_lbl_age: 'ବୟସ *', gf_lbl_contact: 'ଯୋଗାଯୋଗ ନମ୍ବର *',
+    gf_lbl_aadhaar: 'ଆଧାର କାର୍ଡ *', gf_aadhaar_upload: 'ଆଧାର ଅପ୍ଲୋଡ (JPG / PNG / PDF)',
+    sum_adult: 'ଜଣ', sum_adults: 'ଜଣ', sum_child: 'ଶିଶୁ', sum_children: 'ଶିଶୁ',
+    sum_per_adult: '/ ଜଣ', sum_free: 'ମୁଫ୍ତ', sum_no_gst: 'GST ନାହିଁ',
+  };
+
+  /* ─── PUNJABI ─── */
+  T.pa = {
+    lp_title: 'ਆਪਣੀ ਭਾਸ਼ਾ ਚੁਣੋ', lp_subtitle: 'ਜਾਰੀ ਰੱਖਣ ਲਈ ਭਾਸ਼ਾ ਚੁਣੋ', lp_other: 'ਹੋਰ ਭਾਸ਼ਾਵਾਂ', lp_change: 'ਭਾਸ਼ਾ',
+    nav_home: 'ਹੋਮ', nav_itineraries: 'ਯਾਤਰਾ ਯੋਜਨਾ', nav_booking: 'ਬੁਕਿੰਗ', nav_car_rental: 'ਕਾਰ ਕਿਰਾਇਆ', nav_reviews: 'ਸਮੀਖਿਆਵਾਂ', nav_book_safari: 'ਸਫਾਰੀ ਬੁੱਕ ਕਰੋ',
+    rec_text: 'ਅਸਾਮ ਸਰਕਾਰ ਸੈਰ-ਸਪਾਟਾ ਵਿਭਾਗ ਅਤੇ ਬੋਡੋਲੈਂਡ ਟੂਰਿਜ਼ਮ ਦੁਆਰਾ ਮਾਨਤਾ ਪ੍ਰਾਪਤ',
+    home_h1: 'ਅਸਾਮ ਵਿੱਚ ਪਹਿਲੀ ਵਾਰ<br>ਜੀਪ ਸਫਾਰੀ ਔਨਲਾਈਨ ਬੁਕਿੰਗ', home_sub: 'ਕਾਜ਼ੀਰੰਗਾ ਨੈਸ਼ਨਲ ਪਾਰਕ  ਮਾਨਸ ਨੈਸ਼ਨਲ ਪਾਰਕ',
+    home_cta1: 'ਸ਼ੇਅਰਡ ਜੀਪ ਸਫਾਰੀ ਬੁੱਕ ਕਰੋ', home_cta2: 'ਨੌਰਥਈਸਟ ਟੂਰ ਪੈਕੇਜ ਬੁੱਕ ਕਰੋ', home_cta3: 'ਕਾਰ ਕਿਰਾਇਆ',
+    stat_explorers: 'ਸੇਵਾ ਕੀਤੇ ਯਾਤਰੀ', stat_sighting: 'ਦਰਸ਼ਨ ਰਿਕਾਰਡ', stat_experts: 'ਮਾਹਿਰ ਟੀਮ', stat_success: 'ਸਫਲ ਯਾਤਰਾਵਾਂ',
+    intro_label: 'ਕਾਰਜ ਸੂਚਨਾ', intro_title: 'ਅਸੀਂ ਸਿਰਫ਼ ਸੈਰ ਨਹੀਂ ਕਰਦੇ। ਅਸੀਂ ਖੋਜ ਕਰਦੇ ਹਾਂ।',
+    intro_body: 'ਦੂਜੇ ਤੁਹਾਨੂੰ ਸਾਧਾਰਣ ਸੈਰ ਲਈ ਲੈ ਜਾਂਦੇ ਹਨ, ਅਸੀਂ ਇੱਕ ਰਣਨੀਤਕ ਮੁਹਿੰਮ ਚਲਾਉਂਦੇ ਹਾਂ। ਸਾਡੇ ਕੁਦਰਤ ਮਾਹਿਰ ਜੰਗਲ ਦੀ ਹਰ ਨਿਸ਼ਾਨੀ ਪੜ੍ਹਣ ਲਈ ਸਿਖਲਾਈ ਪ੍ਰਾਪਤ ਹਨ।',
+    feat1_title: 'ਮਾਹਿਰ ਟ੍ਰੈਕਰ', feat1_desc: 'ਅਸਾਮ ਦੇ ਰਾਸ਼ਟਰੀ ਪਾਰਕਾਂ ਵਿੱਚ 15+ ਸਾਲਾਂ ਦਾ ਤਜਰਬਾ।',
+    feat2_title: 'ਵੱਧ ਤੋਂ ਵੱਧ ਦਰਸ਼ਨ', feat2_desc: 'ਵੱਧ ਤੋਂ ਵੱਧ ਜੰਗਲੀ ਜੀਵ ਦਰਸ਼ਨ ਲਈ ਅਨੁਕੂਲਿਤ ਸਮਾਂ-ਸਾਰਣੀ।',
+    trend_label: 'ਹੁਣ ਟ੍ਰੈਂਡਿੰਗ', trend_title: 'ਮਸ਼ਹੂਰ ਯਾਤਰਾ ਯੋਜਨਾਵਾਂ',
+    ne_label: 'ਦਿਗੰਤ ਤੋਂ ਪਰੇ', ne_title: 'ਉੱਤਰ-ਪੂਰਬ ਟੂਰ ਪੈਕੇਜ', ne_sub: 'ਉੱਤਰ-ਪੂਰਬ ਦੇ ਅਣਜਾਣੇ ਖੇਤਰਾਂ ਵਿੱਚ ਡੂੰਘੇ ਜਾਓ।',
+    safari_label: 'ਪਾਰਕ ਚੋਣ', safari_title: 'ਆਪਣਾ ਰਾਸ਼ਟਰੀ ਪਾਰਕ ਚੁਣੋ',
+    cta_label: 'ਅੰਤਿਮ ਸੂਚਨਾ', cta_title: 'ਕੋਈ ਸਮਝੌਤਾ ਨਹੀਂ।<br>ਸਿਰਫ਼ ਸਾਹਸ।', cta_btn: 'ਆਪਣੀ ਮੁਹਿੰਮ ਸ਼ੁਰੂ ਕਰੋ',
+    itin_eyebrow: 'ਯਾਤਰਾ ਜਾਣਕਾਰੀ', itin_h1: 'ਜੰਗਲ<br>ਜਾਣਕਾਰੀ', itin_sub: 'ਉੱਤਰ-ਪੂਰਬ ਭਾਰਤ ਦੇ ਮੁੱਖ ਜੰਗਲੀ ਜੀਵ ਖੇਤਰਾਂ ਦੀ ਵਿਸਤਾਰਿਤ ਜਾਣਕਾਰੀ।',
+    book_eyebrow: 'ਜੰਗਲ ਵੱਲ ਪ੍ਰਸਥਾਨ', book_h1: 'ਆਪਣੀ ਸੀਟ<br>ਸੁਰੱਖਿਅਤ ਕਰੋ', book_sub: 'ਗਾਰੰਟੀਡ ਪ੍ਰਵੇਸ਼। ਮਾਹਿਰ ਕੁਦਰਤ ਵਿਗਿਆਨੀ। ਤੁਹਾਡਾ ਸਾਹਸ ਇੱਥੋਂ ਸ਼ੁਰੂ ਹੁੰਦਾ ਹੈ।',
+    step_destination: 'ਮੰਜ਼ਿਲ', step_schedule: 'ਸਮਾਂ-ਸਾਰਣੀ', step_guest: 'ਮਹਿਮਾਨ', step_payment: 'ਭੁਗਤਾਨ',
+    bk_s1_label: 'ਕਦਮ 1 / 4', bk_s1_title: 'ਆਪਣੀ<br>ਮੰਜ਼ਿਲ ਚੁਣੋ', bk_s2_label: 'ਕਦਮ 2 / 4', bk_s2_title: 'ਆਪਣਾ ਸਮਾਂ ਚੁਣੋ', bk_s3_label: 'ਕਦਮ 3 / 4', bk_s3_title: 'ਮਹਿਮਾਨ ਜਾਣਕਾਰੀ', bk_s4_label: 'ਕਦਮ 4 / 4', bk_s4_title: 'ਭੁਗਤਾਨ ਪੂਰਾ ਕਰੋ',
+    bk_lbl_date: 'ਸਫਾਰੀ ਤਾਰੀਖ਼', bk_lbl_guests: 'ਮਹਿਮਾਨਾਂ ਦੀ ਗਿਣਤੀ', bk_lbl_slot: 'ਸਮਾਂ ਸਲਾਟ', bk_lbl_name: 'ਪੂਰਾ ਨਾਮ *', bk_lbl_age: 'ਉਮਰ *', bk_lbl_phone: 'ਸੰਪਰਕ ਨੰਬਰ *', bk_lbl_aadhaar: 'ਆਧਾਰ ਕਾਰਡ *', bk_lbl_payment: 'ਭੁਗਤਾਨ ਸਕ੍ਰੀਨਸ਼ੌਟ *', bk_lbl_utr: 'ਟ੍ਰਾਂਜ਼ੈਕਸ਼ਨ ID / UTR ਨੰਬਰ (ਵਿਕਲਪਿਕ)',
+    bk_hint_payment: 'ਕਿਰਪਾ ਕਰਕੇ ਆਪਣੇ ਸਫਲ ਟ੍ਰਾਂਜ਼ੈਕਸ਼ਨ ਦਾ ਸਕ੍ਰੀਨਸ਼ੌਟ ਅਪਲੋਡ ਕਰੋ।',
+    bk_next1: 'ਅਗਲਾ: ਤਾਰੀਖ਼ ਚੁਣੋ →', bk_next2: 'ਅਗਲਾ: ਮਹਿਮਾਨ ਜਾਣਕਾਰੀ →', bk_next3: 'ਅਗਲਾ: ਭੁਗਤਾਨ →', bk_back: '← ਵਾਪਸ', bk_submit: 'ਬੁਕਿੰਗ ਪੱਕੀ ਕਰੋ',
+    bk_kaz_tag: 'ਯੂਨੈਸਕੋ ਕਿਲ੍ਹਾ · ਕੇਂਦਰੀ ਰੇਂਜ', bk_kaz_price: '₹1,000 / ਵਿਅਕਤੀ · ਸਵੇਰ 9–11 / ਸ਼ਾਮ 2–4',
+    bk_manas_tag: 'ਜੀਵ-ਮੰਡਲ ਰਿਜ਼ਰਵ · ਬਾਂਸਬਾੜੀ ਰੇਂਜ', bk_manas_price: '₹1,300 / ਵਿਅਕਤੀ · ਸਵੇਰ 8–12 / ਸ਼ਾਮ 2–4',
+    bk_group_title: 'ਗਰੁੱਪ / ਪ੍ਰਾਈਵੇਟ ਜੀਪ ਕੀਮਤ',
+    bk_group_text: '3 ਤੋਂ ਵੱਧ — ਕਾਜ਼ੀਰੰਗਾ ₹3,500 / ਜੀਪ | ਮਾਨਸ ₹4,500 / ਜੀਪ',
+    bk_group_sub: 'ਪ੍ਰਾਈਵੇਟ ਅਧਾਰ · ਜੀਪ ਪਿੱਛੇ ਵੱਧ ਤੋਂ ਵੱਧ 6 ਲੋਕ',
+    bk_tuesday: '⚠ ਮਾਨਸ ਬਾਂਸਬਾੜੀ ਰੇਂਜ ਹਰ ਮੰਗਲਵਾਰ ਬੰਦ ਰਹਿੰਦੀ ਹੈ। ਕਿਰਪਾ ਕਰਕੇ ਦੂਜੀ ਤਾਰੀਖ਼ ਚੁਣੋ।',
+    bk_adults_label: 'ਬਾਲਗ', bk_adults_note: '(5 ਸਾਲ ਤੋਂ ਵੱਧ · ਕੀਮਤ ਲੱਗੇਗੀ)',
+    bk_children_label: 'ਬੱਚੇ', bk_children_note: '(5 ਸਾਲ ਅਤੇ ਘੱਟ · ਮੁਫ਼ਤ)',
+    bk_adults_unit: 'ਬਾਲਗ', bk_children_unit: 'ਬੱਚੇ',
+    bk_preview_title: 'ਤੁਹਾਡੀ ਚੁਣੀ ਸਫਾਰੀ',
+    bk_guest_note: '<strong>ਮੁੱਖ ਮਹਿਮਾਨ</strong> (ਮਹਿਮਾਨ 1) ਨੂੰ ਆਧਾਰ ਕਾਰਡ ਅਤੇ ਸੰਪਰਕ ਦੇਣਾ ਹੋਵੇਗਾ। ਬਾਕੀ ਮਹਿਮਾਨਾਂ ਲਈ ਸਿਰਫ਼ ਨਾਮ ਅਤੇ ਉਮਰ ਚਾਹੀਦੀ ਹੈ।',
+    bk_pay_label: 'ਕੁੱਲ ਦੇਣਯੋਗ ਰਕਮ (GST ਤੋਂ ਬਿਨਾਂ)',
+    bk_upi_badge: 'ਕਿਸੇ ਵੀ UPI ਐਪ ਨਾਲ ਸਕੈਨ ਕਰੋ ਅਤੇ ਭੁਗਤਾਨ ਕਰੋ',
+    bk_upload_label: 'ਭੁਗਤਾਨ ਸਕ੍ਰੀਨਸ਼ਾਟ ਅੱਪਲੋਡ ਕਰੋ',
+    bk_submit_pay: 'ਬੁਕਿੰਗ ਜਮ੍ਹਾਂ ਕਰੋ ਅਤੇ ਭੁਗਤਾਨ ਪੁਸ਼ਟੀ ਕਰੋ',
+    bk_refund_title: 'ਵਾਪਸੀ ਨੀਤੀ',
+    bk_refund_text: 'ਕਿਸੇ ਵੀ ਹਾਲਾਤ ਵਿੱਚ ਰਾਸ਼ਟਰੀ ਪਾਰਕ ਅਥਾਰਟੀ ਦਾਖਲੇ ਦੀ ਇਜਾਜ਼ਤ ਨਾ ਦੇਵੇ, ਤਾਂ 24 ਘੰਟਿਆਂ ਵਿੱਚ ਪੂਰੀ ਰਕਮ ਵਾਪਸ ਕੀਤੀ ਜਾਵੇਗੀ।',
+    bk_tnc_agree: 'ਮੈਂ ਵਾਪਸੀ ਨੀਤੀ ਪੜ੍ਹੀ ਹੈ ਅਤੇ ਸਹਿਮਤ ਹਾਂ।',
+    bk_back_guest: '← ਮਹਿਮਾਨ ਜਾਣਕਾਰੀ ਤੇ ਵਾਪਸ',
+    bk_sum_title: 'ਮਿਸ਼ਨ ਸੰਖੇਪ',
+    bk_sum_dest: 'ਮੰਜ਼ਿਲ', bk_sum_date: 'ਤਾਰੀਖ਼', bk_sum_time: 'ਸਮਾਂ ਸਲੋਟ',
+    bk_sum_adults: 'ਬਾਲਗ', bk_sum_children: 'ਬੱਚੇ', bk_sum_rate: 'ਦਰ',
+    bk_sum_total: 'ਕੁੱਲ (GST ਤੋਂ ਬਿਨਾਂ)',
+    bk_sum_note: '5 ਸਾਲ ਅਤੇ ਘੱਟ ਦੇ ਬੱਚੇ ਮੁਫ਼ਤ। 5 ਸਾਲ ਤੋਂ ਵੱਧ ਪੂਰੀ ਦਰ।',
+    bk_need_help: 'ਮਦਦ ਦੀ ਲੋੜ ਹੈ?',
+    bk_park_rules: 'ਪਾਰਕ ਨਿਯਮ ਅਤੇ ਜਾਣਕਾਰੀ',
+    bk_park_rules2: 'ਮਹੱਤਵਪੂਰਨ — ਪਾਰਕ ਨਿਯਮ ਅਤੇ ਕੈਮਰਾ ਚਾਰਜ',
+    cr_eyebrow: 'ਜ਼ਮੀਨੀ ਆਵਾਜਾਈ', cr_h1: 'ਕਾਰ<br>ਕਿਰਾਇਆ', cr_sub: 'ਉੱਤਰ-ਪੂਰਬ ਭਾਰਤ ਵਿੱਚ ਹਰ ਭੂ-ਭਾਗ ਲਈ ਉੱਚ ਕੋਟੀ ਵਾਹਨ।',
+    cr_block_vehicle: 'ਵਾਹਨ ਚੁਣੋ', cr_block_trip: 'ਯਾਤਰਾ ਵੇਰਵਾ', cr_lbl_pax: 'ਯਾਤਰੀਆਂ ਦੀ ਗਿਣਤੀ *', cr_lbl_itin: 'ਯਾਤਰਾ ਮਾਰਗ ਚੁਣੋ *', cr_opt_choose: '-- ਯਾਤਰਾ ਮਾਰਗ ਚੁਣੋ --',
+    cr_sum_title: 'ਤੁਹਾਡੀ ਚੋਣ', cr_veh_req: 'ਲੋੜੀਂਦੇ ਵਾਹਨ', cr_lbl_vehicle: 'ਵਾਹਨ', cr_lbl_capacity: 'ਸਮਰੱਥਾ', cr_lbl_pax2: 'ਯਾਤਰੀ', cr_lbl_veh_needed: 'ਲੋੜੀਂਦੇ ਵਾਹਨ', cr_lbl_itinerary: 'ਯਾਤਰਾ ਯੋਜਨਾ',
+    cr_note: 'ਸਾਡੀ ਟੀਮ ਜਲਦੀ ਹੀ ਤੁਹਾਡੇ ਨਾਲ ਸੰਪਰਕ ਕਰਕੇ ਉਪਲਬਧਤਾ ਅਤੇ ਕੀਮਤ ਦੱਸੇਗੀ।',
+    cr_submit: 'ਪੁੱਛ-ਗਿੱਛ ਭੇਜੋ',
+    rev_eyebrow: 'ਮਹਿਮਾਨ ਰਿਪੋਰਟ', rev_h1: 'ਜੰਗਲ ਤੋਂ<br>ਆਵਾਜ਼ਾਂ', rev_sub: 'ਤਸਦੀਕਸ਼ੁਦਾ ਤਜਰਬੇ। ਅਸਾਮ ਦੇ ਜੰਗਲਾਂ ਤੋਂ ਸਿੱਧੇ।',
+    rev_stat1: 'ਮਹਿਮਾਨ ਰੇਟਿੰਗ', rev_stat2: 'ਸਫਲ ਯਾਤਰਾਵਾਂ', rev_stat3: 'ਦੁਬਾਰਾ ਆਏ ਮਹਿਮਾਨ',
+    rev_sec_label: 'ਫ਼ੈਸਲਾ', rev_sec_title: 'ਅਸਲੀ ਤਜਰਬੇ', rev_sec_body: 'ਕਾਜ਼ੀਰੰਗਾ ਅਤੇ ਮਾਨਸ ਵਿੱਚ ਯਾਤਰਾ ਕੀਤੇ ਮਹਿਮਾਨਾਂ ਦੀਆਂ ਸਿੱਧੀਆਂ ਰਿਪੋਰਟਾਂ।',
+    rev_form_label: 'ਤਜਰਬਾ ਸਾਂਝਾ ਕਰੋ', rev_form_title: 'ਆਪਣੀ ਸਮੀਖਿਆ ਦਿਓ', rev_form_sub: 'ਆਪਣਾ ਜੰਗਲ ਤਜਰਬਾ ਦਰਜ ਕਰੋ। ਤੁਹਾਡੀ ਜਾਣਕਾਰੀ ਭਵਿੱਖ ਦੇ ਯਾਤਰੀਆਂ ਦੀ ਮਦਦ ਕਰੇਗੀ।',
+    rev_lbl_name: 'ਤੁਹਾਡਾ ਨਾਮ', rev_lbl_sector: 'ਯਾਤਰਾ ਖੇਤਰ', rev_lbl_rating: 'ਰੇਟਿੰਗ', rev_lbl_summary: 'ਤਜਰਬੇ ਦਾ ਵੇਰਵਾ', rev_btn: 'ਸਮੀਖਿਆ ਜਮ੍ਹਾਂ ਕਰੋ',
+    footer_desc: 'ਉੱਤਰ-ਪੂਰਬ ਜੰਗਲੀ ਜੀਵ ਖੋਜ ਦੀ ਅਗਲੀ ਕਤਾਰ। ਕੋਈ ਸਮਝੌਤਾ ਨਹੀਂ। ਖਾਲਿਸ ਜੋਸ਼।',
+    footer_col1: 'ਖੇਤਰ', footer_col2: 'ਬੇਸ ਓਪਸ', footer_col3: 'ਸੰਪਰਕ',
+    footer_link_kaz: 'ਕਾਜ਼ੀਰੰਗਾ', footer_link_manas: 'ਮਾਨਸ', footer_link_reports: 'ਫੀਲਡ ਰਿਪੋਰਟ',
+    footer_link_book: 'ਸਫਾਰੀ ਬੁੱਕ', footer_link_intel: 'ਖੇਤਰ ਜਾਣਕਾਰੀ', footer_link_reviews: 'ਸਮੀਖਿਆਵਾਂ',
+    footer_link_wa: 'ਵਟਸਐਪ', footer_link_car: 'ਕਾਰ ਕਿਰਾਇਆ', footer_bottom: '© 2026 ਅਸਾਮ ਵਾਈਲਡ ਸਫਾਰੀ.',
+    svc1_title: 'ਕਾਰ ਕਿਰਾਇਆ', svc1_desc: 'ਉੱਤਰ-ਪੂਰਬ ਭਾਰਤ ਵਿੱਚ ਹਰ ਇਲਾਕੇ ਲਈ ਪ੍ਰੀਮੀਅਮ SUV ਅਤੇ 4x4। ਸਥਾਨਕ ਜਾਣਕਾਰੀ ਵਾਲੇ ਪੇਸ਼ੇਵਰ ਡਰਾਈਵਰ।',
+    svc1_btn: 'ਵਾਹਨ ਬੁੱਕ ਕਰੋ',
+    svc2_title: 'ਹੋਟਲ ਬੁਕਿੰਗ', svc2_desc: 'ਉੱਤਰ-ਪੂਰਬ ਵਿੱਚ ਸਾਰੇ ਮੁੱਖ ਜੰਗਲੀ ਜੀਵ ਖੇਤਰਾਂ ਦੇ ਨੇੜੇ ਤਸਦੀਕਸ਼ੁਦਾ ਇਕੋ-ਰਿਜ਼ੋਰਟ ਅਤੇ ਆਰਾਮਦਾਇਕ ਠਹਿਰਾਅ।',
+    svc2_btn: 'ਠਹਿਰਾਅ ਬੁੱਕ ਕਰੋ',
+    policy_title: 'ਵਾਪਸੀ ਅਤੇ ਰੱਦਕਰਨ ਨੀਤੀ',
+    policy_text: 'ਕਿਸੇ ਵੀ ਹਾਲਾਤ ਵਿੱਚ ਜੇ ਰਾਸ਼ਟਰੀ ਪਾਰਕ ਅਥਾਰਟੀ ਦਾਖਲੇ ਦੀ ਇਜਾਜ਼ਤ ਨਾ ਦੇਵੇ, ਤਾਂ 24 ਘੰਟਿਆਂ ਵਿੱਚ ਪੂਰੀ ਰਕਮ ਵਾਪਸ ਕਰ ਦਿੱਤੀ ਜਾਵੇਗੀ। ਕੋਈ ਰੱਦਕਰਨ ਚਾਰਜ ਨਹੀਂ।',
+    kaz_desc: 'ਇੱਕ ਸਿੰਗ ਵਾਲੇ ਗੈਂਡੇ ਦਾ ਅੰਤਿਮ ਗੜ੍ਹ। ਇੱਕ ਵਿਸ਼ਾਲ, ਕਠੋਰ ਭੂ-ਦ੍ਰਿਸ਼ ਜਿੱਥੇ ਕੁਦਰਤ ਪੂਰਨ ਅਧਿਕਾਰ ਨਾਲ ਰਾਜ ਕਰਦੀ ਹੈ — ਦੁਨੀਆ ਦੀ ਸਭ ਤੋਂ ਵੱਡੀ ਗੈਂਡੇ ਦੀ ਆਬਾਦੀ ਦਾ ਘਰ।',
+    manas_desc: 'ਹਿਮਾਲਿਆ ਦੀਆਂ ਤਲਹਟੀਆਂ ਵਿੱਚ ਲੁਕਿਆ, ਦੰਤਕਥਾ ਵਾਲਾ ਜੀਵ-ਮੰਡਲ ਭੰਡਾਰ। ਗੋਲਡਨ ਲੰਗੂਰ ਅਤੇ ਪਿਗਮੀ ਹਾਗ ਦਾ ਆਖਰੀ ਆਸਰਾ।',
+    park_btn: 'ਖੇਤਰ ਵਿੱਚ ਦਾਖਲ ਹੋਵੋ',
+    cta_sub: 'ਅਸਾਮ ਦੇ ਜੰਗਲ ਵਿੱਚ ਪੂਰਨ ਡੁੱਬਕੀ। ਸੁਰੱਖਿਆ, ਮਾਹਰਤਾ ਜਾਂ ਤਜਰਬੇ ਵਿੱਚ ਕੋਈ ਸਮਝੌਤਾ ਨਹੀਂ।',
+    cta_feat1: 'ਤਸਦੀਕਸ਼ੁਦਾ ਮਾਹਰ', cta_feat2: 'ਤੁਰੰਤ ਰਵਾਨਗੀ', cta_feat3: 'ਸਟੀਕ ਖੋਜ',
+    cta_btn2: 'ਮੁਹਿੰਮ ਅਧਿਕਾਰਤ ਕਰੋ',
+    btn_enquire: 'ਹੁਣੇ ਪੁੱਛੋ',
+    park_kaz_label: 'ਕਾਜ਼ੀਰੰਗਾ ਕੇਂਦਰੀ ਰੇਂਜ', park_manas_label: 'ਮਾਨਸ ਬਾਂਸਬਾੜੀ ਰੇਂਜ',
+    slot_morning: 'ਸਵੇਰੇ ਦੀ ਸਫਾਰੀ', slot_evening: 'ਸ਼ਾਮ ਦੀ ਸਫਾਰੀ',
+    rule_children_charge: '5 ਸਾਲ ਤੋਂ ਵੱਧ ਬੱਚਿਆਂ ਤੋਂ ਪੂਰੀ ਦਰ ਨਾਲ ਚਾਰਜ ਲਿਆ ਜਾਵੇਗਾ।',
+    rule_no_plastic: 'ਰਾਸ਼ਟਰੀ ਪਾਰਕ ਦੇ ਅੰਦਰ ਪਲਾਸਟਿਕ ਸਖ਼ਤੀ ਨਾਲ ਮਨ੍ਹਾ ਹੈ।',
+    rule_still_camera: 'ਸਟਿੱਲ ਕੈਮਰਾ: ₹100 ਦਾਖਲਾ ਚਾਰਜ।',
+    rule_video_kaz: 'ਵੀਡੀਓ ਕੈਮਰਾ: ₹1,000 ਦਾਖਲਾ ਚਾਰਜ।',
+    rule_video_manas: 'ਵੀਡੀਓ ਕੈਮਰਾ: ₹1,500 ਦਾਖਲਾ ਚਾਰਜ।',
+    rule_carry_id: 'ਸਫਾਰੀ ਵਾਲੇ ਦਿਨ ਅਸਲੀ ਆਧਾਰ / ਸਰਕਾਰੀ ID ਨਾਲ ਲੈ ਕੇ ਜਾਓ।',
+    rule_pickup: 'ਮਹਿਮਾਨਾਂ ਨੂੰ 24 ਘੰਟੇ ਪਹਿਲਾਂ ਪਿਕ-ਅੱਪ ਥਾਂ ਅਤੇ ਹੋਟਲ ਦਾ ਨਾਮ ਦੱਸਣਾ ਹੋਵੇਗਾ।',
+    rule_jeep_contact: 'ਜੀਪ ਸੰਪਰਕ ਨੰਬਰ 24 ਘੰਟੇ ਪਹਿਲਾਂ ਦਿੱਤੇ ਜਾਣਗੇ।',
+    rule_aadhaar_rest: 'ਗਰੁੱਪ ਲਈ ਸਿਰਫ਼ ਮੁੱਖ ਮਹਿਮਾਨ ਦਾ ਆਧਾਰ ਚਾਹੀਦਾ ਹੈ। ਬਾਕੀਆਂ ਲਈ ਸਿਰਫ਼ ਨਾਮ ਅਤੇ ਉਮਰ।',
+    rule_manas_closed: _no + 'ਮਾਨਸ ਜੀਪ ਸਫਾਰੀ ਹਰ <strong>ਮੰਗਲਵਾਰ ਬੰਦ</strong>।' + _end,
+    rule_manas_foreign: 'ਵਿਦੇਸ਼ੀ ਨਾਗਰਿਕ ਔਫਲਾਈਨ ਬੁੱਕ ਕਰਨ — +91 97098 84206 ਜਾਂ +91 93656 09948।',
+    rules_title_suffix: '— ਨਿਯਮ ਅਤੇ ਜਾਣਕਾਰੀ',
+    gf_adults_hdr: 'ਬਾਲਗ', gf_children_hdr: 'ਬੱਚੇ (5 ਸਾਲ ਅਤੇ ਘੱਟ — ਮੁਫ਼ਤ)',
+    gf_primary: 'ਮੁੱਖ ਬਾਲਗ — ਬੁਕਿੰਗ ਲੀਡ', gf_adult: 'ਬਾਲਗ', gf_child: 'ਬੱਚਾ',
+    gf_lbl_name: 'ਪੂਰਾ ਨਾਮ *', gf_lbl_age: 'ਉਮਰ *', gf_lbl_contact: 'ਸੰਪਰਕ ਨੰਬਰ *',
+    gf_lbl_aadhaar: 'ਆਧਾਰ ਕਾਰਡ *', gf_aadhaar_upload: 'ਆਧਾਰ ਅਪਲੋਡ ਕਰੋ (JPG / PNG / PDF)',
+    sum_adult: 'ਬਾਲਗ', sum_adults: 'ਬਾਲਗ', sum_child: 'ਬੱਚਾ', sum_children: 'ਬੱਚੇ',
+    sum_per_adult: '/ ਵਿਅਕਤੀ', sum_free: 'ਮੁਫ਼ਤ', sum_no_gst: 'GST ਨਹੀਂ',
+  };
+
+  /* ─── KANNADA ─── */
+  T.kn = {
+    lp_title: 'ನಿಮ್ಮ ಭಾಷೆ ಆರಿಸಿ', lp_subtitle: 'ಮುಂದುವರಿಯಲು ಭಾಷೆ ಆರಿಸಿ', lp_other: 'ಹೆಚ್ಚಿನ ಭಾಷೆಗಳು', lp_change: 'ಭಾಷೆ',
+    nav_home: 'ಮನೆ', nav_itineraries: 'ಪ್ರಯಾಣ ವಿವರ', nav_booking: 'ಬುಕಿಂಗ್', nav_car_rental: 'ಕಾರ್ ಬಾಡಿಗೆ', nav_reviews: 'ವಿಮರ್ಶೆಗಳು', nav_book_safari: 'ಸಫಾರಿ ಬುಕ್ ಮಾಡಿ',
+    rec_text: 'ಅಸ್ಸಾಂ ಸರ್ಕಾರ ಪ್ರವಾಸೋದ್ಯಮ ಇಲಾಖೆ ಮತ್ತು ಬೋಡೋಲ್ಯಾಂಡ್ ಟೂರಿಸಂ ಅನುಮೋದಿಸಿದೆ',
+    home_h1: 'ಅಸ್ಸಾಂನಲ್ಲಿ ಮೊದಲ ಬಾರಿ<br>ಜೀಪ್ ಸಫಾರಿ ಆನ್‌ಲೈನ್ ಬುಕಿಂಗ್', home_sub: 'ಕಾಜಿರಂಗ ರಾಷ್ಟ್ರೀಯ ಉದ್ಯಾನ  ಮಾನಸ್ ರಾಷ್ಟ್ರೀಯ ಉದ್ಯಾನ',
+    home_cta1: 'ಹಂಚಿಕೆ ಜೀಪ್ ಸಫಾರಿ ಬುಕ್ ಮಾಡಿ', home_cta2: 'ನಾರ್ತ್‌ಈಸ್ಟ್ ಟೂರ್ ಪ್ಯಾಕೇಜ್ ಬುಕ್ ಮಾಡಿ', home_cta3: 'ಕಾರ್ ಬಾಡಿಗೆ',
+    stat_explorers: 'ಸೇವೆ ನೀಡಿದ ಪ್ರವಾಸಿಗರು', stat_sighting: 'ದರ್ಶನ ದಾಖಲೆ', stat_experts: 'ತಜ್ಞ ತಂಡ', stat_success: 'ಯಶಸ್ವಿ ಅಭಿಯಾನಗಳು',
+    intro_label: 'ಕಾರ್ಯಾಚರಣೆ ಮಾಹಿತಿ', intro_title: 'ನಾವು ಕೇವಲ ಪ್ರವಾಸ ಮಾಡುವುದಿಲ್ಲ. ನಾವು ಅನ್ವೇಷಿಸುತ್ತೇವೆ.',
+    intro_body: 'ಇತರರು ನಿಮ್ಮನ್ನು ಸಾಮಾನ್ಯ ಪ್ರವಾಸಕ್ಕೆ ಕರೆದೊಯ್ಯುತ್ತಾರೆ, ನಾವು ಒಂದು ಕಾರ್ಯತಂತ್ರ ಅಭಿಯಾನ ನಡೆಸುತ್ತೇವೆ. ಕಾಜಿರಂಗ ಮತ್ತು ಮಾನಸ್‌ನಲ್ಲಿ ನಾವು ಈ ಭೂಮಿಯ ಒಡೆಯರು.',
+    feat1_title: 'ತಜ್ಞ ಟ್ರ್ಯಾಕರ್‌ಗಳು', feat1_desc: 'ಅಸ್ಸಾಂ ರಾಷ್ಟ್ರೀಯ ಉದ್ಯಾನಗಳಲ್ಲಿ 15+ ವರ್ಷಗಳ ಕ್ಷೇತ್ರ ಪರಿಣತಿ.',
+    feat2_title: 'ಗರಿಷ್ಠ ದರ್ಶನ', feat2_desc: 'ಗರಿಷ್ಠ ವನ್ಯಜೀವಿ ದರ್ಶನಕ್ಕಾಗಿ ಅನುಕೂಲಿಸಿದ ಸಮಯ ನಿರ್ಧಾರ.',
+    trend_label: 'ಈಗ ಟ್ರೆಂಡಿಂಗ್', trend_title: 'ಜನಪ್ರಿಯ ಪ್ರಯಾಣ ವಿವರ',
+    ne_label: 'ದಿಗಂತದಾಚೆ', ne_title: 'ಈಶಾನ್ಯ ಟೂರ್ ಪ್ಯಾಕೇಜ್‌ಗಳು', ne_sub: 'ಈಶಾನ್ಯದ ಅಜ್ಞಾತ ಪ್ರದೇಶಗಳಿಗೆ ಆಳವಾಗಿ ಹೋಗಿ. ತವಾಂಗ್ ಶಿಖರಗಳಿಂದ ಭೂತಾನ್ ಕಣಿವೆಗಳವರೆಗೆ.',
+    safari_label: 'ಉದ್ಯಾನ ಆಯ್ಕೆ', safari_title: 'ನಿಮ್ಮ ರಾಷ್ಟ್ರೀಯ ಉದ್ಯಾನ ಆರಿಸಿ',
+    cta_label: 'ಅಂತಿಮ ಸೂಚನೆ', cta_title: 'ಯಾವುದೇ ರಾಜಿ ಇಲ್ಲ.<br>ಕೇವಲ ಸಾಹಸ.', cta_btn: 'ನಿಮ್ಮ ಅಭಿಯಾನ ಪ್ರಾರಂಭಿಸಿ',
+    itin_eyebrow: 'ಪ್ರಯಾಣ ಮಾಹಿತಿ', itin_h1: 'ಕಾಡಿನ<br>ಮಾಹಿತಿ', itin_sub: 'ಈಶಾನ್ಯ ಭಾರತದ ಪ್ರಮುಖ ವನ್ಯಜೀವಿ ಪ್ರದೇಶಗಳ ವಿಸ್ತೃತ ಮಾಹಿತಿ.',
+    book_eyebrow: 'ಕಾಡಿಗೆ ಪ್ರಯಾಣ', book_h1: 'ನಿಮ್ಮ ಸ್ಥಾನ<br>ಖಚಿತಗೊಳಿಸಿ', book_sub: 'ಖಾತ್ರಿ ಪ್ರವೇಶ. ತಜ್ಞ ಪ್ರಕೃತಿ ವಿಜ್ಞಾನಿಗಳು. ನಿಮ್ಮ ಸಾಹಸ ಇಲ್ಲಿಂದ ಪ್ರಾರಂಭ.',
+    step_destination: 'ಗಮ್ಯಸ್ಥಾನ', step_schedule: 'ವೇಳಾಪಟ್ಟಿ', step_guest: 'ಅತಿಥಿ', step_payment: 'ಪಾವತಿ',
+    bk_s1_label: 'ಹಂತ 1 / 4', bk_s1_title: 'ನಿಮ್ಮ<br>ಗಮ್ಯಸ್ಥಾನ ಆರಿಸಿ', bk_s2_label: 'ಹಂತ 2 / 4', bk_s2_title: 'ಸಮಯ ಆರಿಸಿ', bk_s3_label: 'ಹಂತ 3 / 4', bk_s3_title: 'ಅತಿಥಿ ವಿವರಗಳು', bk_s4_label: 'ಹಂತ 4 / 4', bk_s4_title: 'ಪಾವತಿ ಪೂರ್ಣಗೊಳಿಸಿ',
+    bk_lbl_date: 'ಸಫಾರಿ ದಿನಾಂಕ', bk_lbl_guests: 'ಅತಿಥಿಗಳ ಸಂಖ್ಯೆ', bk_lbl_slot: 'ಸಮಯ ಸ್ಲಾಟ್', bk_lbl_name: 'ಪೂರ್ಣ ಹೆಸರು *', bk_lbl_age: 'ವಯಸ್ಸು *', bk_lbl_phone: 'ಸಂಪರ್ಕ ಸಂಖ್ಯೆ *', bk_lbl_aadhaar: 'ಆಧಾರ್ ಕಾರ್ಡ್ *', bk_lbl_payment: 'ಪಾವತಿ ಸ್ಕ್ರೀನ್‌ಶಾಟ್ *', bk_lbl_utr: 'ವ್ಯವಹಾರ ID / UTR ಸಂಖ್ಯೆ (ಐಚ್ಛಿಕ)',
+    bk_hint_payment: 'ದಯವಿಟ್ಟು ನಿಮ್ಮ ಯಶಸ್ವಿ ವ್ಯವಹಾರದ ಸ್ಕ್ರೀನ್‌ಶಾಟ್ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ.',
+    bk_next1: 'ಮುಂದೆ: ದಿನಾಂಕ ಆರಿಸಿ →', bk_next2: 'ಮುಂದೆ: ಅತಿಥಿ ವಿವರ →', bk_next3: 'ಮುಂದೆ: ಪಾವತಿ →', bk_back: '← ಹಿಂದೆ', bk_submit: 'ಬುಕಿಂಗ್ ದೃಢಪಡಿಸಿ',
+    bk_kaz_tag: 'ಯುನೆಸ್ಕೋ ಕೋಟೆ · ಕೇಂದ್ರ ವ್ಯಾಪ್ತಿ', bk_kaz_price: '₹1,000 / ವ್ಯಕ್ತಿ · ಬೆಳಿಗ್ಗೆ 9–11 / ಸಂಜೆ 2–4',
+    bk_manas_tag: 'ಜೀವ-ಗೋಳ ಸಂರಕ್ಷಣೆ · ಬಾನ್ಸ್‌ಬಾರಿ ವ್ಯಾಪ್ತಿ', bk_manas_price: '₹1,300 / ವ್ಯಕ್ತಿ · ಬೆಳಿಗ್ಗೆ 8–12 / ಸಂಜೆ 2–4',
+    bk_group_title: 'ಗುಂಪು / ಖಾಸಗಿ ಜೀಪ್ ದರ',
+    bk_group_text: '3ಕ್ಕಿಂತ ಹೆಚ್ಚು — ಕಾಜಿರಂಗ ₹3,500 / ಜೀಪ್ | ಮಾನಸ ₹4,500 / ಜೀಪ್',
+    bk_group_sub: 'ಖಾಸಗಿ ಆಧಾರದಲ್ಲಿ · ಜೀಪ್‌ಗೆ ಗರಿಷ್ಟ 6 ಜನ',
+    bk_tuesday: '⚠ ಮಾನಸ ಬಾನ್ಸ್‌ಬಾರಿ ವ್ಯಾಪ್ತಿ ಪ್ರತಿ ಮಂಗಳವಾರ ಮುಚ್ಚಿರುತ್ತದೆ. ದಯವಿಟ್ಟು ಬೇರೆ ದಿನಾಂಕ ಆರಿಸಿ.',
+    bk_adults_label: 'ವಯಸ್ಕರು', bk_adults_note: '(5 ವರ್ಷಕ್ಕಿಂತ ಮೇಲೆ · ಶುಲ್ಕ ವರ್ತಿಸುತ್ತದೆ)',
+    bk_children_label: 'ಮಕ್ಕಳು', bk_children_note: '(5 ವರ್ಷ & ಕೆಳಗೆ · ಉಚಿತ)',
+    bk_adults_unit: 'ಜನ', bk_children_unit: 'ಮಕ್ಕಳು',
+    bk_preview_title: 'ನಿಮ್ಮ ಆಯ್ಕೆಯ ಸಫಾರಿ',
+    bk_guest_note: '<strong>ಮುಖ್ಯ ಅತಿಥಿ</strong> (ಅತಿಥಿ 1) ಆಧಾರ್ ಮತ್ತು ಸಂಪರ್ಕ ನೀಡಬೇಕು. ಇತರ ಅತಿಥಿಗಳಿಗೆ ಹೆಸರು ಮತ್ತು ವಯಸ್ಸು ಮಾತ್ರ ಬೇಕು.',
+    bk_pay_label: 'ಪಾವತಿಸಬೇಕಾದ ಒಟ್ಟು ಮೊತ್ತ (GST ಇಲ್ಲ)',
+    bk_upi_badge: 'ಯಾವುದೇ UPI ಅಪ್ಲಿಕೇಶನ್‌ನಿಂದ ಸ್ಕ್ಯಾನ್ ಮಾಡಿ ಪಾವತಿಸಿ',
+    bk_upload_label: 'ಪಾವತಿ ಸ್ಕ್ರೀನ್‌ಶಾಟ್ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ',
+    bk_submit_pay: 'ಬುಕಿಂಗ್ ಸಲ್ಲಿಸಿ ಮತ್ತು ಪಾವತಿ ದೃಢಪಡಿಸಿ',
+    bk_refund_title: 'ಮರುಪಾವತಿ ನೀತಿ',
+    bk_refund_text: 'ರಾಷ್ಟ್ರೀಯ ಉದ್ಯಾನ ಪ್ರವೇಶ ನಿರಾಕರಿಸಿದ ಯಾವುದೇ ಸಂದರ್ಭದಲ್ಲಿ, 24 ಗಂಟೆಯೊಳಗೆ ಪೂರ್ಣ ಮೊತ್ತ ಮರಳಿ ಪಾವತಿಸಲಾಗುತ್ತದೆ.',
+    bk_tnc_agree: 'ಮರುಪಾವತಿ ನೀತಿ ಓದಿ ಒಪ್ಪಿದ್ದೇನೆ.',
+    bk_back_guest: '← ಅತಿಥಿ ವಿವರಕ್ಕೆ ಹಿಂದೆ',
+    bk_sum_title: 'ಮಿಷನ್ ಸಾರಾಂಶ',
+    bk_sum_dest: 'ಗಮ್ಯಸ್ಥಾನ', bk_sum_date: 'ದಿನಾಂಕ', bk_sum_time: 'ಸಮಯ ಸ್ಲಾಟ್',
+    bk_sum_adults: 'ವಯಸ್ಕರು', bk_sum_children: 'ಮಕ್ಕಳು', bk_sum_rate: 'ದರ',
+    bk_sum_total: 'ಒಟ್ಟು (GST ಇಲ್ಲ)',
+    bk_sum_note: '5 ವರ್ಷ & ಕೆಳಗೆ ಉಚಿತ. 5 ವರ್ಷಕ್ಕಿಂತ ಮೇಲೆ ಪೂರ್ಣ ದರ.',
+    bk_need_help: 'ಸಹಾಯ ಬೇಕೇ?',
+    bk_park_rules: 'ಪಾರ್ಕ್ ನಿಯಮಗಳು & ಮಾಹಿತಿ',
+    bk_park_rules2: 'ಮುಖ್ಯ — ಪಾರ್ಕ್ ನಿಯಮಗಳು & ಕ್ಯಾಮೆರಾ ಶುಲ್ಕ',
+    cr_eyebrow: 'ಭೂ ಸಾರಿಗೆ', cr_h1: 'ಕಾರ್<br>ಬಾಡಿಗೆ', cr_sub: 'ಈಶಾನ್ಯ ಭಾರತದ ಪ್ರತಿ ಭೂ-ಪ್ರದೇಶಕ್ಕೆ ಪ್ರೀಮಿಯಂ ವಾಹನಗಳು.',
+    cr_block_vehicle: 'ವಾಹನ ಆರಿಸಿ', cr_block_trip: 'ಪ್ರಯಾಣ ವಿವರಗಳು', cr_lbl_pax: 'ಪ್ರಯಾಣಿಕರ ಸಂಖ್ಯೆ *', cr_lbl_itin: 'ಪ್ರಯಾಣ ಮಾರ್ಗ ಆರಿಸಿ *', cr_opt_choose: '-- ಪ್ರಯಾಣ ಮಾರ್ಗ ಆರಿಸಿ --',
+    cr_sum_title: 'ನಿಮ್ಮ ಆಯ್ಕೆ', cr_veh_req: 'ಅಗತ್ಯ ವಾಹನಗಳು', cr_lbl_vehicle: 'ವಾಹನ', cr_lbl_capacity: 'ಸಾಮರ್ಥ್ಯ', cr_lbl_pax2: 'ಪ್ರಯಾಣಿಕರು', cr_lbl_veh_needed: 'ಅಗತ್ಯ ವಾಹನಗಳು', cr_lbl_itinerary: 'ಪ್ರಯಾಣ ಕಾರ್ಯಕ್ರಮ',
+    cr_note: 'ನಮ್ಮ ತಂಡ ಶೀಘ್ರದಲ್ಲೇ ತಮ್ಮನ್ನು ಸಂಪರ್ಕಿಸಿ ಲಭ್ಯತೆ ಮತ್ತು ಬೆಲೆ ದೃಢಪಡಿಸುತ್ತದೆ.',
+    cr_submit: 'ವಿಚಾರಣೆ ಕಳುಹಿಸಿ',
+    rev_eyebrow: 'ಅತಿಥಿ ವರದಿ', rev_h1: 'ಕಾಡಿನಿಂದ<br>ಧ್ವನಿಗಳು', rev_sub: 'ಪರಿಶೀಲಿಸಿದ ಅನುಭವಗಳು. ಅಸ್ಸಾಂ ಕಾಡುಗಳಿಂದ ನೇರವಾಗಿ.',
+    rev_stat1: 'ಅತಿಥಿ ರೇಟಿಂಗ್', rev_stat2: 'ಯಶಸ್ವಿ ಪ್ರಯಾಣಗಳು', rev_stat3: 'ಮರಳಿ ಬಂದ ಅತಿಥಿಗಳು',
+    rev_sec_label: 'ತೀರ್ಪು', rev_sec_title: 'ನಿಜವಾದ ಅನುಭವಗಳು', rev_sec_body: 'ಕಾಜಿರಂಗ ಮತ್ತು ಮಾನಸ್‌ಗೆ ಭೇಟಿ ನೀಡಿದ ಅತಿಥಿಗಳ ನೇರ ವರದಿಗಳು.',
+    rev_form_label: 'ಅನುಭವ ಹಂಚಿಕೊಳ್ಳಿ', rev_form_title: 'ನಿಮ್ಮ ವಿಮರ್ಶೆ ಸಲ್ಲಿಸಿ', rev_form_sub: 'ನಿಮ್ಮ ಕಾಡಿನ ಅನುಭವ ದಾಖಲಿಸಿ. ನಿಮ್ಮ ಮಾಹಿತಿ ಭವಿಷ್ಯದ ಪ್ರಯಾಣಿಕರಿಗೆ ಸಹಾಯ ಮಾಡುತ್ತದೆ.',
+    rev_lbl_name: 'ನಿಮ್ಮ ಹೆಸರು', rev_lbl_sector: 'ಪ್ರಯಾಣ ಪ್ರದೇಶ', rev_lbl_rating: 'ರೇಟಿಂಗ್', rev_lbl_summary: 'ಅನುಭವ ವಿವರ', rev_btn: 'ವಿಮರ್ಶೆ ಸಲ್ಲಿಸು',
+    footer_desc: 'ಈಶಾನ್ಯ ವನ್ಯಜೀವಿ ಸಂಶೋಧನೆಯ ಮುಂಚೂಣಿ ದಳ. ಯಾವುದೇ ರಾಜಿ ಇಲ್ಲ. ಶುದ್ಧ ಸಾಹಸ.',
+    footer_col1: 'ವಲಯಗಳು', footer_col2: 'ಬೇಸ್ ಆಪ್ಸ್', footer_col3: 'ಸಂಪರ್ಕ',
+    footer_link_kaz: 'ಕಾಜಿರಂಗ', footer_link_manas: 'ಮಾನಸ', footer_link_reports: 'ಕ್ಷೇತ್ರ ವರದಿ',
+    footer_link_book: 'ಸಫಾರಿ ಬುಕ್', footer_link_intel: 'ವಲಯ ಮಾಹಿತಿ', footer_link_reviews: 'ವಿಮರ್ಶೆಗಳು',
+    footer_link_wa: 'ವಾಟ್ಸಾಪ್', footer_link_car: 'ಕಾರ್ ಬಾಡಿಗೆ', footer_bottom: '© 2026 ಅಸ್ಸಾಂ ವೈಲ್ಡ್ ಸಫಾರಿ.',
+    svc1_title: 'ಕಾರ್ ಬಾಡಿಗೆ', svc1_desc: 'ಈಶಾನ್ಯ ಭಾರತದಾದ್ಯಂತ ಎಲ್ಲಾ ಭೂಭಾಗಗಳಿಗೆ ಪ್ರೀಮಿಯಂ SUV ಮತ್ತು 4x4. ಸ್ಥಳೀಯ ಜ್ಞಾನ ಹೊಂದಿದ ವೃತ್ತಿಪರ ಚಾಲಕರು.',
+    svc1_btn: 'ವಾಹನ ಬುಕ್ ಮಾಡಿ',
+    svc2_title: 'ಹೋಟೆಲ್ ಬುಕಿಂಗ್', svc2_desc: 'ಈಶಾನ್ಯದಾದ್ಯಂತ ಎಲ್ಲಾ ಪ್ರಮುಖ ವನ್ಯಜೀವಿ ವಲಯಗಳ ಬಳಿ ದೃಢಪಡಿಸಿದ ಇಕೋ-ರಿಸಾರ್ಟ್ ಮತ್ತು ಆರಾಮದಾಯಕ ಉಳಿಯುವಿಕೆ.',
+    svc2_btn: 'ಉಳಿಯುವಿಕೆ ಬುಕ್ ಮಾಡಿ',
+    policy_title: 'ಮರುಪಾವತಿ ಮತ್ತು ರದ್ದತಿ ನೀತಿ',
+    policy_text: 'ಯಾವುದೇ ಸಂದರ್ಭದಲ್ಲಿ ರಾಷ್ಟ್ರೀಯ ಉದ್ಯಾನ ಪ್ರಾಧಿಕಾರ ಪ್ರವೇಶಕ್ಕೆ ಅನುಮತಿ ನೀಡದಿದ್ದರೆ, 24 ಗಂಟೆಯಲ್ಲಿ ಪೂರ್ಣ ಮೊತ್ತ ಮರಳಿ ಪಾವತಿಸಲಾಗುತ್ತದೆ. ರದ್ದತಿ ಶುಲ್ಕ ಇಲ್ಲ.',
+    kaz_desc: 'ಒಂದೇ ಕೊಂಬಿನ ಘೇಂಡಾಮೃಗದ ಅಂತಿಮ ಭದ್ರಕೋಟೆ. ಪ್ರಕೃತಿ ಸಂಪೂರ್ಣ ಅಧಿಕಾರದೊಂದಿಗೆ ಆಳ್ವಿಕೆ ನಡೆಸುವ ವಿಶಾಲ, ಕ್ರೂರ ಭೂ-ದ್ರಶ್ಯ — ಜಗತ್ತಿನ ಅತ್ಯಧಿಕ ಘೇಂಡಾಮೃಗ ಜನಸಂಖ್ಯೆಯ ಮನೆ.',
+    manas_desc: 'ಹಿಮಾಲಯದ ತಪ್ಪಲಿನಲ್ಲಿ ಅಡಗಿರುವ, ದಂತಕಥೆಯ ಮಟ್ಟದ ಜೀವಗೋಳ ಸಂರಕ್ಷಣೆ. ಗೋಲ್ಡನ್ ಲಂಗೂರ್ ಮತ್ತು ಪಿಗ್ಮಿ ಹಾಗ್‌ನ ಕೊನೆಯ ಆಶ್ರಯ.',
+    park_btn: 'ವಲಯ ಪ್ರವೇಶಿಸಿ',
+    cta_sub: 'ಅಸ್ಸಾಂ ಅರಣ್ಯದಲ್ಲಿ ಸಂಪೂರ್ಣ ಮುಳುಗುವಿಕೆ. ಸುರಕ್ಷತೆ, ಪರಿಣತಿ ಅಥವಾ ಅನುಭವದಲ್ಲಿ ಶೂನ್ಯ ರಾಜಿ.',
+    cta_feat1: 'ದೃಢಪಡಿಸಿದ ತಜ್ಞರು', cta_feat2: 'ತಕ್ಷಣ ಹೊರಡುವಿಕೆ', cta_feat3: 'ನಿಖರ ಸಂಶೋಧನೆ',
+    cta_btn2: 'ಅಭಿಯಾನ ಅಧಿಕೃತಗೊಳಿಸಿ',
+    btn_enquire: 'ಈಗಲೇ ವಿಚಾರಿಸಿ',
+    park_kaz_label: 'ಕಾಜಿರಂಗ ಕೇಂದ್ರ ವ್ಯಾಪ್ತಿ', park_manas_label: 'ಮಾನಸ ಬಾನ್ಸ್‌ಬಾರಿ ವ್ಯಾಪ್ತಿ',
+    slot_morning: 'ಬೆಳಿಗ್ಗೆ ಸಫಾರಿ', slot_evening: 'ಸಂಜೆ ಸಫಾರಿ',
+    rule_children_charge: '5 ವರ್ಷಕ್ಕಿಂತ ಮೇಲಿನ ಮಕ್ಕಳಿಗೆ ಪೂರ್ಣ ದರದಲ್ಲಿ ಶುಲ್ಕ ವಿಧಿಸಲಾಗುತ್ತದೆ.',
+    rule_no_plastic: 'ರಾಷ್ಟ್ರೀಯ ಉದ್ಯಾನದೊಳಗೆ ಪ್ಲಾಸ್ಟಿಕ್ ಕಟ್ಟುನಿಟ್ಟಾಗಿ ನಿಷೇಧಿಸಲಾಗಿದೆ.',
+    rule_still_camera: 'ಸ್ಟಿಲ್ ಕ್ಯಾಮೆರಾ: ₹100 ಪ್ರವೇಶ ಶುಲ್ಕ.',
+    rule_video_kaz: 'ವಿಡಿಯೋ ಕ್ಯಾಮೆರಾ: ₹1,000 ಪ್ರವೇಶ ಶುಲ್ಕ.',
+    rule_video_manas: 'ವಿಡಿಯೋ ಕ್ಯಾಮೆರಾ: ₹1,500 ಪ್ರವೇಶ ಶುಲ್ಕ.',
+    rule_carry_id: 'ಸಫಾರಿ ದಿನ ಮೂಲ ಆಧಾರ್ / ಸರ್ಕಾರಿ ID ಜೊತೆ ತನ್ನಿ.',
+    rule_pickup: 'ಅತಿಥಿಗಳು 24 ಗಂಟೆ ಮೊದಲು ಪಿಕ್-ಅಪ್ ಸ್ಥಳ ಮತ್ತು ಹೋಟೆಲ್ ಹೆಸರು ಹೇಳಬೇಕು.',
+    rule_jeep_contact: 'ಜೀಪ್ ಸಂಪರ್ಕ ಸಂಖ್ಯೆಗಳು 24 ಗಂಟೆ ಮೊದಲು ನೀಡಲಾಗುತ್ತದೆ.',
+    rule_aadhaar_rest: 'ಗುಂಪಿಗೆ ಕೇವಲ ಮುಖ್ಯ ಅತಿಥಿಗೆ ಆಧಾರ್ ಬೇಕು. ಇತರರಿಗೆ ಹೆಸರು ಮತ್ತು ವಯಸ್ಸು ಮಾತ್ರ.',
+    rule_manas_closed: _no + 'ಮಾನಸ್ ಜೀಪ್ ಸಫಾರಿ ಪ್ರತಿ <strong>ಮಂಗಳವಾರ ಮುಚ್ಚಿರುತ್ತದೆ</strong>.' + _end,
+    rule_manas_foreign: 'ವಿದೇಶೀಯರು ಆಫ್‌ಲೈನ್‌ನಲ್ಲಿ ಬುಕ್ ಮಾಡಬೇಕು — +91 97098 84206 ಅಥವಾ +91 93656 09948.',
+    rules_title_suffix: '— ನಿಯಮಗಳು & ಮಾಹಿತಿ',
+    gf_adults_hdr: 'ವಯಸ್ಕರು', gf_children_hdr: 'ಮಕ್ಕಳು (5 ವರ್ಷ & ಕೆಳಗೆ — ಉಚಿತ)',
+    gf_primary: 'ಮುಖ್ಯ ವಯಸ್ಕ — ಬುಕಿಂಗ್ ಲೀಡ್', gf_adult: 'ವಯಸ್ಕ', gf_child: 'ಮಗು',
+    gf_lbl_name: 'ಪೂರ್ಣ ಹೆಸರು *', gf_lbl_age: 'ವಯಸ್ಸು *', gf_lbl_contact: 'ಸಂಪರ್ಕ ಸಂಖ್ಯೆ *',
+    gf_lbl_aadhaar: 'ಆಧಾರ್ ಕಾರ್ಡ್ *', gf_aadhaar_upload: 'ಆಧಾರ್ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ (JPG / PNG / PDF)',
+    sum_adult: 'ಜನ', sum_adults: 'ಜನ', sum_child: 'ಮಗು', sum_children: 'ಮಕ್ಕಳು',
+    sum_per_adult: '/ ವ್ಯಕ್ತಿ', sum_free: 'ಉಚಿತ', sum_no_gst: 'GST ಇಲ್ಲ',
+  };
+
+  /* ─── MALAYALAM ─── */
+  T.ml = {
+    lp_title: 'നിങ്ങളുടെ ഭാഷ തിരഞ്ഞെടുക്കൂ', lp_subtitle: 'തുടരാൻ ഒരു ഭാഷ തിരഞ്ഞെടുക്കൂ', lp_other: 'കൂടുതൽ ഭാഷകൾ', lp_change: 'ഭാഷ',
+    nav_home: 'ഹോം', nav_itineraries: 'യാത്രാ പദ്ധതി', nav_booking: 'ബുക്കിംഗ്', nav_car_rental: 'കാർ വാടക', nav_reviews: 'അവലോകനങ്ങൾ', nav_book_safari: 'സഫാരി ബുക്ക് ചെയ്യൂ',
+    rec_text: 'അസ്സാം ഗവൺമെന്റ് ടൂറിസം ഡിപ്പാർട്ട്‌മെന്റും ബോഡോലാൻഡ് ടൂറിസവും അംഗീകരിച്ചത്',
+    home_h1: 'അസ്സാമിൽ ആദ്യമായി<br>ജീപ്പ് സഫാരി ഓൺലൈൻ ബുക്കിംഗ്', home_sub: 'കാസിരംഗ നാഷണൽ പാർക്ക്  മാനസ് നാഷണൽ പാർക്ക്',
+    home_cta1: 'ഷെയേർഡ് ജീപ്പ് സഫാരി ബുക്ക് ചെയ്യൂ', home_cta2: 'നോർത്ത്ഈസ്റ്റ് ടൂർ പാക്കേജ് ബുക്ക് ചെയ്യൂ', home_cta3: 'കാർ വാടക',
+    stat_explorers: 'സേവനം ലഭിച്ച സഞ്ചാരികൾ', stat_sighting: 'ദർശന റെക്കോർഡ്', stat_experts: 'വിദഗ്ധ ടീം', stat_success: 'വിജയകരമായ യാത്രകൾ',
+    intro_label: 'പ്രവർത്തന വിവരം', intro_title: 'ഞങ്ങൾ വെറും ടൂർ ചെയ്യുന്നില്ല. ഞങ്ങൾ അന്വേഷിക്കുന്നു.',
+    intro_body: 'മറ്റുള്ളവർ നിങ്ങളെ ഒരു സാധാരണ യാത്രയ്ക്ക് കൊണ്ടുപോകുന്നു, ഞങ്ങൾ ഒരു തന്ത്രപരമായ ദൗത്യം നടത്തുന്നു. ഞങ്ങളുടെ പ്രകൃതിശാസ്ത്രജ്ഞർ വനത്തിന്റെ ഓരോ സൂചനയും വായിക്കാൻ പരിശീലനം ലഭിച്ചവരാണ്.',
+    feat1_title: 'വിദഗ്ധ ട്രാക്കർമാർ', feat1_desc: 'അസ്സാം ദേശീയ ഉദ്യാനങ്ങളിൽ 15+ വർഷത്തെ മേഖലാ വൈദഗ്ദ്ധ്യം.',
+    feat2_title: 'പരമാവധി ദർശനം', feat2_desc: 'പരമാവധി വന്യജീവി ദർശനത്തിനായി ഒപ്റ്റിമൈസ് ചെയ്ത സമയ ക്രമീകരണം.',
+    trend_label: 'ഇപ്പോൾ ട്രെൻഡിംഗ്', trend_title: 'ട്രെൻഡിംഗ് യാത്രാ പദ്ധതികൾ',
+    ne_label: 'ചക്രവാളത്തിനപ്പുറം', ne_title: 'വടക്കുകിഴക്കൻ ടൂർ പാക്കേജുകൾ', ne_sub: 'വടക്കുകിഴക്കന്റെ അജ്ഞാത പ്രദേശങ്ങളിലേക്ക് ആഴത്തിൽ പ്രവേശിക്കൂ. തവാംഗ് കൊടുമുടികൾ മുതൽ ഭൂട്ടാൻ താഴ്‌വരകൾ വരെ.',
+    safari_label: 'പാർക്ക് തിരഞ്ഞെടുക്കൽ', safari_title: 'നിങ്ങളുടെ ദേശീയ ഉദ്യാനം തിരഞ്ഞെടുക്കൂ',
+    cta_label: 'അന്തിമ നിർദ്ദേശം', cta_title: 'ഒരു വിട്ടുവീഴ്ചയില്ല.<br>സാഹസം മാത്രം.', cta_btn: 'നിങ്ങളുടെ ദൗത്യം ആരംഭിക്കൂ',
+    itin_eyebrow: 'യാത്രാ വിവരം', itin_h1: 'കാടിന്റെ<br>വിവരം', itin_sub: 'വടക്കുകിഴക്കൻ ഭാരതത്തിലെ പ്രധാന വന്യജീവി മേഖലകളുടെ വിശദ വിവരങ്ങൾ.',
+    book_eyebrow: 'കാടിലേക്ക് പ്രയാണം', book_h1: 'നിങ്ങളുടെ സ്ഥാനം<br>സുരക്ഷിതമാക്കൂ', book_sub: 'ഉറപ്പ് നൽകിയ പ്രവേശം. വിദഗ്ധ പ്രകൃതിശാസ്ത്രജ്ഞർ. നിങ്ങളുടെ സാഹസം ഇവിടെ ആരംഭിക്കുന്നു.',
+    step_destination: 'ലക്ഷ്യസ്ഥാനം', step_schedule: 'ഷെഡ്യൂൾ', step_guest: 'അതിഥി', step_payment: 'പേമെന്റ്',
+    bk_s1_label: 'ഘട്ടം 1 / 4', bk_s1_title: 'നിങ്ങളുടെ<br>ലക്ഷ്യസ്ഥാനം തിരഞ്ഞെടുക്കൂ', bk_s2_label: 'ഘട്ടം 2 / 4', bk_s2_title: 'സമയം തിരഞ്ഞെടുക്കൂ', bk_s3_label: 'ഘട്ടം 3 / 4', bk_s3_title: 'അതിഥി വിശദാംശങ്ങൾ', bk_s4_label: 'ഘട്ടം 4 / 4', bk_s4_title: 'പേമെന്റ് പൂർത്തിയാക്കൂ',
+    bk_lbl_date: 'സഫാരി തീയതി', bk_lbl_guests: 'അതിഥികളുടെ എണ്ണം', bk_lbl_slot: 'സമയ സ്ലോട്ട്', bk_lbl_name: 'പൂർണ്ണ പേര് *', bk_lbl_age: 'പ്രായം *', bk_lbl_phone: 'ബന്ധപ്പെടാനുള്ള നമ്പർ *', bk_lbl_aadhaar: 'ആധാർ കാർഡ് *', bk_lbl_payment: 'പേമെന്റ് സ്ക്രീൻഷോട്ട് *', bk_lbl_utr: 'ഇടപാട് ID / UTR നമ്പർ (ഐച്ഛികം)',
+    bk_hint_payment: 'ദയവായി നിങ്ങളുടെ വിജയകരമായ ഇടപാടിന്റെ സ്ക്രീൻഷോട്ട് അപ്‌ലോഡ് ചെയ്യൂ.',
+    bk_next1: 'അടുത്തത്: തീയതി തിരഞ്ഞെടുക്കൂ →', bk_next2: 'അടുത്തത്: അതിഥി വിശദാംശം →', bk_next3: 'അടുത്തത്: പേമെന്റ് →', bk_back: '← തിരികെ', bk_submit: 'ബുക്കിംഗ് ഉറപ്പാക്കൂ',
+    bk_kaz_tag: 'യുനെസ്‌കോ കോട്ട · കേന്ദ്ര റേഞ്ച്', bk_kaz_price: '₹1,000 / വ്യക്തി · രാവിലെ 9–11 / വൈകുന്നേരം 2–4',
+    bk_manas_tag: 'ജൈവ-മണ്ഡല സംരക്ഷണം · ബാൻസ്ബാരി റേഞ്ച്', bk_manas_price: '₹1,300 / വ്യക്തി · രാവിലെ 8–12 / വൈകുന്നേരം 2–4',
+    bk_group_title: 'ഗ്രൂപ്പ് / സ്വകാര്യ ജീപ്പ് നിരക്ക്',
+    bk_group_text: '3-ൽ കൂടുതൽ — കാസിരംഗ ₹3,500 / ജീപ്പ് | മാനസ് ₹4,500 / ജീപ്പ്',
+    bk_group_sub: 'സ്വകാര്യ അടിസ്ഥാനത്തിൽ · ജീപ്പിന് പരമാവധി 6 പേർ',
+    bk_tuesday: '⚠ മാനസ് ബാൻസ്ബാരി റേഞ്ച് എല്ലാ ചൊവ്വാഴ്ചയും അടഞ്ഞിരിക്കും. മറ്റൊരു തീയതി തിരഞ്ഞെടുക്കൂ.',
+    bk_adults_label: 'മുതിർന്നവർ', bk_adults_note: '(5 വയസ്സിനു മുകളിൽ · ചാർജ് ഉണ്ട്)',
+    bk_children_label: 'കുട്ടികൾ', bk_children_note: '(5 വയസ്സ് & അതിൽ താഴെ · സൗജന്യം)',
+    bk_adults_unit: 'പേർ', bk_children_unit: 'കുട്ടികൾ',
+    bk_preview_title: 'നിങ്ങൾ തിരഞ്ഞെടുത്ത സഫാരി',
+    bk_guest_note: '<strong>പ്രാഥമിക അതിഥി</strong> (അതിഥി 1) ആധാർ കാർഡും ബന്ധപ്പെടൽ വിവരവും നൽകണം. അധിക അതിഥികൾക്ക് പേരും പ്രായവും മാത്രം മതി.',
+    bk_pay_label: 'ആകെ നൽകേണ്ട തുക (GST ഇല്ല)',
+    bk_upi_badge: 'ഏത് UPI ആപ്പ് ഉപയോഗിച്ചും സ്‌കാൻ ചെയ്ത് അടയ്ക്കൂ',
+    bk_upload_label: 'പേമെന്റ് സ്‌ക്രീൻഷോട്ട് അപ്‌ലോഡ് ചെയ്യൂ',
+    bk_submit_pay: 'ബുക്കിംഗ് സമർപ്പിക്കൂ & പേമെന്റ് സ്ഥിരീകരിക്കൂ',
+    bk_refund_title: 'തിരിച്ചടവ് നയം',
+    bk_refund_text: 'ദേശീയ ഉദ്യാനം പ്രവേശനം നിരസിക്കുന്ന ഏത് സാഹചര്യത്തിലും 24 മണിക്കൂറിനുള്ളിൽ മുഴുവൻ തുകയും തിരിച്ചടക്കും.',
+    bk_tnc_agree: 'തിരിച്ചടവ് നയം വായിച്ച് ഞാൻ സമ്മതിക്കുന്നു.',
+    bk_back_guest: '← അതിഥി വിശദാംശത്തിലേക്ക് തിരികെ',
+    bk_sum_title: 'ദൗത്യ സംഗ്രഹം',
+    bk_sum_dest: 'ലക്ഷ്യസ്ഥാനം', bk_sum_date: 'തീയതി', bk_sum_time: 'സമയ സ്ലോട്ട്',
+    bk_sum_adults: 'മുതിർന്നവർ', bk_sum_children: 'കുട്ടികൾ', bk_sum_rate: 'നിരക്ക്',
+    bk_sum_total: 'ആകെ (GST ഇല്ല)',
+    bk_sum_note: '5 വയസ്സ് & അതിൽ താഴെ സൗജന്യം. 5 വയസ്സിനു മുകളിൽ പൂർണ്ണ നിരക്ക്.',
+    bk_need_help: 'സഹായം വേണോ?',
+    bk_park_rules: 'പാർക്ക് നിയമങ്ങൾ & വിവരങ്ങൾ',
+    bk_park_rules2: 'പ്രധാനം — പാർക്ക് നിയമങ്ങൾ & ക്യാമറ ചാർജ്',
+    cr_eyebrow: 'കര ഗതാഗതം', cr_h1: 'കാർ<br>വാടക', cr_sub: 'വടക്കുകിഴക്കൻ ഭാരതത്തിലെ ഓരോ ഭൂപ്രദേശത്തിനും പ്രീമിയം വാഹനങ്ങൾ.',
+    cr_block_vehicle: 'വാഹനം തിരഞ്ഞെടുക്കൂ', cr_block_trip: 'യാത്രാ വിശദാംശങ്ങൾ', cr_lbl_pax: 'യാത്രക്കാരുടെ എണ്ണം *', cr_lbl_itin: 'യാത്രാ പാത തിരഞ്ഞെടുക്കൂ *', cr_opt_choose: '-- യാത്രാ പാത തിരഞ്ഞെടുക്കൂ --',
+    cr_sum_title: 'നിങ്ങളുടെ തിരഞ്ഞെടുക്കൽ', cr_veh_req: 'ആവശ്യമായ വാഹനങ്ങൾ', cr_lbl_vehicle: 'വാഹനം', cr_lbl_capacity: 'ശേഷി', cr_lbl_pax2: 'യാത്രക്കാർ', cr_lbl_veh_needed: 'ആവശ്യമായ വാഹനങ്ങൾ', cr_lbl_itinerary: 'യാത്രാ പദ്ധതി',
+    cr_note: 'ഞങ്ങളുടെ ടീം ഉടൻ ലഭ്യത, വില സ്ഥിരീകരിക്കാൻ ബന്ധപ്പെടും.',
+    cr_submit: 'അന്വേഷണം അയക്കൂ',
+    rev_eyebrow: 'അതിഥി റിപ്പോർട്ടുകൾ', rev_h1: 'കാടിൽ നിന്ന്<br>ശബ്ദങ്ങൾ', rev_sub: 'സ്ഥിരീകരിച്ച അനുഭവങ്ങൾ. അസ്സാം വനങ്ങളിൽ നിന്ന് നേരിട്ട്.',
+    rev_stat1: 'അതിഥി റേറ്റിംഗ്', rev_stat2: 'വിജയകരമായ യാത്രകൾ', rev_stat3: 'വീണ്ടും വന്ന അതിഥികൾ',
+    rev_sec_label: 'വിധി', rev_sec_title: 'യഥാർത്ഥ അനുഭവങ്ങൾ', rev_sec_body: 'കാസിരംഗ, മാനസ് സന്ദർശിച്ച അതിഥികളുടെ നേരിട്ടുള്ള റിപ്പോർട്ടുകൾ.',
+    rev_form_label: 'അനുഭവം പങ്കുവെക്കൂ', rev_form_title: 'നിങ്ങളുടെ അവലോകനം സമർപ്പിക്കൂ', rev_form_sub: 'നിങ്ങളുടെ വന അനുഭവം രേഖപ്പെടുത്തൂ. നിങ്ങളുടെ വിവരം ഭാവി സഞ്ചാരികളെ സഹായിക്കും.',
+    rev_lbl_name: 'നിങ്ങളുടെ പേര്', rev_lbl_sector: 'യാത്രാ മേഖല', rev_lbl_rating: 'റേറ്റിംഗ്', rev_lbl_summary: 'അനുഭവ വിവരണം', rev_btn: 'അവലോകനം സമർപ്പിക്കൂ',
+    footer_desc: 'വടക്കുകിഴക്കൻ വന്യജീവി പര്യവേഷണത്തിലെ മുൻനിര സേന. ഒരു വിട്ടുവീഴ്ചയുമില്ല. നിർമ്മല സാഹസം.',
+    footer_col1: 'മേഖലകൾ', footer_col2: 'ബേസ് ഓപ്സ്', footer_col3: 'ബന്ധപ്പെടുക',
+    footer_link_kaz: 'കാസിരംഗ', footer_link_manas: 'മാനസ്', footer_link_reports: 'ഫീൽഡ് റിപ്പോർട്ടുകൾ',
+    footer_link_book: 'സഫാരി ബുക്ക്', footer_link_intel: 'മേഖലാ വിവരം', footer_link_reviews: 'അവലോകനങ്ങൾ',
+    footer_link_wa: 'വാട്ട്സ്ആപ്പ്', footer_link_car: 'കാർ വാടക', footer_bottom: '© 2026 അസ്സാം വൈൽഡ് സഫാരി.',
+    svc1_title: 'കാർ വാടക', svc1_desc: 'വടക്കുകിഴക്കൻ ഭാരതത്തിലെ എല്ലാ ഭൂപ്രദേശങ്ങൾക്കും പ്രീമിയം SUV, 4x4. സ്ഥലപരിചയമുള്ള പ്രൊഫഷണൽ ഡ്രൈവർമാർ.',
+    svc1_btn: 'വാഹനം ബുക്ക് ചെയ്യൂ',
+    svc2_title: 'ഹോട്ടൽ ബുക്കിംഗ്', svc2_desc: 'വടക്കുകിഴക്കൻ ഭാരതത്തിലെ എല്ലാ പ്രധാന വന്യജീവി മേഖലകൾക്ക് സമീപം സ്ഥിരീകരിച്ച ഇക്കോ-റിസോർട്ടുകൾ, സൗകര്യമേറിയ താമസം.',
+    svc2_btn: 'താമസം ബുക്ക് ചെയ്യൂ',
+    policy_title: 'റീഫണ്ട് & റദ്ദാക്കൽ നയം',
+    policy_text: 'ഏതു സാഹചര്യത്തിലും ദേശീയ ഉദ്യാനം പ്രവേശനം അനുവദിക്കില്ലെങ്കിൽ 24 മണിക്കൂറിനുള്ളിൽ മുഴുവൻ തുകയും തിരിച്ചടക്കും. റദ്ദാക്കൽ ചാർജ് ഇല്ല.',
+    kaz_desc: 'ഒറ്റക്കൊമ്പൻ കാണ്ടാമൃഗത്തിന്റെ ആത്യന്തിക കോട്ട. പ്രകൃതി പൂർണ്ണ ആധിപത്യത്തോടെ ഭരിക്കുന്ന ഒരു വിശാലമായ, കഠോരമായ ഭൂദൃശ്യം — ലോകത്തെ ഏറ്റവും വലിയ കാണ്ടാമൃഗ ജനസംഖ്യയുടെ ഭവനം.',
+    manas_desc: 'ഹിമാലയ താഴ്‌വരകളിൽ ഒളിഞ്ഞിരിക്കുന്ന, ഐതിഹ്യ പദവിയുള്ള ഒരു ജൈവമണ്ഡല സംരക്ഷണ മേഖല. ഗോൾഡൻ ലാംഗൂർ, പിഗ്മി ഹോഗ് എന്നിവയുടെ അവസാന അഭയകേന്ദ്രം.',
+    park_btn: 'മേഖലയിൽ പ്രവേശിക്കൂ',
+    cta_sub: 'അസ്സാം കാടിൽ സമ്പൂർണ്ണ മുഴുകൽ. സുരക്ഷ, വൈദഗ്ധ്യം, അനുഭവം — ഒരു വിട്ടുവീഴ്ചയുമില്ല.',
+    cta_feat1: 'സ്ഥിരീകരിച്ച വിദഗ്ധർ', cta_feat2: 'ഉടൻ പ്രവർത്തനം', cta_feat3: 'കൃത്യ ഗവേഷണം',
+    cta_btn2: 'ദൗത്യം അനുവദിക്കൂ',
+    btn_enquire: 'ഇപ്പോൾ അന്വേഷിക്കൂ',
+    park_kaz_label: 'കാസിരംഗ കേന്ദ്ര റേഞ്ച്', park_manas_label: 'മാനസ് ബാൻസ്ബാരി റേഞ്ച്',
+    slot_morning: 'പ്രഭാത സഫാരി', slot_evening: 'സന്ധ്യ സഫാരി',
+    rule_children_charge: '5 വയസ്സിന് മുകളിലുള്ള കുട്ടികൾക്ക് പൂർണ്ണ നിരക്കിൽ ചാർജ് ഈടാക്കും.',
+    rule_no_plastic: 'ദേശീയ ഉദ്യാനത്തിനകത്ത് പ്ലാസ്റ്റിക് കർശനമായി നിരോധിച്ചിരിക്കുന്നു.',
+    rule_still_camera: 'സ്റ്റിൽ ക്യാമറ: ₹100 പ്രവേശ ചാർജ്.',
+    rule_video_kaz: 'വീഡിയോ ക്യാമറ: ₹1,000 പ്രവേശ ചാർജ്.',
+    rule_video_manas: 'വീഡിയോ ക്യാമറ: ₹1,500 പ്രവേശ ചാർജ്.',
+    rule_carry_id: 'സഫാരി ദിനത്തിൽ യഥാർത്ഥ ആധാർ / ഗവൺമെന്റ് ID കൂടെ കൊണ്ടുവരൂ.',
+    rule_pickup: 'അതിഥികൾ 24 മണിക്കൂർ മുൻപ് പിക്-അപ്പ് സ്ഥലവും ഹോട്ടൽ പേരും അറിയിക്കണം.',
+    rule_jeep_contact: 'ജീപ്പ് ബന്ധപ്പെടൽ നമ്പറുകൾ 24 മണിക്കൂർ മുൻപ് നൽകും.',
+    rule_aadhaar_rest: 'ഗ്രൂപ്പിനായി പ്രാഥമിക അതിഥിക്ക് മാത്രം ആധാർ ആവശ്യമാണ്. മറ്റുള്ളവർക്ക് പേരും പ്രായവും മതി.',
+    rule_manas_closed: _no + 'മാനസ് ജീപ്പ് സഫാരി എല്ലാ <strong>ചൊവ്വാഴ്ചയും അടഞ്ഞിരിക്കും</strong>.' + _end,
+    rule_manas_foreign: 'വിദേശ പൗരന്മാർ ഓഫ്‌ലൈനിൽ ബുക്ക് ചെയ്യണം — +91 97098 84206 അല്ലെങ്കിൽ +91 93656 09948.',
+    rules_title_suffix: '— നിയമങ്ങൾ & വിവരങ്ങൾ',
+    gf_adults_hdr: 'മുതിർന്നവർ', gf_children_hdr: 'കുട്ടികൾ (5 വയസ്സ് & അതിൽ താഴെ — സൗജന്യം)',
+    gf_primary: 'പ്രാഥമിക മുതിർന്ന ആൾ — ബുക്കിംഗ് ലീഡ്', gf_adult: 'മുതിർന്ന ആൾ', gf_child: 'കുട്ടി',
+    gf_lbl_name: 'പൂർണ്ണ പേര് *', gf_lbl_age: 'പ്രായം *', gf_lbl_contact: 'ബന്ധപ്പെടൽ നമ്പർ *',
+    gf_lbl_aadhaar: 'ആധാർ കാർഡ് *', gf_aadhaar_upload: 'ആധാർ അപ്‌ലോഡ് ചെയ്യൂ (JPG / PNG / PDF)',
+    sum_adult: 'പേർ', sum_adults: 'പേർ', sum_child: 'കുട്ടി', sum_children: 'കുട്ടികൾ',
+    sum_per_adult: '/ വ്യക്തി', sum_free: 'സൗജന്യം', sum_no_gst: 'GST ഇല്ല',
+  };
+
+  /* ══════════════════════════════════════════════
+     HELPERS
+  ══════════════════════════════════════════════ */
+  function getLang() { return localStorage.getItem(STORAGE_KEY) || null; }
+  function setLang(code) { localStorage.setItem(STORAGE_KEY, code); }
+  function t(key) {
+    const lang = getLang() || 'en';
+    let val = (T[lang] && T[lang][key] != null) ? T[lang][key] : (T['en'][key] || '');
+    if (typeof val === 'string') {
+      // Strip emojis (like ⛔, 🌍, ⚠, ✓, 🧑‍🤝‍🧑, 🚙, 📋, 🧑, 💾) at runtime for cleanest UX
+      val = val.replace(/[\u26d4\u{1f30d}\u{1f9d1}\u200d\u{1f91d}\u{1f699}\u{1f6aa}\u26a0\u2705\u2714\u2716\u2717\u2718\u2713]/gu, '');
+      val = val.replace(/[⚠⛔🌍🧑‍🤝‍🧑🚙📋🧑💾✓✓]/gu, '').trim();
+    }
+    return val;
+  }
+
+  /* ── Set element content ── */
+  function set(sel, key, html) {
+    const v = t(key); if (!v) return;
+    document.querySelectorAll(sel).forEach(el => { html ? (el.innerHTML = v) : (el.textContent = v); });
+  }
+  function setN(sel, n, key, html) {
+    const v = t(key); if (!v) return;
+    const el = document.querySelectorAll(sel)[n];
+    if (el) { html ? (el.innerHTML = v) : (el.textContent = v); }
+  }
+  function setP(sel, key) {
+    const v = t(key); if (!v) return;
+    document.querySelectorAll(sel).forEach(el => el.placeholder = v);
+  }
+
+  /* ══════════════════════════════════════════════
+     APPLY ALL PAGE CONTENT
+  ══════════════════════════════════════════════ */
+  function applyPageContent() {
+    const path = window.location.pathname.toLowerCase();
+    const isBooking = path.includes('booking');
+    const isItineraries = path.includes('itineraries');
+    const isCar = path.includes('car-rental');
+    const isReviews = path.includes('reviews');
+    const isHome = !isBooking && !isItineraries && !isCar && !isReviews && (!path.includes('/pages/') || path.includes('index.html'));
+
+    /* ── Nav (all pages) ── */
+    const navAs = document.querySelectorAll('.nav-links li a');
+    const navKeys = ['nav_home', 'nav_itineraries', 'nav_booking', 'nav_car_rental', 'nav_reviews'];
+    let navIdx = 0;
+    navAs.forEach(a => {
+      if (a.classList.contains('nav-cta')) { a.textContent = t('nav_book_safari'); return; }
+      if (navKeys[navIdx]) { a.textContent = t(navKeys[navIdx]); navIdx++; }
+    });
+    set('.rec-label', 'rec_text');
+
+    /* Footer, intro, park cards and the bottom call-to-action are plain English on every language. */
+
+    /* ── HOMEPAGE ── */
+    if (isHome) {
+      set('.hero-title', 'home_h1_v2', true);
+      set('.hero-subtitle', 'home_sub');
+      /* CTAs — matched by href; first span only so the subtitle line is preserved */
+      document.querySelectorAll('.hero-actions a').forEach(a => {
+        const span = a.querySelector('span:first-child');
+        const put = (key) => { if (span) span.textContent = t(key); else a.textContent = t(key); };
+        if (a.href && a.href.includes('type=shared')) put('home_cta_shared');
+        else if (a.href && a.href.includes('booking')) put('home_cta_private');
+        else if (a.href && a.href.includes('itinerari')) put('home_cta2');
+        else if (a.href && a.href.includes('car-rental')) put('home_cta3');
+      });
+      /* itineraries — found by section, not by position, so adding or removing sections can't mislabel them */
+      const neLabel = document.querySelector('.ne-section .section-label'), neTitle = document.querySelector('.ne-section .section-title');
+      if (neLabel) neLabel.textContent = t('ne_label');
+      if (neTitle) neTitle.textContent = t('ne_title');
+      /* NE subtitle — first p inside ne-section header div */
+      const neHeaderDiv = document.querySelector('.ne-section > div:first-child');
+      const neSub = neHeaderDiv ? neHeaderDiv.querySelector('p') : null;
+      if (neSub) neSub.textContent = t('ne_sub');
+      /* enquire buttons on tour cards */
+      document.querySelectorAll('.tour-enquire-btn').forEach(btn => { btn.textContent = t('btn_book_now'); });
+    }
+
+    /* ── ITINERARIES ── */
+    if (isItineraries) {
+      set('.hero-eyebrow', 'itin_eyebrow');
+      set('header h1', 'itin_h1', true);
+      set('header p', 'itin_sub');
+      const neLabel = document.querySelector('.ne-section .section-label'), neTitle = document.querySelector('.ne-section .section-title');
+      if (neLabel) neLabel.textContent = t('ne_label');
+      if (neTitle) neTitle.textContent = t('ne_title');
+      const neHeaderDiv = document.querySelector('.ne-section > div:first-child');
+      const neSub = neHeaderDiv ? neHeaderDiv.querySelector('p') : null;
+      if (neSub) neSub.textContent = t('ne_sub');
+      document.querySelectorAll('.tour-enquire-btn').forEach(btn => { btn.textContent = t('btn_book_now'); });
+    }
+
+    /* ── BOOKING ── */
+    /* Booking and car rental pages are English-only: their forms are built dynamically from the database. */
+
+    /* ── CAR RENTAL ── */
+
+    /* ── REVIEWS ── English-only (a short personal message and a form). */
+  }
+
+  /* ══════════════════════════════════════════════
+     SPLASH SCREEN
+  ══════════════════════════════════════════════ */
+  function isSubPage() { return window.location.pathname.includes('/pages/'); }
+
+  function buildSplash() {
+    const primary = LANGUAGES.filter(l => l.primary);
+    const others = LANGUAGES.filter(l => !l.primary);
+    const imgBase = isSubPage() ? '../images/' : 'images/';
+
+    const primaryBtns = primary.map(l => `
+      <button class="ls-btn ls-btn-primary" data-code="${l.code}">
+        <span class="ls-native">${l.native}</span>
+        <span class="ls-name">${l.name}</span>
+      </button>`).join('');
+    const otherBtns = others.map(l => `
+      <button class="ls-btn ls-btn-other" data-code="${l.code}">
+        <span class="ls-native">${l.native}</span>
+        <span class="ls-name">${l.name}</span>
+      </button>`).join('');
+
+    return `<div id="lang-splash" style="position:fixed;inset:0;z-index:99999;align-items:center;justify-content:center;padding:1rem;">
+  <div class="ls-bg" style="position:absolute;inset:0;background:linear-gradient(135deg,#0d1a0f 0%,#1a2e1c 40%,#0a1208 100%);"></div>
+  <div style="position:absolute;inset:0;background:url('${imgBase}kaziranga.jpg') center/cover no-repeat;opacity:0.08;pointer-events:none;"></div>
+  <div class="ls-panel">
+    <div class="ls-logo-row">
+      <img src="${imgBase}logo.jpeg" alt="Assam Wild Safari" class="ls-logo-img">
+      <div>
+        <div class="ls-logo-name">Assam <span style="color:#c9a34f;">Wild</span> Safari</div>
+        <div class="ls-logo-sub">Northeast India's Premium Safari</div>
+      </div>
+    </div>
+    <h2 class="ls-title">Choose Your Language</h2>
+    <p class="ls-sub">अपनी भाषा चुनें  আপোনাৰ ভাষা বাছক  আপনার ভাষা বেছে নিন</p>
+    <div class="ls-primary-grid">${primaryBtns}</div>
+    <div class="ls-divider"><span>More Languages</span></div>
+    <div class="ls-other-grid">${otherBtns}</div>
+  </div>
+</div>
+<style>
+  #lang-splash { display:flex; }
+  .ls-panel{position:relative;z-index:2;max-width:640px;width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);backdrop-filter:blur(12px);padding:2.5rem 2rem;text-align:center;animation:lsFadeIn .5s ease;}
+  @keyframes lsFadeIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  .ls-logo-row{display:flex;align-items:center;justify-content:center;gap:.8rem;margin-bottom:1.8rem;text-align:left;}
+  .ls-logo-img{height:40px;width:auto;object-fit:contain;}
+  .ls-logo-name{font-family:Georgia,serif;font-size:1.1rem;color:#fff;letter-spacing:.04em;}
+  .ls-logo-sub{font-size:.55rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.4);font-weight:700;margin-top:3px;}
+  .ls-title{font-family:Georgia,serif;font-size:clamp(1.4rem,4vw,1.9rem);color:#fff;margin:0 0 .5rem;letter-spacing:.03em;}
+  .ls-sub{font-size:.78rem;color:rgba(255,255,255,.4);margin-bottom:2rem;letter-spacing:.04em;}
+  .ls-primary-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.8rem;margin-bottom:1.5rem;}
+  .ls-other-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem;margin-top:1rem;}
+  @media(max-width:480px){.ls-primary-grid{grid-template-columns:1fr 1fr}.ls-other-grid{grid-template-columns:repeat(2,1fr)}}
+  .ls-btn{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.03);color:#fff;cursor:pointer;transition:all .18s;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.25rem;}
+  .ls-btn:hover{border-color:#c9a34f;background:rgba(201,163,79,.1);transform:translateY(-2px);}
+  .ls-btn-primary{padding:1.1rem .8rem;}
+  .ls-btn-other{padding:.7rem .4rem;}
+  .ls-native{font-size:1.15rem;font-weight:700;line-height:1.2;}
+  .ls-btn-other .ls-native{font-size:.95rem;}
+  .ls-name{font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.45);}
+  .ls-divider{display:flex;align-items:center;gap:.8rem;color:rgba(255,255,255,.25);font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;}
+  .ls-divider::before,.ls-divider::after{content:'';flex:1;border-top:1px solid rgba(255,255,255,.1);}
+  .ls-change-btn{position:fixed;bottom:1.2rem;right:1.2rem;z-index:9000;background:rgba(13,26,15,.92);border:1px solid rgba(201,163,79,.4);color:#c9a34f;font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:.55rem 1rem;cursor:pointer;display:flex;align-items:center;gap:.5rem;backdrop-filter:blur(8px);transition:all .2s;}
+  .ls-change-btn:hover{background:rgba(201,163,79,.15);}
+  .ls-change-btn.ls-in-nav{position:static;z-index:auto;margin-left:auto;margin-right:1.4rem;padding:.45rem .85rem;backdrop-filter:none;background:transparent;}
+  @media(max-width:560px){.ls-change-btn.ls-in-nav{margin-right:.9rem;padding:.5rem;font-size:0;gap:0;}.ls-change-btn.ls-in-nav svg{width:18px;height:18px;}}
+  .ls-change-btn svg{width:14px;height:14px;}
+</style>`;
+  }
+
+  function showSplash() {
+    const el = document.getElementById('lang-splash');
+    if (el) { el.style.display = 'flex'; el.style.opacity = '1'; }
+  }
+  function hideSplash() {
+    const el = document.getElementById('lang-splash');
+    if (!el) return;
+    el.style.transition = 'opacity .35s';
+    el.style.opacity = '0';
+    setTimeout(() => { el.style.display = 'none'; el.style.opacity = ''; }, 360);
+  }
+
+  function injectChangeLangBtn() {
+    if (window.location.pathname.toLowerCase().includes('booking')) {
+      return;
+    }
+    const btn = document.createElement('button');
+    btn.className = 'ls-change-btn';
+    btn.title = 'Change Language';
+    btn.setAttribute('aria-label', 'Change language');
+    btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg> ${t('lp_change')}`;
+    btn.addEventListener('click', showSplash);
+    // It sits inside the top menu bar so it never covers page content. (A page without a menu bar gets no button.)
+    const nav = document.querySelector('.navbar');
+    if (!nav) return;
+    btn.classList.add('ls-in-nav');
+    nav.insertBefore(btn, nav.querySelector('.hamburger'));
+  }
+
+  /* ══════════════════════════════════════════════
+     INIT
+  ══════════════════════════════════════════════ */
+  function init() {
+    const isBooking = window.location.pathname.toLowerCase().includes('booking');
+
+    if (!isBooking) {
+      /* inject splash */
+      const tmp = document.createElement('div');
+      tmp.innerHTML = buildSplash();
+      while (tmp.firstChild) document.body.insertBefore(tmp.firstChild, document.body.firstChild);
+
+      /* show splash only on first visit; hide immediately if language already chosen */
+      const splashEl = document.getElementById('lang-splash');
+      if (splashEl) {
+        /* Search-engine and AI crawlers read the page itself — the language chooser would only cover it. */
+        const crawler = /bot|crawl|spider|slurp|lighthouse|pagespeed|gptbot|claude|perplexity|bingpreview|facebookexternalhit/i.test(navigator.userAgent);
+        splashEl.style.display = (getLang() || crawler) ? 'none' : 'flex';
+      }
+
+      /* wire language buttons */
+      document.querySelectorAll('.ls-btn[data-code]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          setLang(btn.dataset.code);
+          hideSplash();
+          applyPageContent();
+          injectChangeLangBtn(); /* update button label */
+          document.querySelectorAll('.ls-change-btn').forEach((b, i) => { if (i > 0) b.remove(); });
+        });
+      });
+    }
+
+    /* apply translations */
+    applyPageContent();
+
+    /* floating button */
+    injectChangeLangBtn();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+  window.AWS_LANG = { t, setLang, getLang, applyPageContent };
+})();

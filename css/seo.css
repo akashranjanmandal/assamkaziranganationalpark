@@ -1,0 +1,42 @@
+/* Styles for the static, search-friendly pages (park pages, tour packages, taxi fares). */
+.seo-hero { position: relative; padding: 11rem 1.5rem 5rem; background: var(--forest-black); color: #fff; text-align: center; overflow: hidden; }
+.seo-hero::before { content: ''; position: absolute; inset: 0; background: var(--seo-hero-img, none) center/cover; opacity: 0.35; }
+.seo-hero > * { position: relative; z-index: 1; }
+.seo-hero h1 { font-family: var(--font-display); font-size: clamp(2.4rem, 6vw, 4.6rem); line-height: 1; letter-spacing: 0.02em; max-width: 960px; margin: 0.6rem auto 1.2rem; }
+.seo-hero .lead { max-width: 720px; margin: 0 auto 2rem; color: rgba(255,255,255,0.78); font-size: 1.1rem; line-height: 1.7; }
+.seo-cta-row { display: flex; gap: 0.8rem; justify-content: center; flex-wrap: wrap; }
+.seo-crumbs { font-size: 0.8rem; color: rgba(255,255,255,0.6); margin-bottom: 0.4rem; }
+.seo-crumbs a { color: var(--gold-light); text-decoration: none; }
+.seo-main { max-width: 1040px; margin: 0 auto; padding: 4rem 1.5rem 2rem; }
+.seo-main h2 { font-family: var(--font-display); font-size: clamp(1.9rem, 4vw, 2.8rem); letter-spacing: 0.02em; color: var(--forest-black); margin: 3rem 0 1rem; line-height: 1.05; }
+.seo-main h2:first-child { margin-top: 0; }
+.seo-main h3 { font-size: 1.1rem; margin: 1.6rem 0 0.4rem; color: var(--forest-dark); }
+.seo-main p, .seo-main li { color: #33433a; line-height: 1.85; font-size: 1.02rem; }
+.seo-main p { margin-bottom: 1rem; }
+.seo-main ul { padding-left: 1.3rem; margin-bottom: 1rem; }
+.seo-main a { color: var(--gold); }
+.seo-table-wrap { overflow-x: auto; margin: 1rem 0 1.4rem; border: 1px solid #e6e1d3; }
+.seo-table { width: 100%; border-collapse: collapse; min-width: 480px; background: #fff; }
+.seo-table th, .seo-table td { text-align: left; padding: 0.75rem 1rem; border-bottom: 1px solid #eee8d8; font-size: 0.95rem; }
+.seo-table th { background: #0f2214; color: #fff; font-weight: 600; letter-spacing: 0.03em; font-size: 0.8rem; text-transform: uppercase; }
+.seo-table td.num, .seo-table th.num { text-align: right; white-space: nowrap; }
+.seo-note { font-size: 0.88rem !important; color: #666 !important; }
+.seo-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+.seo-fact { border: 1px solid #e6e1d3; padding: 1rem 1.1rem; background: #fbfaf6; }
+.seo-fact b { display: block; color: var(--gold); font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 0.3rem; }
+.seo-faq details { border-bottom: 1px solid #e6e1d3; padding: 1rem 0; }
+.seo-faq summary { cursor: pointer; font-weight: 600; color: var(--forest-black); font-size: 1.05rem; }
+.seo-faq details p { margin: 0.7rem 0 0; }
+.seo-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 1.2rem; margin: 1.5rem 0; }
+.seo-card { display: flex; flex-direction: column; gap: 0.5rem; border: 1px solid #e6e1d3; padding: 1.3rem; background: #fff; text-decoration: none; color: inherit; transition: transform .25s, box-shadow .25s; }
+.seo-card:hover { transform: translateY(-4px); box-shadow: 0 14px 40px rgba(0,0,0,0.1); }
+.seo-card .tag { font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); font-weight: 700; }
+.seo-card h3 { margin: 0; font-size: 1.15rem; color: var(--forest-black); }
+.seo-card p { font-size: 0.92rem; margin: 0; color: #555; }
+.seo-card .more { margin-top: auto; color: var(--gold); font-weight: 600; font-size: 0.9rem; }
+.seo-day { border-left: 3px solid var(--gold); padding: 0.2rem 0 0.2rem 1.1rem; margin: 1.2rem 0; }
+.seo-day b { display: block; color: var(--forest-black); }
+.seo-band { background: var(--forest-deep); color: #fff; text-align: center; padding: 4rem 1.5rem; }
+.seo-band h2 { font-family: var(--font-display); font-size: clamp(1.9rem, 4vw, 2.8rem); margin-bottom: 0.8rem; }
+.seo-band p { max-width: 640px; margin: 0 auto 1.6rem; color: rgba(255,255,255,0.75); }
+@media (max-width: 600px) { .seo-hero { padding-top: 9rem; } }
